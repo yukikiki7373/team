@@ -1,2 +1,3 @@
 test (yuki)
 test(shoma)
+test(rin)
