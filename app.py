@@ -33,7 +33,7 @@ Session(app)
 
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///team.db")
+db = SQL("sqlite:///teamSQLite/team.db")
 
 
 @app.route("/")
