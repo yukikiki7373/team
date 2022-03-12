@@ -2,6 +2,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
 from flask_session import Session
+from sqlalchemy import true
 from helpers import apology, login_required
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -214,8 +215,8 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
+@app.route("/register_b", methods=["GET", "POST"])
+def register_b():
     if request.method == "POST":
 
         username = request.form.get("username")
@@ -250,14 +251,14 @@ def register():
             )
             # Insert the new user
             db.execute(
-                "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash,
+                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
             )
             # Redirect user to home page
             return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("register.html")
+        return render_template("register_b.html")
 
 def errorhandler(e):
     """Handle error"""
