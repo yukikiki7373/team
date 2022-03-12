@@ -260,6 +260,51 @@ def register_b():
     else:
         return render_template("register_b.html")
 
+@app.route("/register_c", methods=["GET", "POST"])
+def register_c():
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+        # Ensure the username was submitted
+        if not username:
+            return apology("ユーザー名を入力してください", 400)
+        # Ensure the username doesn't exists
+        elif len(rows) != 0:
+            return apology("このユーザー名は既に登録されています", 400)
+
+        # Ensure password was submitted
+        elif not password:
+            return apology("パスワードを入力してください", 400)
+
+        # Ensure confirmation password was submitted
+        elif not request.form.get("confirmation"):
+            return apology("パスワード（確認）を入力してください", 400)
+
+        # Ensure passwords match
+        elif not password == confirmation:
+            return apology("同じパスワードを入力してください", 400)
+
+        else:
+            # Generate the hash of the password
+            hash = generate_password_hash(
+                password, method="pbkdf2:sha256", salt_length=8
+            )
+            # Insert the new user
+            db.execute(
+                "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash
+            )
+            # Redirect user to home page
+            return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register_c.html")
+
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
