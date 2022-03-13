@@ -40,118 +40,118 @@ db = SQL("sqlite:///teamSQLite/team.db")
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    return render_template("dreams.html")
 
-@app.route("/list")
-@login_required
-def list():
-    """Show list of sotsuron.db"""
-    posts = db.execute("SELECT * FROM posts")
-    return render_template("list.html", posts=posts)
+# @app.route("/list")
+# @login_required
+# def list():
+#     """Show list of sotsuron.db"""
+#     posts = db.execute("SELECT * FROM posts")
+#     return render_template("list.html", posts=posts)
 
-@app.route("/post_register", methods=["GET", "POST"])
-@login_required
-def post_register():
-    """Register new post"""
+# @app.route("/post_register", methods=["GET", "POST"])
+# @login_required
+# def post_register():
+#     """Register new post"""
 
-    if request.method == "POST":
-        title = request.form.get("title")
-        overview = request.form.get("overview")
-        content = request.form.get("content")
-        learned = request.form.get("learned")
-        help = request.form.get("help")
+#     if request.method == "POST":
+#         title = request.form.get("title")
+#         overview = request.form.get("overview")
+#         content = request.form.get("content")
+#         learned = request.form.get("learned")
+#         help = request.form.get("help")
 
-        db.execute(
-            "INSERT INTO posts (user_id, title, overview, content, learned, help) VALUES (?, ?, ?, ?, ?, ?)",
-            session["user_id"],
-            title,
-            overview,
-            content,
-            learned,
-            help
-        )
+#         db.execute(
+#             "INSERT INTO posts (user_id, title, overview, content, learned, help) VALUES (?, ?, ?, ?, ?, ?)",
+#             session["user_id"],
+#             title,
+#             overview,
+#             content,
+#             learned,
+#             help
+#         )
 
-        flash("投稿が完了しました。")
-        return redirect("/")
+#         flash("投稿が完了しました。")
+#         return redirect("/")
 
-    else:
-        return render_template("post_register.html")
+#     else:
+#         return render_template("post_register.html")
 
-@app.route("/mypost")
-@login_required
-def mypost():
-    """Show my post"""
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
-
-
-@app.route("/title_edit", methods=["POST"])
-@login_required
-def title_edit():
-    """Edit my title"""
-
-    id = request.form["id"]
-    title = request.form["title"]
-
-    db.execute("UPDATE posts SET title= ? WHERE id = ?", title, id)
-
-    flash("編集が完了しました。")
-
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
+# @app.route("/mypost")
+# @login_required
+# def mypost():
+#     """Show my post"""
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
 
 
-@app.route("/overview_edit", methods=["POST"])
-@login_required
-def overview_edit():
-    """Edit my overview"""
+# @app.route("/title_edit", methods=["POST"])
+# @login_required
+# def title_edit():
+#     """Edit my title"""
 
-    id = request.form["id"]
-    overview = request.form["overview"]
+#     id = request.form["id"]
+#     title = request.form["title"]
 
-    db.execute("UPDATE posts SET overview = ? WHERE id = ?", overview, id)
+#     db.execute("UPDATE posts SET title= ? WHERE id = ?", title, id)
 
-    flash("編集が完了しました。")
+#     flash("編集が完了しました。")
 
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
-
-
-@app.route("/content_edit", methods=["POST"])
-@login_required
-def content_edit():
-    """Edit my content"""
-
-    id = request.form["id"]
-    content = request.form["content"]
-
-    db.execute("UPDATE posts SET content = ? WHERE id = ?", content, id)
-
-    flash("編集が完了しました。")
-
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
 
 
-@app.route("/learned_edit", methods=["POST"])
-@login_required
-def learned_edit():
-    """Edit my learned"""
+# @app.route("/overview_edit", methods=["POST"])
+# @login_required
+# def overview_edit():
+#     """Edit my overview"""
 
-    id = request.form["id"]
-    learned = request.form["learned"]
+#     id = request.form["id"]
+#     overview = request.form["overview"]
 
-    db.execute("UPDATE posts SET learned = ? WHERE id = ?", learned, id)
+#     db.execute("UPDATE posts SET overview = ? WHERE id = ?", overview, id)
 
-    flash("編集が完了しました。")
+#     flash("編集が完了しました。")
 
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
 
 
-@app.route("/help_edit", methods=["POST"])
-@login_required
-def help_edit():
+# @app.route("/content_edit", methods=["POST"])
+# @login_required
+# def content_edit():
+#     """Edit my content"""
+
+#     id = request.form["id"]
+#     content = request.form["content"]
+
+#     db.execute("UPDATE posts SET content = ? WHERE id = ?", content, id)
+
+#     flash("編集が完了しました。")
+
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
+
+
+# @app.route("/learned_edit", methods=["POST"])
+# @login_required
+# def learned_edit():
+#     """Edit my learned"""
+
+#     id = request.form["id"]
+#     learned = request.form["learned"]
+
+#     db.execute("UPDATE posts SET learned = ? WHERE id = ?", learned, id)
+
+#     flash("編集が完了しました。")
+
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
+
+
+# @app.route("/help_edit", methods=["POST"])
+# @login_required
+# def help_edit():
     """Edit my help"""
 
     id = request.form["id"]
@@ -254,11 +254,56 @@ def register_b():
                 "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
             )
             # Redirect user to home page
-            return redirect("/")
+            return redirect("/dreams")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register_b.html")
+
+@app.route("/register_c", methods=["GET", "POST"])
+def register_c():
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+        # Ensure the username was submitted
+        if not username:
+            return apology("ユーザー名を入力してください", 400)
+        # Ensure the username doesn't exists
+        elif len(rows) != 0:
+            return apology("このユーザー名は既に登録されています", 400)
+
+        # Ensure password was submitted
+        elif not password:
+            return apology("パスワードを入力してください", 400)
+
+        # Ensure confirmation password was submitted
+        elif not request.form.get("confirmation"):
+            return apology("パスワード（確認）を入力してください", 400)
+
+        # Ensure passwords match
+        elif not password == confirmation:
+            return apology("同じパスワードを入力してください", 400)
+
+        else:
+            # Generate the hash of the password
+            hash = generate_password_hash(
+                password, method="pbkdf2:sha256", salt_length=8
+            )
+            # Insert the new user
+            db.execute(
+                "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash
+            )
+            # Redirect user to home page
+            return redirect("/dreams")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register_c.html")
 
 def errorhandler(e):
     """Handle error"""
