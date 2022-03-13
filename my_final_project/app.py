@@ -48,7 +48,7 @@ def dreams():
     """Show list of dreams.db"""
     dreams = db.execute("SELECT * FROM dreams")
     comments = db.execute("SELECT * FROM comments")
-    dreams = db.execute("SELECT * FROM dreams")
+    replies = db.execute("SELECT * FROM replies")
 
     """Show the result of quotation"""
     keyword = request.form.get("keyword")
@@ -68,10 +68,10 @@ def dreams():
             return redirect("/")
 
         else:
-            return render_template("dreams.html", dreams=dreams)
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
     else:
-        return render_template("dreams.html", dreams=dreams, quote=quote)
+        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
 
 
 @app.route("/secrets", methods=["GET", "POST"])
@@ -118,37 +118,74 @@ def secrets():
 
 @app.route("/comment", methods=["POST"])
 @login_required
-def title_edit():
+def comment():
     """Add comment to a dream"""
 
     dreams_id = request.form["dreams_id"]
     content = request.form["content"]
 
     db.execute(
-        "INSERT INTO secrets (user_id, dreams_id, content) VALUES (?, ?, ?)",
+        "INSERT INTO comments (user_id, dreams_id, content) VALUES (?, ?, ?)",
         session["user_id"],
         dreams_id,
         content,
     )
 
+    """Show list of dreams.db"""
     dreams = db.execute("SELECT * FROM dreams")
-    return render_template("mypost.html", dreams=dreams)
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
 
 
-# @app.route("/overview_edit", methods=["POST"])
-# @login_required
-# def overview_edit():
-#     """Edit my overview"""
+@app.route("/reply", methods=["POST"])
+@login_required
+def reply():
+    """Add reply to a comment"""
 
-#     id = request.form["id"]
-#     overview = request.form["overview"]
+    comments_id = request.form["comments_id"]
+    content = request.form["content"]
 
-#     db.execute("UPDATE posts SET overview = ? WHERE id = ?", overview, id)
+    db.execute(
+        "INSERT INTO replies (user_id, comments_id, content) VALUES (?, ?, ?)",
+        session["user_id"],
+        comments_id,
+        content,
+    )
 
-#     flash("編集が完了しました。")
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
 
-#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-#     return render_template("mypost.html", posts=posts)
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+
+
+@app.route("/best_answer", methods=["POST"])
+@login_required
+def best_answer():
+    """Select a best answer"""
+
+    comment_id = request.form["comment_id"]
+
+    db.execute("UPDATE comments SET is_best = ? WHERE id = ?", 1, comment_id)
+
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
 
 
 # @app.route("/content_edit", methods=["POST"])
