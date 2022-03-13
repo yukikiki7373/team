@@ -5,7 +5,56 @@
 }
 /*---//リセットCSS-------*/
 
+/*---topページのCSS-----*/
+img {
+  display: block;
+}
+.img-position {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+img:first-child {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+img:nth-child(2) {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+img:nth-child(3) {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+
+.top-button {
+  position: absolute;
+  top: 600px;
+  left: 550px;
+}
+
+.btn-primary-top {
+  width: 130px;
+  height: 30px;
+  margin-left: 50px;
+  color: #fff;
+  border: 2px solid #0000cd;
+  border-radius: 0;
+  background: #00bfff;
+  -webkit-box-shadow: 4px 4px 0 #000;
+  box-shadow: 4px 4px 0 #000;
+}
+.btn-primary-top:hover {
+  -webkit-box-shadow: -4px -4px 0 #000;
+  box-shadow: -4px -4px 0 #000;
+}
+
+/*---//topページのCSS----*?
 /*---背景画像の設定------*/
+
 .fv {
   background-image: url(../img/dreams.png);
   height: 100%;
