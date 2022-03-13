@@ -38,9 +38,9 @@ db = SQL("sqlite:///teamSQLite/team.db")
 
 
 @app.route("/")
-@login_required
+# @login_required
 def index():
-    return render_template("dreams.html")
+    return render_template("top.html")
 
 # @app.route("/list")
 # @login_required
