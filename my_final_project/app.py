@@ -108,12 +108,23 @@ def secrets():
         return render_template("secrets.html", secrets=secrets, quote=quote)
 
 
-# @app.route("/mypost")
-# @login_required
-# def mypost():
-#     """Show my post"""
-#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-#     return render_template("mypost.html", posts=posts)
+@app.route("/mydreams")
+@login_required
+def mydreams():
+    """Show my dreams"""
+    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ?", session["user_id"])
+    comments = db.execute(
+        "SELECT * FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    replies = db.execute(
+        "SELECT * FROM replies WHERE comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    return render_template("mypost.html", dreams=dreams, comments=comments, replies=replies)
+
+
+
 
 
 @app.route("/comment", methods=["POST"])
