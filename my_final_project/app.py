@@ -1,3 +1,4 @@
+from turtle import title
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
@@ -41,40 +42,71 @@ db = SQL("sqlite:///teamSQLite/team.db")
 def top():
     return render_template("top.html")
 
-# @app.route("/list")
-# @login_required
-# def list():
-#     """Show list of sotsuron.db"""
-#     posts = db.execute("SELECT * FROM posts")
-#     return render_template("list.html", posts=posts)
+@app.route("/dreams", methods=["GET", "POST"])
+@login_required
+def dreams():
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    dreams = db.execute("SELECT * FROM dreams")
 
-# @app.route("/post_register", methods=["GET", "POST"])
-# @login_required
-# def post_register():
-#     """Register new post"""
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
 
-#     if request.method == "POST":
-#         title = request.form.get("title")
-#         overview = request.form.get("overview")
-#         content = request.form.get("content")
-#         learned = request.form.get("learned")
-#         help = request.form.get("help")
+    """Costomer can register new dream"""
+    is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-#         db.execute(
-#             "INSERT INTO posts (user_id, title, overview, content, learned, help) VALUES (?, ?, ?, ?, ?, ?)",
-#             session["user_id"],
-#             title,
-#             overview,
-#             content,
-#             learned,
-#             help
-#         )
+    if is_business == 0:
+        if request.method == "POST":
+            content = request.form.get("content")
+            db.execute(
+                "INSERT INTO dreams (user_id, content) VALUES (?, ?)",
+                session["user_id"],
+                content
+            )
+            return redirect("/")
 
-#         flash("投稿が完了しました。")
-#         return redirect("/")
+        else:
+            return render_template("dreams.html", dreams=dreams)
 
-#     else:
-#         return render_template("post_register.html")
+    else:
+        return render_template("dreams.html", dreams=dreams, quote=quote)
+
+
+@app.route("/secrets", methods=["GET", "POST"])
+@login_required
+def secrets():
+    """Show list of secrets.db"""
+    secrets = db.execute("SELECT * FROM secrets")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM secrets LIKE "%keyword%"")
+
+    """Business users can register new dream"""
+    is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
+
+    if is_business == 1:
+        if request.method == "POST":
+            title = request.form.get("title")
+            content = request.form.get("content")
+            image = request.form.get("image")
+            db.execute(
+                "INSERT INTO secrets (user_id, title, content, image) VALUES (?, ?, ?, ?)",
+                session["user_id"],
+                title,
+                content,
+                image
+            )
+            return redirect("/")
+
+        else:
+            return render_template("secrets.html", secrets=secrets)
+
+    else:
+        return render_template("secrets.html", secrets=secrets, quote=quote)
+
 
 # @app.route("/mypost")
 # @login_required
@@ -84,20 +116,23 @@ def top():
 #     return render_template("mypost.html", posts=posts)
 
 
-# @app.route("/title_edit", methods=["POST"])
-# @login_required
-# def title_edit():
-#     """Edit my title"""
+@app.route("/comment", methods=["POST"])
+@login_required
+def title_edit():
+    """Add comment to a dream"""
 
-#     id = request.form["id"]
-#     title = request.form["title"]
+    dreams_id = request.form["dreams_id"]
+    content = request.form["content"]
 
-#     db.execute("UPDATE posts SET title= ? WHERE id = ?", title, id)
+    db.execute(
+        "INSERT INTO secrets (user_id, dreams_id, content) VALUES (?, ?, ?)",
+        session["user_id"],
+        dreams_id,
+        content,
+    )
 
-#     flash("編集が完了しました。")
-
-#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-#     return render_template("mypost.html", posts=posts)
+    dreams = db.execute("SELECT * FROM dreams")
+    return render_template("mypost.html", dreams=dreams)
 
 
 # @app.route("/overview_edit", methods=["POST"])
