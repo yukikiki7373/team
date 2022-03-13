@@ -42,116 +42,116 @@ db = SQL("sqlite:///teamSQLite/team.db")
 def dreams():
     return render_template("dreams.html")
 
-@app.route("/list")
-@login_required
-def list():
-    """Show list of sotsuron.db"""
-    posts = db.execute("SELECT * FROM posts")
-    return render_template("list.html", posts=posts)
+# @app.route("/list")
+# @login_required
+# def list():
+#     """Show list of sotsuron.db"""
+#     posts = db.execute("SELECT * FROM posts")
+#     return render_template("list.html", posts=posts)
 
-@app.route("/post_register", methods=["GET", "POST"])
-@login_required
-def post_register():
-    """Register new post"""
+# @app.route("/post_register", methods=["GET", "POST"])
+# @login_required
+# def post_register():
+#     """Register new post"""
 
-    if request.method == "POST":
-        title = request.form.get("title")
-        overview = request.form.get("overview")
-        content = request.form.get("content")
-        learned = request.form.get("learned")
-        help = request.form.get("help")
+#     if request.method == "POST":
+#         title = request.form.get("title")
+#         overview = request.form.get("overview")
+#         content = request.form.get("content")
+#         learned = request.form.get("learned")
+#         help = request.form.get("help")
 
-        db.execute(
-            "INSERT INTO posts (user_id, title, overview, content, learned, help) VALUES (?, ?, ?, ?, ?, ?)",
-            session["user_id"],
-            title,
-            overview,
-            content,
-            learned,
-            help
-        )
+#         db.execute(
+#             "INSERT INTO posts (user_id, title, overview, content, learned, help) VALUES (?, ?, ?, ?, ?, ?)",
+#             session["user_id"],
+#             title,
+#             overview,
+#             content,
+#             learned,
+#             help
+#         )
 
-        flash("投稿が完了しました。")
-        return redirect("/")
+#         flash("投稿が完了しました。")
+#         return redirect("/")
 
-    else:
-        return render_template("post_register.html")
+#     else:
+#         return render_template("post_register.html")
 
-@app.route("/mypost")
-@login_required
-def mypost():
-    """Show my post"""
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
-
-
-@app.route("/title_edit", methods=["POST"])
-@login_required
-def title_edit():
-    """Edit my title"""
-
-    id = request.form["id"]
-    title = request.form["title"]
-
-    db.execute("UPDATE posts SET title= ? WHERE id = ?", title, id)
-
-    flash("編集が完了しました。")
-
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
+# @app.route("/mypost")
+# @login_required
+# def mypost():
+#     """Show my post"""
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
 
 
-@app.route("/overview_edit", methods=["POST"])
-@login_required
-def overview_edit():
-    """Edit my overview"""
+# @app.route("/title_edit", methods=["POST"])
+# @login_required
+# def title_edit():
+#     """Edit my title"""
 
-    id = request.form["id"]
-    overview = request.form["overview"]
+#     id = request.form["id"]
+#     title = request.form["title"]
 
-    db.execute("UPDATE posts SET overview = ? WHERE id = ?", overview, id)
+#     db.execute("UPDATE posts SET title= ? WHERE id = ?", title, id)
 
-    flash("編集が完了しました。")
+#     flash("編集が完了しました。")
 
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
-
-
-@app.route("/content_edit", methods=["POST"])
-@login_required
-def content_edit():
-    """Edit my content"""
-
-    id = request.form["id"]
-    content = request.form["content"]
-
-    db.execute("UPDATE posts SET content = ? WHERE id = ?", content, id)
-
-    flash("編集が完了しました。")
-
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
 
 
-@app.route("/learned_edit", methods=["POST"])
-@login_required
-def learned_edit():
-    """Edit my learned"""
+# @app.route("/overview_edit", methods=["POST"])
+# @login_required
+# def overview_edit():
+#     """Edit my overview"""
 
-    id = request.form["id"]
-    learned = request.form["learned"]
+#     id = request.form["id"]
+#     overview = request.form["overview"]
 
-    db.execute("UPDATE posts SET learned = ? WHERE id = ?", learned, id)
+#     db.execute("UPDATE posts SET overview = ? WHERE id = ?", overview, id)
 
-    flash("編集が完了しました。")
+#     flash("編集が完了しました。")
 
-    posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-    return render_template("mypost.html", posts=posts)
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
 
 
-@app.route("/help_edit", methods=["POST"])
-@login_required
-def help_edit():
+# @app.route("/content_edit", methods=["POST"])
+# @login_required
+# def content_edit():
+#     """Edit my content"""
+
+#     id = request.form["id"]
+#     content = request.form["content"]
+
+#     db.execute("UPDATE posts SET content = ? WHERE id = ?", content, id)
+
+#     flash("編集が完了しました。")
+
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
+
+
+# @app.route("/learned_edit", methods=["POST"])
+# @login_required
+# def learned_edit():
+#     """Edit my learned"""
+
+#     id = request.form["id"]
+#     learned = request.form["learned"]
+
+#     db.execute("UPDATE posts SET learned = ? WHERE id = ?", learned, id)
+
+#     flash("編集が完了しました。")
+
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
+
+
+# @app.route("/help_edit", methods=["POST"])
+# @login_required
+# def help_edit():
     """Edit my help"""
 
     id = request.form["id"]
