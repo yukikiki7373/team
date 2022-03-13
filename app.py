@@ -37,7 +37,7 @@ Session(app)
 db = SQL("sqlite:///teamSQLite/team.db")
 
 
-@app.route("/")
+@app.route("/dreams")
 @login_required
 def dreams():
     return render_template("dreams.html")
@@ -254,7 +254,7 @@ def register_b():
                 "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
             )
             # Redirect user to home page
-            return redirect("/")
+            return redirect("/dreams")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
