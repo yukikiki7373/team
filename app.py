@@ -37,9 +37,9 @@ Session(app)
 db = SQL("sqlite:///teamSQLite/team.db")
 
 
-@app.route("/dreams")
+@app.route("/")
 @login_required
-def dreams():
+def index():
     return render_template("dreams.html")
 
 # @app.route("/list")
