@@ -1,7 +1,15 @@
+<<<<<<< HEAD
+=======
+from turtle import title
+>>>>>>> 372a9176fcffd50237e1131204374907b35893da
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
 from flask_session import Session
+<<<<<<< HEAD
+=======
+from sqlalchemy import true
+>>>>>>> 372a9176fcffd50237e1131204374907b35893da
 from helpers import apology, login_required
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -33,6 +41,7 @@ Session(app)
 
 
 # Configure CS50 Library to use SQLite database
+<<<<<<< HEAD
 db = SQL("sqlite:///sotsuron.db")
 
 
@@ -151,6 +160,207 @@ def learned_edit():
 @app.route("/help_edit", methods=["POST"])
 @login_required
 def help_edit():
+=======
+db = SQL("sqlite:///teamSQLite/team.db")
+
+
+@app.route("/")
+def top():
+    return render_template("top.html")
+
+@app.route("/dreams", methods=["GET", "POST"])
+@login_required
+def dreams():
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+
+    """Costomer can register new dream"""
+    is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
+
+    if is_business == 0:
+        if request.method == "POST":
+            content = request.form.get("content")
+            db.execute(
+                "INSERT INTO dreams (user_id, content) VALUES (?, ?)",
+                session["user_id"],
+                content
+            )
+            return redirect("/")
+
+        else:
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+
+    else:
+        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+
+
+@app.route("/secrets", methods=["GET", "POST"])
+@login_required
+def secrets():
+    """Show list of secrets.db"""
+    secrets = db.execute("SELECT * FROM secrets")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM secrets LIKE "%keyword%"")
+
+    """Business users can register new dream"""
+    is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
+
+    if is_business == 1:
+        if request.method == "POST":
+            title = request.form.get("title")
+            content = request.form.get("content")
+            image = request.form.get("image")
+            db.execute(
+                "INSERT INTO secrets (user_id, title, content, image) VALUES (?, ?, ?, ?)",
+                session["user_id"],
+                title,
+                content,
+                image
+            )
+            return redirect("/")
+
+        else:
+            return render_template("secrets.html", secrets=secrets)
+
+    else:
+        return render_template("secrets.html", secrets=secrets, quote=quote)
+
+
+@app.route("/mydreams")
+@login_required
+def mydreams():
+    """Show my dreams"""
+    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ?", session["user_id"])
+    comments = db.execute(
+        "SELECT * FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    replies = db.execute(
+        "SELECT * FROM replies WHERE comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    return render_template("mypost.html", dreams=dreams, comments=comments, replies=replies)
+
+
+
+
+
+@app.route("/comment", methods=["POST"])
+@login_required
+def comment():
+    """Add comment to a dream"""
+
+    dreams_id = request.form["dreams_id"]
+    content = request.form["content"]
+
+    db.execute(
+        "INSERT INTO comments (user_id, dreams_id, content) VALUES (?, ?, ?)",
+        session["user_id"],
+        dreams_id,
+        content,
+    )
+
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+
+
+@app.route("/reply", methods=["POST"])
+@login_required
+def reply():
+    """Add reply to a comment"""
+
+    comments_id = request.form["comments_id"]
+    content = request.form["content"]
+
+    db.execute(
+        "INSERT INTO replies (user_id, comments_id, content) VALUES (?, ?, ?)",
+        session["user_id"],
+        comments_id,
+        content,
+    )
+
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+
+
+@app.route("/best_answer", methods=["POST"])
+@login_required
+def best_answer():
+    """Select a best answer"""
+
+    comment_id = request.form["comment_id"]
+
+    db.execute("UPDATE comments SET is_best = ? WHERE id = ?", 1, comment_id)
+
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams")
+    comments = db.execute("SELECT * FROM comments")
+    replies = db.execute("SELECT * FROM replies")
+
+    """Show the result of quotation"""
+    keyword = request.form.get("keyword")
+    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+
+
+# @app.route("/content_edit", methods=["POST"])
+# @login_required
+# def content_edit():
+#     """Edit my content"""
+
+#     id = request.form["id"]
+#     content = request.form["content"]
+
+#     db.execute("UPDATE posts SET content = ? WHERE id = ?", content, id)
+
+#     flash("編集が完了しました。")
+
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
+
+
+# @app.route("/learned_edit", methods=["POST"])
+# @login_required
+# def learned_edit():
+#     """Edit my learned"""
+
+#     id = request.form["id"]
+#     learned = request.form["learned"]
+
+#     db.execute("UPDATE posts SET learned = ? WHERE id = ?", learned, id)
+
+#     flash("編集が完了しました。")
+
+#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
+#     return render_template("mypost.html", posts=posts)
+
+
+# @app.route("/help_edit", methods=["POST"])
+# @login_required
+# def help_edit():
+>>>>>>> 372a9176fcffd50237e1131204374907b35893da
     """Edit my help"""
 
     id = request.form["id"]
@@ -214,8 +424,13 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+<<<<<<< HEAD
 @app.route("/register", methods=["GET", "POST"])
 def register():
+=======
+@app.route("/register_b", methods=["GET", "POST"])
+def register_b():
+>>>>>>> 372a9176fcffd50237e1131204374907b35893da
     if request.method == "POST":
 
         username = request.form.get("username")
@@ -250,6 +465,7 @@ def register():
             )
             # Insert the new user
             db.execute(
+<<<<<<< HEAD
                 "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash,
             )
             # Redirect user to home page
@@ -258,6 +474,61 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+=======
+                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
+            )
+            # Redirect user to home page
+            return redirect("/dreams")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register_b.html")
+
+@app.route("/register_c", methods=["GET", "POST"])
+def register_c():
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+        # Ensure the username was submitted
+        if not username:
+            return apology("ユーザー名を入力してください", 400)
+        # Ensure the username doesn't exists
+        elif len(rows) != 0:
+            return apology("このユーザー名は既に登録されています", 400)
+
+        # Ensure password was submitted
+        elif not password:
+            return apology("パスワードを入力してください", 400)
+
+        # Ensure confirmation password was submitted
+        elif not request.form.get("confirmation"):
+            return apology("パスワード（確認）を入力してください", 400)
+
+        # Ensure passwords match
+        elif not password == confirmation:
+            return apology("同じパスワードを入力してください", 400)
+
+        else:
+            # Generate the hash of the password
+            hash = generate_password_hash(
+                password, method="pbkdf2:sha256", salt_length=8
+            )
+            # Insert the new user
+            db.execute(
+                "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash
+            )
+            # Redirect user to home page
+            return redirect("/dreams")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register_c.html")
+>>>>>>> 372a9176fcffd50237e1131204374907b35893da
 
 def errorhandler(e):
     """Handle error"""

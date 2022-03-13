@@ -50,13 +50,40 @@
 --     FOREIGN KEY(dreams_id) REFERENCES dreams(id)
 -- );
 
+-- CREATE TABLE replies(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     coments_id INTEGER NOT NULL,
+--     content TEXT NOT NULL,
+--     is_deleted BOOLEAN NOT NULL,
+--     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
+--     FOREIGN KEY(user_id) REFERENCES users(id),
+--     FOREIGN KEY(coments_id) REFERENCES coments(id)
+-- );
+
+-- DROP TABLE coments;
+
+-- CREATE TABLE comments(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     dreams_id INTEGER NOT NULL,
+--     content TEXT NOT NULL,
+--     is_best BOOLEAN NOT NULL,
+--     is_deleted BOOLEAN NOT NULL,
+--     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
+--     FOREIGN KEY(user_id) REFERENCES users(id),
+--     FOREIGN KEY(dreams_id) REFERENCES dreams(id)
+-- );
+
+-- DROP TABLE replies;
+
 CREATE TABLE replies(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    coments_id INTEGER NOT NULL,
+    comments_id INTEGER NOT NULL,
     content TEXT NOT NULL,
     is_deleted BOOLEAN NOT NULL,
     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
     FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(coments_id) REFERENCES coments(id)
+    FOREIGN KEY(comments_id) REFERENCES comments(id)
 );

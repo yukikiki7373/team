@@ -1,21 +1,49 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>もしもボックス</title>
+</head>
 
-{% block title %}
-ログイン
-{% endblock %}
 
-{% block main %}
-    <img class="picture"
-    src="https://1.bp.blogspot.com/--nV_777pz5E/U9y_XEAjLGI/AAAAAAAAjbY/hmS2E1G1SCE/s800/flower_seichou2.png"
-    alt="A sprout"/>
-
-    <form action="/login" method="post">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control_2" name="username" placeholder="Username" type="text">
+<body>
+<!-----------------------------ログインボタン-------------------------------->
+    <div class="fv">
+        <div class="login-button">
+            <form action="/login" method="post">
+               <div class="form-group">
+                   <input autocomplete="off" autofocus class="form-control" name="username" placeholder="なまえ" type="text">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" name="password" placeholder="ひみつのばんごう" type="password">
+                </div>
+                <button class="btn btn-primary" type="submit">ろぐいん</button>
+            </form>
         </div>
-        <div class="form-group">
-            <input class="form-control_2" name="password" placeholder="Password" type="password">
-        </div>
-        <button class="btn btn-light" type="submit">Log in</button>
-    </form>
-{% endblock %}
+<!------------------------------//ログインボタン-------------------------------->
+
+<!------------------------------登録ボタン-------------------------------------->
+            <div>
+                
+                   <a href="register_c.html"><button class="btn btn-primary-first" type="submit">はじめての方</button></a>
+                
+            </div>
+                
+<!-----------------------------//登録ボタン-------------------------------------->            
+
+<!-----------------------------開発者登録ボタン----------------------------------->
+            <div>
+                
+                  <a href="register_b.html"><button class="btn btn-primary-developer" type="submit">はじめましての<br>ひみつ道具の開発者の方</button></a>
+                
+            </div>
+ <!----------------------------//開発者登録ボタン---------------------------------->               
+        
+    </div>
+
+</body>
+</html>
+
