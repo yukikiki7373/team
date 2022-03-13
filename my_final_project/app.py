@@ -1,3 +1,4 @@
+from turtle import title
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
@@ -110,6 +111,36 @@ def secrets():
 @app.route("/mydreams")
 @login_required
 def mydreams():
+    """Show my dreams & comments & replies"""
+    dreams = db.execute(
+        "SELECT * FROM dreams WHERE user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
+        session["user_id"],
+        session["user_id"],
+        session["user_id"]
+    )
+    comments = db.execute(
+        "SELECT * FROM comments WHERE user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
+        session["user_id"],
+        session["user_id"],
+        session["user_id"]
+    )
+    replies = db.execute(
+        "SELECT * FROM replies WHERE comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
+
+
+@app.route("/dream_edit", methods=["POST"])
+@login_required
+def dream_edit():
+    """Edit my dream"""
+
+    dream_id = request.form["dream_id"]
+    content = request.form["content"]
+
+    db.execute("UPDATE dreams SET content = ? WHERE id = ?", content, dream_id)
+
     """Show my dreams"""
     dreams = db.execute("SELECT * FROM dreams WHERE user_id = ?", session["user_id"])
     comments = db.execute(
@@ -120,11 +151,30 @@ def mydreams():
         "SELECT * FROM replies WHERE comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
         session["user_id"]
     )
-    return render_template("mypost.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
+@app.route("/comment_edit", methods=["POST"])
+@login_required
+def dream_edit():
+    """Edit my dream"""
 
+    dream_id = request.form["dream_id"]
+    content = request.form["content"]
 
+    db.execute("UPDATE dreams SET content = ? WHERE id = ?", content, dream_id)
+
+    """Show my dreams"""
+    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ?", session["user_id"])
+    comments = db.execute(
+        "SELECT * FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    replies = db.execute(
+        "SELECT * FROM replies WHERE comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        session["user_id"]
+    )
+    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
 
 @app.route("/comment", methods=["POST"])
 @login_required
@@ -197,21 +247,6 @@ def best_answer():
     quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
     return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
 
-
-# @app.route("/content_edit", methods=["POST"])
-# @login_required
-# def content_edit():
-#     """Edit my content"""
-
-#     id = request.form["id"]
-#     content = request.form["content"]
-
-#     db.execute("UPDATE posts SET content = ? WHERE id = ?", content, id)
-
-#     flash("編集が完了しました。")
-
-#     posts = db.execute("SELECT * FROM posts WHERE user_id = ?", session["user_id"])
-#     return render_template("mypost.html", posts=posts)
 
 
 # @app.route("/learned_edit", methods=["POST"])
@@ -296,10 +331,9 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
-    
+
 @app.route("/register_b", methods=["GET", "POST"])
 def register_b():
-
     if request.method == "POST":
 
         username = request.form.get("username")
