@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from turtle import title
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -432,3 +433,28 @@ def errorhandler(e):
 # Listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+
+@app.route("/dream_delete", methods=["POST"]) #this is for normal_user 
+@login_required
+def dream_delete():
+    """dream_delete"""
+
+    user_id = session["user_id"] # insert user_id 
+    dreams_id = request.form.get("dream")
+
+    db.execute("UPDATE dreams SET is_deleted = ? WHERE id = ? AND user_id = ?", 1, dreams_id, user_id) #Change id_deleted == true
+
+    return render_template("/")#これの遷移先が不明のため後で質問する
+
+@app.route("/secrets_delete", methods=["POST"]) #this is for developer
+@login_required
+def secrets_delete():
+    """secrets_delete"""
+
+    user_id = session["user_id"] # insert user_id 
+    secrets = request.form.get("secrets")
+
+    db.execute("UPDATE secrets SET is_deleted = ? WHERE id = ? AND user_id = ?", 1, secrets, user_id) #Change id_deleted == true
+
+    return render_template("/")#これの遷移先が不明のため後で質問する
