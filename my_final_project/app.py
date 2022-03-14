@@ -155,28 +155,6 @@ def dream_edit():
     return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
-@app.route("/comment_edit", methods=["POST"])
-@login_required
-def dream_edit():
-    """Edit my dream"""
-
-    dream_id = request.form["dream_id"]
-    content = request.form["content"]
-
-    db.execute("UPDATE dreams SET content = ? WHERE id = ?", content, dream_id)
-
-    """Show my dreams"""
-    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ?", session["user_id"])
-    comments = db.execute(
-        "SELECT * FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        session["user_id"]
-    )
-    replies = db.execute(
-        "SELECT * FROM replies WHERE comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        session["user_id"]
-    )
-    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
-
 @app.route("/comment", methods=["POST"])
 @login_required
 def comment():
