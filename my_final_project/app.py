@@ -435,26 +435,35 @@ for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
 
-@app.route("/dream_delete", methods=["POST"]) #this is for normal_user 
+@app.route("/dream_delete", methods=["POST"]) #To delete posts（this is for normal_user） 
 @login_required
 def dream_delete():
     """dream_delete"""
 
     user_id = session["user_id"] # insert user_id 
-    dreams_id = request.form.get("dream")
+    dreams_content = request.form.get("dreams_content") #Insert content into this variable. Comparison to investigate which dream is about to delete
+    dreams_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, dreams_content)
 
-    db.execute("UPDATE dreams SET is_deleted = ? WHERE id = ? AND user_id = ?", 1, dreams_id, user_id) #Change id_deleted == true
+    db.execute("UPDATE dreams SET is_deleted = 1 WHERE id = ? AND user_id = ?", dreams_id, user_id) #Change id_deleted == true
+
+    #delete comments related posts that is deleted ↑ (Change 'is_deleted' into 1)
+    comments_id = db.execute("SELECT id FROM comments WHERE dream_id = ?", dreams_id)
+    db.execute("UPDATE comments SET is_deleted = 1 WHERE id = ?", comments_id)
+
+    #delete replies related comments that is deleted ↑ (Change 'is_deleted' into 1)
+    db.execute("UPDATE replies SET is_deleted = 1 WHERER comments_id = ?", comments_id)
 
     return render_template("/")#これの遷移先が不明のため後で質問する
 
-@app.route("/secrets_delete", methods=["POST"]) #this is for developer
+@app.route("/secrets_delete", methods=["POST"]) #To delete posts(this is for developer)
 @login_required
 def secrets_delete():
     """secrets_delete"""
 
     user_id = session["user_id"] # insert user_id 
-    secrets = request.form.get("secrets")
+    secrets_content = request.form.get("secrets_content") #Insert content into this variable. Comparison to investigate which secret is about to delete
+    secrets_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, secrets_content)
 
-    db.execute("UPDATE secrets SET is_deleted = ? WHERE id = ? AND user_id = ?", 1, secrets, user_id) #Change id_deleted == true
+    db.execute("UPDATE secrets SET is_deleted = 1 WHERE id = ? AND user_id = ?", secrets_id, user_id) #Change id_deleted == true
 
     return render_template("/")#これの遷移先が不明のため後で質問する
