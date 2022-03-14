@@ -68,7 +68,7 @@ def dreams():
             return redirect("/")
 
         else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
 
     else:
         return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
@@ -102,7 +102,7 @@ def secrets():
             return redirect("/")
 
         else:
-            return render_template("secrets.html", secrets=secrets)
+            return render_template("secrets.html", secrets=secrets, quote=quote)
 
     else:
         return render_template("secrets.html", secrets=secrets, quote=quote)
