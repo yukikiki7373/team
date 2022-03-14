@@ -46,13 +46,13 @@ def top():
 @login_required
 def dreams():
     """Show list of dreams.db"""
-    dreams = db.execute("SELECT * FROM dreams")
-    comments = db.execute("SELECT * FROM comments")
-    replies = db.execute("SELECT * FROM replies")
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", 0)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? AND dreams_id IN(SELECT id FROM dreams WHERE is_deleted = ?)", 0, 0)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND comments_id IN(SELECT id FROM comments WHERE is_deleted = ?)", 0, 0)
 
     """Show the result of quotation"""
     keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams LIKE "%keyword%"")
+    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
 
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -78,11 +78,11 @@ def dreams():
 @login_required
 def secrets():
     """Show list of secrets.db"""
-    secrets = db.execute("SELECT * FROM secrets")
+    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", 0)
 
     """Show the result of quotation"""
     keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM secrets LIKE "%keyword%"")
+    quote = db.execute("SELECT * FROM secrets WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
 
     """Business users can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
