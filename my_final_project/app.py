@@ -517,3 +517,50 @@ def secrets_delete():
     db.execute("UPDATE secrets SET is_deleted = 1 WHERE id = ? AND user_id = ?", secrets_id, user_id) #Change id_deleted == true
 
     return render_template("/")#これの遷移先が不明のため後で質問する
+
+
+@app.route("/mysecrets") #To show secrets(only developer who is login)
+@login_required
+def mysecrets():
+    user_id = session["user_id"]
+    """Show my secrets"""
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = 0", user_id)
+
+    return render_template("mypage_b.html", secrets=secrets)
+
+
+@app.route("/show_my_best_answer") #To show best_answer(only developer who is login)
+@login_required
+def show_my_best_answer():
+    user_id = session["user_id"]
+
+    user = db.execute("SELECT is_business FROM users WHERE id = ?", user_id)
+
+    """Show best answer"""
+    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ? AND is_deleted = 0 AND is_best = 1", user_id)
+    comments = db.execute("SELECT * FROM comments WHERE user_id = ? AND is_deleted = 0", user_id)
+    replies = db.execute("SELECT * FROM replies WHERE user_id = ? AND is_deleted = 0", user_id)
+    if user == 0:
+        return render_template("mypage_c.html", dreams=dreams, comments=comments, replies=replies)
+    else:
+        return render_template("mypage_b.html", dreams=dreams, comments=comments, replies=replies)
+
+
+@app.route("/secrets_edit", methods=["POST"]) #To edit secrets(only developer who is login)
+@login_required
+def secrets_edit():
+
+    user_id = session["user_id"]
+
+    """Edit my secrets"""
+
+    secrets_id = request.form["secrets_id"]
+    secrets_content = request.form["secrets_content"]
+
+    db.execute("UPDATE secrets SET content = ? WHERE id = ?, user_id = ?", secrets_content, secrets_id, user_id)
+
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = 0", user_id)
+
+
+    return render_template("mypage_b.html", secrets=secrets)
+
