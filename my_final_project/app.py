@@ -47,13 +47,9 @@ def top():
 @login_required
 def dreams():
     """Show list of dreams.db"""
-    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", 0)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", 0)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", 0)
-
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -69,21 +65,46 @@ def dreams():
             return redirect("/")
 
         else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
     else:
-        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+
+
+@app.route("/quote_dreams", methods=["GET", "POST"])
+@login_required
+def quote_dreams():  
+    """Show the result of quotation of dreams"""
+    symbol = request.form.get("symbol")
+    quote = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?",
+        False, 
+        symbol
+        )
+
+    return render_template("quote.html", quote=quote)
+
+
+@app.route("/quote_secrets", methods=["GET", "POST"])
+@login_required
+def quote_secrets():  
+    """Show the result of quotation of secrets"""
+    symbol = request.form.get("symbol")
+    quote = db.execute(
+        "SELECT * FROM secrets WHERE is_deleted = ? AND content LIKE ? OR title LIKE ?",
+        False,
+        symbol,
+        symbol
+    )
+
+    return render_template("quote.html", quote=quote)
 
 
 @app.route("/secrets", methods=["GET", "POST"])
 @login_required
 def secrets():
     """Show list of secrets.db"""
-    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", 0)
-
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM secrets WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
+    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", False)
 
     """Business users can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -103,33 +124,36 @@ def secrets():
             return redirect("/")
 
         else:
-            return render_template("secrets.html", secrets=secrets, quote=quote)
+            return render_template("secrets.html", secrets=secrets)
 
     else:
-        return render_template("secrets.html", secrets=secrets, quote=quote)
+        return render_template("secrets.html", secrets=secrets)
 
 
 @app.route("/mydreams")
 @login_required
 def mydreams():
     """Show my dreams & comments & replies"""
+    """Show my dreams & comments & replies"""
     dreams = db.execute(
         "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     comments = db.execute(
         "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        0,
+        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        False,
+        session["user_id"],
+        session["user_id"],
         session["user_id"]
     )
     return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
@@ -148,21 +172,23 @@ def dream_edit():
     """Show my dreams & comments & replies"""
     dreams = db.execute(
         "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     comments = db.execute(
         "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        0,
+        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        False,
+        session["user_id"],
+        session["user_id"],
         session["user_id"]
     )
     return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
@@ -181,21 +207,23 @@ def comment_edit():
     """Show my dreams & comments & replies"""
     dreams = db.execute(
         "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     comments = db.execute(
         "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        0,
+        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        False,
+        session["user_id"],
+        session["user_id"],
         session["user_id"]
     )
     return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
@@ -216,21 +244,23 @@ def reply_edit():
     """Show my dreams & comments & replies"""
     dreams = db.execute(
         "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     comments = db.execute(
         "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
-        0,
+        False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
     replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        0,
+        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
+        False,
+        session["user_id"],
+        session["user_id"],
         session["user_id"]
     )
     return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
@@ -252,15 +282,11 @@ def comment():
     )
 
     """Show list of dreams.db"""
-    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", 0)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", 0)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", 0)
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
-
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/reply", methods=["POST"])
@@ -279,15 +305,11 @@ def reply():
     )
 
     """Show list of dreams.db"""
-    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", 0)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", 0)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", 0)
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
-
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/best_answer", methods=["POST"])
@@ -300,15 +322,11 @@ def best_answer():
     db.execute("UPDATE comments SET is_best = ? WHERE id = ?", 1, comment_id)
 
     """Show list of dreams.db"""
-    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", 0)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", 0)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", 0)
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
-
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/solve_dream", methods=["POST"])
@@ -321,16 +339,11 @@ def solve_dream():
     db.execute("UPDATE dreams SET is_solve = ? WHERE id = ?", 1, dream_id)
 
     """Show list of dreams.db"""
-    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", 0)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", 0)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", 0)
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
-
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
-
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -419,10 +432,10 @@ def register_b():
             )
             # Insert the new user
             db.execute(
-                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
+                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, True
             )
             # Redirect user to home page
-            return redirect("/")
+            return redirect("/login")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -467,7 +480,7 @@ def register_c():
                 "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash
             )
             # Redirect user to home page
-            return redirect("/dreams")
+            return redirect("/login")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
