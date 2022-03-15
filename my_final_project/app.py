@@ -350,7 +350,7 @@ def register_b():
                 "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
             )
             # Redirect user to home page
-            return redirect("/dreams")
+            return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
