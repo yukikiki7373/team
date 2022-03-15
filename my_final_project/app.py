@@ -393,7 +393,7 @@ def logout():
 @app.route("/register_b", methods=["GET", "POST"])
 def register_b():
     if request.method == "POST":
-        print("test")
+        
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
