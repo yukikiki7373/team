@@ -51,14 +51,10 @@ def dreams():
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", 0)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", 0)
 
-    """Show the result of quotation"""
-    keyword = request.form.get("keyword")
-    quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?", 0, keyword)
-
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-    if is_business == 0:
+    if is_business == False:
         if request.method == "POST":
             content = request.form.get("content")
             db.execute(
@@ -69,10 +65,21 @@ def dreams():
             return redirect("/")
 
         else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
     else:
-        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, quote=quote)
+        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+
+# @app.route("/quote", methods=["GET", "POST"])
+# @login_required
+# def quote():
+
+#     """Show the result of quotation"""
+#     symbol = request.form.get("symbol")
+#     quote = db.execute("SELECT * FROM dreams WHERE is_deleted = ? AND content = ?", False, symbol)
+
+#     return render_template("quote.html", quote=quote)
+
 
 
 @app.route("/secrets", methods=["GET", "POST"])
@@ -366,7 +373,7 @@ def login():
         session["user_id"] = users[0]["id"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/dreams")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -386,7 +393,7 @@ def logout():
 @app.route("/register_b", methods=["GET", "POST"])
 def register_b():
     if request.method == "POST":
-
+        print("test")
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
@@ -419,10 +426,11 @@ def register_b():
             )
             # Insert the new user
             db.execute(
-                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, true
+                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, True
             )
+
             # Redirect user to home page
-            return redirect("/")
+            return redirect("/login")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
