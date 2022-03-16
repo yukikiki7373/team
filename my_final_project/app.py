@@ -44,6 +44,21 @@ db = SQL("sqlite:///teamSQLite/team.db")
 def top():
     return render_template("top.html")
 
+    #------------------------------jinnaテスト用コード--------------------------------------
+    # test = "jinjaは作動してる!!"
+
+    # names = {'yuki', 'takahashi', 'aaa', 'bbb', 11}
+
+    # db.execute("DELETE FROM users WHERE username LIKE '%i'")
+    # db.execute("INSERT INTO users(username, hash, is_business) values('yuki', 'fwaofhaogoha', True)")
+    # db.execute("INSERT INTO users(username, hash, is_business) values('takahashi', 'fwggoanajfha', False)")
+
+    # users = db.execute("SELECT * FROM users")
+
+    # return render_template("test.html", test=test, names=names, users=users)
+
+    #------------------------------jinnaテスト用コード--------------------------------------
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
