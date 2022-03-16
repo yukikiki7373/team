@@ -1,3 +1,4 @@
+/*------------------------共通スタイル------------------*/
 body {
   background-color: #5271ff;
 }
@@ -24,6 +25,14 @@ nav .nav-item {
   transition: 0.3s;
 }
 
+.btn {
+  width: 12%;
+  background-color: #f8e693;
+  margin-top: 20px;
+}
+/*----------------------//共通スタイル----------------------------------*/
+
+/*-----------------------もしも投稿スタイル---------------------------------*/
 .title-wrapper {
   display: flex;
   justify-content: center;
@@ -46,6 +55,7 @@ nav .nav-item {
   width: 180px;
   height: 30px;
   margin: 0px 10px;
+  background-color: #c5f4ff;
 }
 
 .form-control-dreams {
@@ -70,12 +80,7 @@ nav .nav-item {
   align-items: center;
 }
 
-.btn {
-  width: 12%;
-  background-color: #f8e693;
-  margin-top: 20px;
-}
-
+/*---------------------//もしも投稿スタイル-----------------*/
 /*---------------------ひみつ道具投稿--------------------------*/
 .table {
   text-align: left;
