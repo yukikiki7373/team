@@ -49,6 +49,38 @@
         </form>
         <img src="../static/img/light.png" alt="">
     </div>
+
+<div>
+    <form action="/post_register" method="post">
+
+        <div class="form-floating">
+          <textarea class="form-control-dreams" name="title" placeholder="もしもを投稿してください" id="floatingTextarea2" style="height: 60px"></textarea>
+        
+        <button class="btn btn-light btn-dreams-width" type="submit">もしもを投稿</button>
+        </div>
+    </form>
+</div>
+
+<table class="table" cellspacing=500>
+    {% for post in posts %}
+      <tbody>
+      <tr><th>タイトル</th></tr>
+      <tr><td>{{post.title}}</td></tr>
+  
+      <tr><th>概要</th></tr>
+      <tr><td>{{post.overview}}</td></tr>
+  
+      <tr><th>内容</th></tr>
+      <tr><td>{{post.content}}</td></tr>
+  
+      <tr><th>これまで学んできたこと</th></tr>
+      <tr><td>{{post.learned}}</td></tr>
+  
+      <tr><th>協力してほしいこと</th></tr>
+      <tr><td>{{post.help}}</td></tr>
+      </tbody>
+    {% endfor %}
+  </table>
   </main>
 </body>
 </html>
