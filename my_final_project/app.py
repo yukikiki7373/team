@@ -202,24 +202,26 @@ def dreams():
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
-    """Costomer can register new dream"""
-    is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
+    # """Costomer can register new dream"""
+    # is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-    if is_business == False:
-        if request.method == "POST":
-            content = request.form.get("content")
-            db.execute(
-                "INSERT INTO dreams (user_id, content) VALUES (?, ?)",
-                session["user_id"],
-                content
-            )
-            return redirect("/")
-
-        else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+    # if is_business == False:
+    if request.method == "POST":
+        content = request.form.get("content")
+        db.execute(
+            "INSERT INTO dreams (user_id, content, is_solved, is_deleted) VALUES (?, ?, ?, ?)",
+            session["user_id"],
+            content,
+            False,
+            False
+        )
+        return redirect("/dreams")
 
     else:
         return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+
+    # else:
+    #     return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/quote_dreams", methods=["GET", "POST"])
@@ -259,28 +261,30 @@ def secrets():
     """Show list of secrets.db"""
     secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", False)
 
-    """Business users can register new dream"""
-    is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
+    # """Business users can register new dream"""
+    # is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-    if is_business == True:
-        if request.method == "POST":
-            title = request.form.get("title")
-            content = request.form.get("content")
-            image = request.form.get("image")
-            db.execute(
-                "INSERT INTO secrets (user_id, title, content, image) VALUES (?, ?, ?, ?)",
-                session["user_id"],
-                title,
-                content,
-                image
-            )
-            return redirect("/")
-
-        else:
-            return render_template("secrets.html", secrets=secrets)
+    # if is_business == True:
+    if request.method == "POST":
+        title = request.form.get("title")
+        image = request.form.get("image_file")
+        content = request.form.get("content")
+        
+        db.execute(
+            "INSERT INTO secrets (user_id, title, content, image, is_deleted) VALUES (?, ?, ?, ?, ?)",
+            session["user_id"],
+            title,
+            content,
+            image,
+            False
+        )
+        return redirect("/secrets")
 
     else:
         return render_template("secrets.html", secrets=secrets)
+
+    # else:
+    #     return render_template("secrets.html", secrets=secrets)
 
 
 @app.route("/mydreams")
