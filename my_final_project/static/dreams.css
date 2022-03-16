@@ -39,10 +39,74 @@ nav .nav-item {
 .form-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .form-control {
   width: 180px;
   height: 30px;
+  margin: 0px 10px;
 }
+
+.form-control-dreams {
+  display: inline-block;
+  font-family: "Hannari", serif;
+  width: 50%;
+  margin-top: 20px;
+  margin-right: 10px;
+  background-color: #c5f4ff;
+  border-radius: 10px;
+  border: solid 5px #ffffff;
+}
+
+.btn-dreams-width {
+  border: solid 3px #fa85a0;
+  border-radius: 5px;
+}
+
+.form-floating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 12%;
+  background-color: #f8e693;
+  margin-top: 20px;
+}
+
+/*---------------------ひみつ道具投稿--------------------------*/
+.table {
+  text-align: left;
+}
+.form-control-width {
+  width: 580px;
+  height: auto;
+}
+
+.secrets-color {
+  background-color: #f8e493;
+  border-radius: 20px;
+  border: solid 5px #ffffff;
+  width: 55%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-border {
+  border-top: dotted #000000 2px;
+  border-bottom: dotted #000000 2px;
+}
+
+.form-secrets-width {
+  text-align: center;
+}
+
+.btn-secrets-width {
+  width: auto;
+  background-color: #c5f4ff;
+  border: solid 3px #fa85a0;
+  border-radius: 5px;
+}
+/*--------------------//ひみつ道具投稿--------------------------*/
