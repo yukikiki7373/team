@@ -1,4 +1,5 @@
 from asyncio.windows_events import NULL
+from crypt import methods
 from turtle import title
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -419,19 +420,22 @@ def dream_delete():
     """dream_delete"""
 
     user_id = session["user_id"] # insert user_id 
-    dreams_content = request.form.get("dreams_content") #Insert content into this variable. Comparison to investigate which dream is about to delete
-    dreams_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, dreams_content)
 
-    db.execute("UPDATE dreams SET is_deleted = 1 WHERE id = ? AND user_id = ?", dreams_id, user_id) #Change id_deleted == true
+    # dreams_content = request.form.get("dreams_content") #Insert content into this variable. Comparison to investigate which dream is about to delete
+    # dreams_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, dreams_content)
 
-    #delete comments related posts that is deleted ↑ (Change 'is_deleted' into 1)
+    dreams_id = request.form.get("dreams_id") #上記の2行をあわわしている
+
+    db.execute("UPDATE dreams SET is_deleted = True WHERE id = ? AND user_id = ?", dreams_id, user_id) #Change id_deleted == true
+
+    #delete comments related posts that is deleted ↑ (Change 'is_deleted' into True)
     comments_id = db.execute("SELECT id FROM comments WHERE dream_id = ?", dreams_id)
-    db.execute("UPDATE comments SET is_deleted = 1 WHERE id = ?", comments_id)
+    db.execute("UPDATE comments SET is_deleted = True WHERE id = ?", comments_id)
 
-    #delete replies related comments that is deleted ↑ (Change 'is_deleted' into 1)
-    db.execute("UPDATE replies SET is_deleted = 1 WHERER comments_id = ?", comments_id)
+    #delete replies related comments that is deleted ↑ (Change 'is_deleted' into True)
+    db.execute("UPDATE replies SET is_deleted = True WHERER comments_id = ?", comments_id)
 
-    return render_template("/")#これの遷移先が不明のため後で質問する
+    return redirect("mypage_c.html")
 
 @app.route("/secrets_delete", methods=["POST"]) #To delete posts(this is for developer)
 @login_required
@@ -439,20 +443,22 @@ def secrets_delete():
     """secrets_delete"""
 
     user_id = session["user_id"] # insert user_id 
-    secrets_content = request.form.get("secrets_content") #Insert content into this variable. Comparison to investigate which secret is about to delete
-    secrets_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, secrets_content)
 
-    db.execute("UPDATE secrets SET is_deleted = 1 WHERE id = ? AND user_id = ?", secrets_id, user_id) #Change id_deleted == true
+    # secrets_content = request.form.get("secrets_content") #Insert content into this variable. Comparison to investigate which secret is about to delete
+    # secrets_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, secrets_content)
 
-    return render_template("/")#これの遷移先が不明のため後で質問する
+    secrets_id = request.form.get("secrets_id")
 
+    db.execute("UPDATE secrets SET is_deleted = True WHERE id = ? AND user_id = ?", secrets_id, user_id) #Change id_deleted == true
+
+    return redirect("mypage_b")
 
 @app.route("/mysecrets") #To show secrets(only developer who is login)
 @login_required
 def mysecrets():
     user_id = session["user_id"]
     """Show my secrets"""
-    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = 0", user_id)
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
     return render_template("mypage_b.html", secrets=secrets)
 
@@ -465,10 +471,10 @@ def show_my_best_answer():
     user = db.execute("SELECT is_business FROM users WHERE id = ?", user_id)
 
     """Show best answer"""
-    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ? AND is_deleted = 0 AND is_best = 1", user_id)
-    comments = db.execute("SELECT * FROM comments WHERE user_id = ? AND is_deleted = 0", user_id)
-    replies = db.execute("SELECT * FROM replies WHERE user_id = ? AND is_deleted = 0", user_id)
-    if user == 0:
+    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ? AND is_deleted = False AND is_best = 1", user_id)
+    comments = db.execute("SELECT * FROM comments WHERE user_id = ? AND is_deleted = False", user_id)
+    replies = db.execute("SELECT * FROM replies WHERE user_id = ? AND is_deleted = False", user_id)
+    if user == False:
         return render_template("mypage_c.html", dreams=dreams, comments=comments, replies=replies)
     else:
         return render_template("mypage_b.html", dreams=dreams, comments=comments, replies=replies)
@@ -487,8 +493,6 @@ def secrets_edit():
 
     db.execute("UPDATE secrets SET content = ? WHERE id = ?, user_id = ?", secrets_content, secrets_id, user_id)
 
-    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = 0", user_id)
-
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
     return render_template("mypage_b.html", secrets=secrets)
-
