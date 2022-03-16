@@ -197,12 +197,10 @@ def register_b():
 @app.route("/dreams", methods=["GET", "POST"])
 @login_required
 def dreams():
-#    """Show list of dreams.db"""
+    """Show list of dreams.db"""
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
- #   solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
- #   unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -234,8 +232,10 @@ def quote_dreams():
         False, 
         symbol
         )
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
-    return render_template("quote.html", quote=quote)
+    return render_template("quote.html", quote=quote, solved=solved, unsolved=unsolved)
 
 
 @app.route("/quote_secrets", methods=["GET", "POST"])
