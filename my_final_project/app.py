@@ -50,6 +50,8 @@ def dreams():
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -65,10 +67,10 @@ def dreams():
             return redirect("/")
 
         else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
 
     else:
-        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
 
 
 @app.route("/quote_dreams", methods=["GET", "POST"])
@@ -284,8 +286,10 @@ def comment():
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
 
 
 @app.route("/reply", methods=["POST"])
@@ -307,8 +311,10 @@ def reply():
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
 
 
 @app.route("/best_answer", methods=["POST"])
@@ -324,8 +330,10 @@ def best_answer():
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
 
 
 @app.route("/solve_dream", methods=["POST"])
@@ -335,14 +343,16 @@ def solve_dream():
 
     dream_id = request.form["dream_id"]
 
-    db.execute("UPDATE dreams SET is_solve = ? WHERE id = ?", 1, dream_id)
+    db.execute("UPDATE dreams SET is_solve = ? WHERE id = ?", True, dream_id)
 
     """Show list of dreams.db"""
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
-    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -515,7 +525,15 @@ def dream_delete():
     #delete replies related comments that is deleted ↑ (Change 'is_deleted' into 1)
     db.execute("UPDATE replies SET is_deleted = 1 WHERER comments_id = ?", comments_id)
 
-    return render_template("/")#これの遷移先が不明のため後で質問する
+    """Show list of dreams.db"""
+    dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
+
+    return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
+
 
 @app.route("/secrets_delete", methods=["POST"]) #To delete posts(this is for developer)
 @login_required
@@ -528,4 +546,7 @@ def secrets_delete():
 
     db.execute("UPDATE secrets SET is_deleted = 1 WHERE id = ? AND user_id = ?", secrets_id, user_id) #Change id_deleted == true
 
-    return render_template("/")#これの遷移先が不明のため後で質問する
+    """Show list of secrets.db"""
+    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", False)
+    
+    return render_template("secrets.html", secrets=secrets)
