@@ -11,6 +11,7 @@
 </head>
  
  <body>
+<!------------------------------------メニュー------------------------------------->
 <nav class="navbar navbar-expand-md navbar-light" style="background-color: #748eff;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -32,24 +33,32 @@
   
             </div>
   </nav>
+  <!------------------------------------//メニュー------------------------------------->
 
   <main>
+<!--------------------------タイトルと画像------------------------------------>
     <div class="title-wrapper">
         <img src="../static/img/call.png" alt="">
         <h1 class="title-color">もしもボックス</h1>
         <img src="../static/img/shine.png" alt="">
     </div>
+<!--------------------------//タイトルと画像------------------------------------>
 
+<!--------------------------検索欄---------------------------------------------->
     <div class="form-wrapper">
-        <img src="../static/img/flower.png" alt="">
+
+        <img src="../static/img/gray.png" alt="">
         <form action="/qupte" method="post">
+
             <div class="form-group">
                 <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="検索" type="text">
             </div>
         </form>
         <img src="../static/img/light.png" alt="">
     </div>
+<!--------------------------//検索欄---------------------------------------------->
 
+<!--------------------------もしも投稿--------------------------------------------->
     <div>
         <form action="/dreams" method="post">
     
@@ -60,6 +69,7 @@
             </div>
         </form>
     </div>
+<!--------------------------//もしも投稿--------------------------------------------->
     
     {# <table class="table" cellspacing=500>
         {% for post in posts %}

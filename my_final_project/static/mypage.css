@@ -1,0 +1,43 @@
+main {
+  width: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.mypage-wrapper,
+.mypage-item {
+  font-size: 25px;
+  font-weight: bold;
+  float: left;
+  margin-right: 50px;
+  list-style-type: none;
+}
+
+ul li a {
+  color: #fff;
+  text-decoration: none;
+
+  width: auto;
+}
+
+ul li a:hover {
+  color: #ffe681;
+}
+
+ul li a.current {
+  color: #fff;
+}
+
+#contents {
+  clear: both;
+}
+
+#contents div {
+  padding: 30px 20px;
+}
+
+.sub-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
