@@ -1,5 +1,5 @@
 from asyncio.windows_events import NULL
-from crypt import methods
+#from crypt import methods
 from turtle import title
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -77,7 +77,7 @@ def login():
         session["user_id"] = users[0]["id"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/dreams")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -130,7 +130,7 @@ def register_c():
             )
             # Insert the new user
             db.execute(
-                "INSERT INTO users (username, hash) VALUES (?, ?) ", username, hash
+                "INSERT INTO users (username, hash, is_business) VALUES (?, ?, ?) ", username, hash, False
             )
             # Redirect user to home page
             return redirect("/login")
@@ -197,12 +197,12 @@ def register_b():
 @app.route("/dreams", methods=["GET", "POST"])
 @login_required
 def dreams():
-    """Show list of dreams.db"""
+#    """Show list of dreams.db"""
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
-    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
-    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
+ #   solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
+ #   unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -218,10 +218,10 @@ def dreams():
             return redirect("/")
 
         else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
+            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
     else:
-        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies, solved=solved, unsolved=unsolved)
+        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/quote_dreams", methods=["GET", "POST"])
