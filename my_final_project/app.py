@@ -205,21 +205,23 @@ def dreams():
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-    if is_business == False:
-        if request.method == "POST":
-            content = request.form.get("content")
-            db.execute(
-                "INSERT INTO dreams (user_id, content) VALUES (?, ?)",
-                session["user_id"],
-                content
-            )
-            return redirect("/")
-
-        else:
-            return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+    # if is_business == False:
+    if request.method == "POST":
+        content = request.form.get("content")
+        db.execute(
+            "INSERT INTO dreams (user_id, content, is_solved, is_deleted) VALUES (?, ?, ?, ?)",
+            session["user_id"],
+            content,
+            False,
+            False
+        )
+        return redirect("/dreams")
 
     else:
         return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+
+    # else:
+    #     return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/quote_dreams", methods=["GET", "POST"])
