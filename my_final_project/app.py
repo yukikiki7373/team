@@ -54,7 +54,7 @@ def dreams():
     """Costomer can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-    if is_business == 0:
+    if is_business == False:
         if request.method == "POST":
             content = request.form.get("content")
             db.execute(
@@ -109,7 +109,7 @@ def secrets():
     """Business users can register new dream"""
     is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
 
-    if is_business == 1:
+    if is_business == True:
         if request.method == "POST":
             title = request.form.get("title")
             content = request.form.get("content")
@@ -133,7 +133,6 @@ def secrets():
 @app.route("/mydreams")
 @login_required
 def mydreams():
-    """Show my dreams & comments & replies"""
     """Show my dreams & comments & replies"""
     dreams = db.execute(
         "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
