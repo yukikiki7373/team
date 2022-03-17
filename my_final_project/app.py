@@ -42,10 +42,10 @@ db = SQL("sqlite:///teamSQLite/team.db")
 
 @app.route("/")
 def top():
-    return render_template("top.html")
+    # return render_template("top.html")
 
     #------------------------------jinnaテスト用コード--------------------------------------
-    # test = "jinjaは作動してる!!"
+    test = "jinjaは作動してる!!"
 
     # names = {'yuki', 'takahashi', 'aaa', 'bbb', 11}
 
@@ -55,7 +55,11 @@ def top():
 
     # users = db.execute("SELECT * FROM users")
 
-    # return render_template("test.html", test=test, names=names, users=users)
+    # -----secrets一覧テスト用コード-----
+
+    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", False)
+
+    return render_template("test.html", test=test, secrets=secrets)
 
     #------------------------------jinnaテスト用コード--------------------------------------
 
