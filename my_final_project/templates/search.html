@@ -13,7 +13,7 @@
 
 
     <script>
- $(function () {
+        $(function () {
     //tab1以外を非表示にする
     $('#contents div[id != "tab1"]').hide();
 
@@ -51,7 +51,7 @@
 
                         <li class="nav-item nav-space-left"><a class="nav-link" href="search"><span class="menu-color">検索</span></a></li>
 
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="mypage_b"><span class="menu-color">マイページ</span></a></li>
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="post_register"><span class="menu-color">マイページ</span></a></li>
                     </ul>
 
                     <ul class="navbar-nav ml-auto mt-2 nav-space-right">
@@ -64,71 +64,22 @@
   <main>
         <div class="title-wrapper">
              <img src="../static/img/shine.png" alt="">
-             <h1 class="title-color">マイページ</h1>
+             <h1 class="title-color">検索</h1>
              <img src="../static/img/shine.png" alt="">
         </div>
 
-  <div class="sub-menu">
-        <ul class="mypage-wrapper">
-          <li class="mypage-item"><a href="#tab1" class="current">ひみつ道具</a></li>
-          <li class="mypage-item"><a href="#tab2">マイ　ベストアンサー</a></li>
-        </ul>
-   </div>
-      
-   <div class="mypage-width">
-        <div id="contents">
-          <div id="tab1">
-            <p>ひみつ道具の内容</p>
-            <form class="form-secrets-width" name="f" method="post">
-              <section class="secrets-color">
-                <table class="table table-striped">
-                  <tbody>
-        
-                    <tr class="form-control-secrets">
-                      <td>
-                        <input type="textarea" class="form-control-width" id="title_area"  placeholder="タイトル">
-                      </td>
-                    </tr>
-                    <!----画像読み取って表示-->
-                    <tr class="img-border">
-                       <td>
-                        <label>画像：<input type="file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
-                        <img src="" id="img" />
-                       </td>
-                    </tr>
-        
-                    <tr class="form-control-secrets">
-                      <td>
-                        <textarea class="form-control-width" cols="40" rows="8" id="comment_area"  placeholder="「ひみつ道具」説明" ></textarea>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-            </section>  
-        
-               <!--投稿ボタン-------->
-                <button class="btn btn-light btn-secrets-width" type="submit">「ひみつ道具」を投稿</button>
-        
+        <div class="form-wrapper">
+
+            <img src="../static/img/gray.png" alt="">
+            <form action="/qupte" method="post">
+    
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="検索" type="text">
+                </div>
             </form>
-</div>
-
-          <div id="tab2">
-            <p>マイ　ベストアンサーの内容</p>
-            <form action="/post_register" method="post">
-         
-              <section class="form-floating">
-                  <textarea class="form-control-dreams" name="title" placeholder="もしもを投稿してください" id="floatingTextarea2" style="height: 60px"></textarea>
-                  <button class="btn btn-light btn-dreams-width" type="submit">もしもを投稿</button>
-               </section> 
-            </form>
-          </div>
-
-      </div>
-
-
-   </div>
+            <img src="../static/img/light.png" alt="">
+        </div>
+    
   </main>
-
 </body>
 </html>
-
