@@ -44,6 +44,18 @@ db = SQL("sqlite:///teamSQLite/team.db")
 def top():
     return render_template("top.html")
 
+    # -----------------------------もしも一覧表示用コード（構造テスト）---------------------------
+    # dreams = db.execute("SELECT * FROM dreams")
+    # users =  db.execute("SELECT username, id FROM users")
+    # comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    # replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+
+
+    # return render_template("test_for_mosimo.html", dreams=dreams, comments=comments, replies=replies, users=users)
+
+    # -------------------------------もしも一覧表示用コード（構造テスト）--------------------------------------
+
     #------------------------------jinnaテスト用コード--------------------------------------
     # test = "jinjaは作動してる!!"
 

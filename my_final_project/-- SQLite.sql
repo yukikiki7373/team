@@ -77,13 +77,26 @@
 
 -- DROP TABLE replies;
 
-CREATE TABLE replies(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    comments_id INTEGER NOT NULL,
-    content TEXT NOT NULL,
-    is_deleted BOOLEAN NOT NULL,
-    created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
-    FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(comments_id) REFERENCES comments(id)
-);
+-- CREATE TABLE replies(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     comments_id INTEGER NOT NULL,
+--     content TEXT NOT NULL,
+--     is_deleted BOOLEAN NOT NULL,
+--     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
+--     FOREIGN KEY(user_id) REFERENCES users(id),
+--     FOREIGN KEY(comments_id) REFERENCES comments(id)
+-- );
+
+-- INSERT INTO dreams(
+--     user_id,
+--     content,
+--     is_solved,
+--     is_deleted) 
+--     VALUES("10", "testtesttesttest", False, False);
+    
+INSERT INTO comments(user_id, dreams_id, content, is_best, is_deleted) VALUES(10, 3, "good", False, False);
+
+-- UPDATE comments SET dreams_id = 2 WHERE id = 2;
+
+-- INSERT INTO replies(user_id, comments_id, content, is_deleted) VALUES(3, 3, "ナイスです!!!", False);
