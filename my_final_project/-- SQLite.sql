@@ -22,7 +22,7 @@
 --     user_id INTEGER NOT NULL,
 --     title TEXT NOT NULL,
 --     content TEXT NOT NULL,
---     image TEXT NOT NULL,
+--     image BLOB NOT NULL,
 --     is_deleted BOOLEAN NOT NULL,
 --     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
 --     FOREIGN KEY(user_id) REFERENCES users(id)
@@ -77,13 +77,27 @@
 
 -- DROP TABLE replies;
 
-CREATE TABLE replies(
+-- CREATE TABLE replies(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     comments_id INTEGER NOT NULL,
+--     content TEXT NOT NULL,
+--     is_deleted BOOLEAN NOT NULL,
+--     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
+--     FOREIGN KEY(user_id) REFERENCES users(id),
+--     FOREIGN KEY(comments_id) REFERENCES comments(id)
+-- );
+
+--DROP TABLE secrets;
+
+CREATE TABLE secrets(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    comments_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
     content TEXT NOT NULL,
+    image BLOB NOT NULL,
     is_deleted BOOLEAN NOT NULL,
     created_date TIMESTAMP DEFAULT (datetime('now','localtime')),
-    FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(comments_id) REFERENCES comments(id)
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
