@@ -88,6 +88,18 @@
 --     FOREIGN KEY(comments_id) REFERENCES comments(id)
 -- );
 
+-- INSERT INTO dreams(
+--     user_id,
+--     content,
+--     is_solved,
+--     is_deleted) 
+--     VALUES("10", "testtesttesttest", False, False);
+    
+INSERT INTO comments(user_id, dreams_id, content, is_best, is_deleted) VALUES(10, 3, "good", False, False);
+
+-- UPDATE comments SET dreams_id = 2 WHERE id = 2;
+
+-- INSERT INTO replies(user_id, comments_id, content, is_deleted) VALUES(3, 3, "ナイスです!!!", False);
 --DROP TABLE secrets;
 
 CREATE TABLE secrets(
