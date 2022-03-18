@@ -9,31 +9,9 @@
   <link rel="stylesheet" href="../static/dreams.css">
   <link rel="stylesheet" href="../static/mypage.css">
   <script src="../static/js/jquery-2.1.4.min.js"></script>
+  <script src="../static/js/script.js"></script>
     <title>もしもボックス</title>
 
-
-    <script>
-        $(function () {
-    //tab1以外を非表示にする
-    $('#contents div[id != "tab1"]').hide();
-
-    //タブをクリック
-    $("a").click(function () {
-        //クリック時の処理
-        $("#contents div").hide();
-        $($(this).attr("href")).show();
-
-        //現在のcurrentクラスを排除
-        $(".current").removeClass("current");
-
-        //選択されたタブ（自分自身）にcurrentクラスを追加
-        $(this).addClass("current");
-        return false;
-    });
-});
-
-     
-    </script>
 </head>
  
  <body>
