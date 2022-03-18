@@ -5,6 +5,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
 from flask_session import Session
+from jinja2 import Template
 from sqlalchemy import true
 from helpers import apology, login_required
 from tempfile import mkdtemp
@@ -233,8 +234,10 @@ def register_b():
 def dreams():
     """Show list of dreams.db"""
     dreams = db.execute("SELECT * FROM dreams WHERE is_deleted = ?", False)
+    users =  db.execute("SELECT username, id FROM users")
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
 
     # """Costomer can register new dream"""
     # is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
@@ -252,7 +255,7 @@ def dreams():
         return redirect("/dreams")
 
     else:
-        return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
+        return render_template("dreams.html", dreams=dreams, users=users, comments=comments, replies=replies)
 
     # else:
     #     return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
