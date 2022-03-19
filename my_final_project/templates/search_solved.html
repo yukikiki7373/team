@@ -71,6 +71,19 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
+        
+            {% for dream in dreams%}
+                {% for user in users %}
+                    {% if dream['user_id'] == user['id'] %}
+                        <div class="form-floating">
+                            <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+        
+
   </main>
 </body>
 </html>
