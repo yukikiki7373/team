@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- http://getbootstrap.com/docs/4.5/ -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="../static/dreams.css">
+  <link rel="stylesheet" href="../static/mypage.css">
+  <script src="../static/js/jquery-2.1.4.min.js"></script>
+  <script src="../static/js/script.js"></script>
+    <title>もしもボックス</title>
+
+
+    <script>
+        $(function () {
+    //tab1以外を非表示にする
+    $('#contents div[id != "tab1"]').hide();
+
+    //タブをクリック
+    $("a").click(function () {
+        //クリック時の処理
+        $("#contents div").hide();
+        $($(this).attr("href")).show();
+
+        //現在のcurrentクラスを排除
+        $(".current").removeClass("current");
+
+        //選択されたタブ（自分自身）にcurrentクラスを追加
+        $(this).addClass("current");
+        return false;
+    });
+});
+
+     
+    </script>
+</head>
+ 
+ <body>
+<nav class="navbar navbar-expand-md navbar-light" style="background-color: #748eff;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav4">
+               
+                    <ul class="navbar-nav mr-auto mt-2">
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="dreams"><span class="menu-color">もしもボックス</span></a></li>
+    
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="secrets"><span class="menu-color">ひみつ道具</span></a></li>
+
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="search"><span class="menu-color">検索</span></a></li>
+
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="post_register"><span class="menu-color">マイページ</span></a></li>
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto mt-2 nav-space-right">
+                        <li class="nav-item"><a class="nav-link green" href="/logout"><span class="menu-color">ろぐあうと</span></a></li>
+                    </ul>
+  
+            </div>
+  </nav>
+
+  <main>
+        <div class="title-wrapper">
+             <img src="../static/img/shine.png" alt="">
+             <h1 class="title-color">"未解決"の検索結果</h1>
+             <img src="../static/img/shine.png" alt="">
+        </div>
+
+  </main>
+</body>
+</html>
