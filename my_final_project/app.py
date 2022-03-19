@@ -261,9 +261,9 @@ def dreams():
     #     return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
 
 
-@app.route("/quote_dreams", methods=["GET", "POST"])
+@app.route("/search_dreams", methods=["GET", "POST"])
 @login_required
-def quote_dreams():  
+def search_dreams():  
     """Show the result of quotation of dreams"""
     symbol = request.form.get("symbol")
     quote = db.execute(
@@ -274,7 +274,8 @@ def quote_dreams():
     solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
     unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
 
-    return render_template("quote.html", quote=quote, solved=solved, unsolved=unsolved)
+    return render_template("search.html", quote=quote, solved=solved, unsolved=unsolved)
+
 
 
 @app.route("/quote_secrets", methods=["GET", "POST"])
@@ -324,9 +325,9 @@ def secrets():
     #     return render_template("secrets.html", secrets=secrets)
 
 
-@app.route("/mydreams")
+@app.route("/mypage_c")
 @login_required
-def mydreams():
+def mypage_c():
     """Show my dreams & comments & replies"""
     dreams = db.execute(
         "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
@@ -349,7 +350,7 @@ def mydreams():
         session["user_id"],
         session["user_id"]
     )
-    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("mypage_c.html", dreams=dreams, comments=comments, replies=replies)
 
 
 @app.route("/dream_edit", methods=["POST"])
@@ -589,9 +590,9 @@ def secrets_delete():
 
     return redirect("mypage_b")
 
-@app.route("/mysecrets") #To show secrets(only developer who is login)
+@app.route("/mypage_b") #To show secrets(only developer who is login)
 @login_required
-def mysecrets():
+def mypage_b():
     user_id = session["user_id"]
     """Show my secrets"""
     secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
