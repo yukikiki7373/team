@@ -634,4 +634,27 @@ def secrets_edit():
 
     return render_template("mypage_b.html", secrets=secrets)
 
+
+@app.route("/solved", methods=["POST"])
+@login_required
+def solved():
+    dream = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ?", True, False)
   
+    comments = db.execute("SELECT * FROM commensts WHERE is_deleted = ? ", False)
+
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    return render_template("search_solved.html", dream = dream, comments=comments, replies=replies)
+
+
+@app.route("/unsolved", methods=["POST"])
+@login_required
+def unsolved():
+    dream = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ?", False, False)
+  
+    comments = db.execute("SELECT * FROM commensts WHERE is_deleted = ? ", False)
+
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    return render_template("search_unsolved.html", dream = dream, comments=comments, replies=replies)
+    
