@@ -59,12 +59,13 @@ img:nth-child(3) {
   background-image: url(../static/img/dreams.png);
   height: 100%;
   width: 100%;
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   background-size: cover;
   background-position: center;
 }
+
 /*---//背景画像の設定------*/
 
 /*-----ログインボタンの移動--*/
@@ -155,7 +156,7 @@ img:nth-child(3) {
   background-image: url(../static/img/register_b.png);
   height: 100%;
   width: 100%;
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   background-size: cover;
@@ -171,7 +172,7 @@ img:nth-child(3) {
   background-image: url(../static/img/register_c.png);
   height: 100%;
   width: 100%;
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   background-size: cover;
