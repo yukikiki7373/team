@@ -95,7 +95,7 @@
 --     is_deleted) 
 --     VALUES("10", "testtesttesttest", False, False);
     
-INSERT INTO replies(user_id, comments_id, content, is_deleted) VALUES(3, 1, "リプライリプライリプライリプライリプライリプライリプライリプライリプライリプライリプライリプライ", False);
+-- INSERT INTO dreams(user_id, content, is_solved, is_deleted) VALUES(10, "もしも？？？できたらなぁ", True, True);
 
 -- UPDATE comments SET dreams_id = 2 WHERE id = 2;
 
