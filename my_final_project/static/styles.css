@@ -10,7 +10,7 @@ img {
   display: block;
 }
 .img-position {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
 }
@@ -59,7 +59,7 @@ img:nth-child(3) {
   background-image: url(../static/img/dreams.png);
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   background-size: cover;
@@ -155,7 +155,7 @@ img:nth-child(3) {
   background-image: url(../static/img/register_b.png);
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   background-size: cover;
@@ -171,7 +171,7 @@ img:nth-child(3) {
   background-image: url(../static/img/register_c.png);
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   background-size: cover;
