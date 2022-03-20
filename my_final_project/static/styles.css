@@ -71,8 +71,8 @@ img:nth-child(3) {
 /*-----ログインボタンの移動--*/
 .login-button {
   position: absolute;
-  top: 600px;
-  left: 590px;
+  top: 570px;
+  left: 550px;
 }
 /*-----//ログインボタンの移動--*/
 
@@ -109,7 +109,7 @@ img:nth-child(3) {
 /*-----はじめての方のとうろくボタン--------*/
 .btn-primary-first {
   position: absolute;
-  top: 700px;
+  top: 650px;
   right: 50px;
   width: 120px;
   height: 30px;
@@ -130,7 +130,7 @@ img:nth-child(3) {
 /*-----開発者の方のとうろくボタン--------*/
 .btn-primary-developer {
   position: absolute;
-  top: 700px;
+  top: 650px;
   left: 50px;
   position: absolute;
   width: 120px;
