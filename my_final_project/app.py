@@ -638,22 +638,21 @@ def secrets_edit():
 @app.route("/solved", methods=["GET", "POST"]) #this is for timeline of solved dream
 @login_required
 def solved():
-    dream = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ?", True, False)
+    dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", True, False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
     users = db.execute("SELECT * FROM users")
 
-    return render_template("search_solved.html", dream = dream, comments=comments, replies=replies, users=users)
+    return render_template("search_solved.html", dreams = dreams, comments=comments, replies=replies, users=users)
 
 
-@app.route("/unsolved", methods=["POST"])  #this is for timeline of unsolved dream
+@app.route("/unsolved", methods=["GET","POST"])  #this is for timeline of unsolved dream
 @login_required
 def unsolved():
-    dream = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ?", False, False)
-  
+    dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", False, False)
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ", False)
-
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    users = db.execute("SELECT * FROM users")
 
-    return render_template("search_unsolved.html", dream = dream, comments=comments, replies=replies)
+    return render_template("search_unsolved.html", dreams = dreams, comments=comments, replies=replies, users=users)
     
