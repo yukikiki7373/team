@@ -27,7 +27,6 @@
     
                         <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
 
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="/search_dreams"><span class="menu-color">検索</span></a></li>
 
                         <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_c"><span class="menu-color">マイページ</span></a></li>
                     </ul>
@@ -68,13 +67,12 @@
         <form action="/dreams" method="post">
     
             <div class="form-floating">
-              <textarea class="form-control-dreams" name="content" placeholder="もしもを投稿してください" id="floatingTextarea2" style="height: 60px"></textarea>
+              <textarea class="form-control-dreams" name="content" cols="10" rows="3" placeholder="もしもを投稿してください" id="floatingTextarea2"></textarea>
     
             <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">もしもを投稿</button>
             </div>
         </form>
     </div>
-
 
 <!--------------------------//もしも投稿--------------------------------------------->
     
@@ -83,7 +81,7 @@
             {% if dream['user_id'] == user['id'] %}
                 <!-- ---------------- もしも投稿の表示部分 ------------------>
                 <div class="form-floating">
-                    <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
+                    <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2" style="height: auto;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
                 </div>
                 <!-- ---------------- もしも投稿の表示部分 ------------------>
             {% endif %}
@@ -94,7 +92,7 @@
                             {% if comment['user_id'] == user['id'] %}
                             <!-- ---------------- コメント投稿の表示部分 ------------------>
                                 <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
+                                    <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2"  style="height:auto; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
                                 </div>
                             <!-- ---------------- コメント投稿の表示部分 ------------------>
                             {% endif %}
@@ -105,7 +103,7 @@
                                     {% if user['id'] == reply['user_id'] %}
                                     <!-- ---------------- リプライ投稿の表示部分 ------------------>
                                         <div class="form-floating">
-                                            <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
+                                            <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2" style="height: auto; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
                                         </div>
                                     <!-- ---------------- リプライ投稿の表示部分 ------------------>
                                     {% endif %}
