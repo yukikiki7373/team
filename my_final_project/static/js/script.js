@@ -82,7 +82,7 @@ reader.readAsDataURL(e.files[0]);
 
 
 
-スクロールした際の動きを関数でまとめる
+// スクロールした際の動きを関数でまとめる
 function setFadeElement(){
     var windowH = $(window).height();//ウィンドウの高さを取得
     var scroll = $(window).scrollTop();//スクロール値を取得
