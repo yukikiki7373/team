@@ -113,3 +113,4 @@
 --     FOREIGN KEY(user_id) REFERENCES users(id)
 -- );
 
+INSERT INTO comments (id, user_id, dreams_id, content, is_best, is_deleted) VALUES ("6", "3", "7", "これどうですか？", "1", "0");
