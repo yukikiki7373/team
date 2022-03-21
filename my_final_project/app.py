@@ -1,6 +1,6 @@
 from asyncio.windows_events import NULL
 #from crypt import methods
-from turtle import title
+from turtle import title, width
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
@@ -11,6 +11,8 @@ from helpers import apology, login_required
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+from datetime import datetime, time
 import os
 
 # Configure application
@@ -297,29 +299,34 @@ def quote_secrets():
 @login_required
 def secrets():
     """Show list of secrets.db"""
-    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ?", False)
-
-    # """Business users can register new dream"""
-    # is_business = db.execute("SELECT is_business FROM users WHERE id = ?", session["user_id"])
+    user_id = session["user_id"] 
+    secrets = db.execute("SELECT * FROM secrets WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    users = db.execute("SELECT * FROM users")
 
     # if is_business == True:
     if request.method == "POST":
         title = request.form.get("title")
-        image = request.form.get("image_file")
+        image = request.files['image_file'] 
+        # filename = request.form.get("image_file")
+        tdatetime = datetime.now()
+        tstr = tdatetime.strftime('%Y-%m-%d_%Hh%Mm%Ss')
+        # time = datetime.strptime(tstr, '%Y/%m/%d %H:%M:%S')
+        image.filename = tstr
+        user = db.execute("SELECT id FROM users WHERE id =?", user_id)
+        filename = str(user[0]['id']) + '_' + image.filename
         content = request.form.get("content")
         
-        db.execute(
-            "INSERT INTO secrets (user_id, title, content, image, is_deleted) VALUES (?, ?, ?, ?, ?)",
-            session["user_id"],
-            title,
-            content,
-            image,
-            False
-        )
+        db.execute("INSERT INTO secrets (user_id, title, content, image, is_deleted) VALUES (?, ?, ?, ?, ?)", 
+                    user_id, title, content, filename, False)
+
+        filepath = 'static/upload_img/' + filename
+        image.save(filepath)
+
         return redirect("/secrets")
 
     else:
-        return render_template("secrets.html", secrets=secrets)
+        filenames = db.execute("SELECT image, user_id FROM secrets WHERE is_deleted = False")
+        return render_template("secrets.html", secrets=secrets, users=users, filenames = filenames)
 
     # else:
     #     return render_template("secrets.html", secrets=secrets)
