@@ -1,29 +1,173 @@
-{% extends "layout_for_test.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- http://getbootstrap.com/docs/4.5/ -->
+ 
+  <link rel="stylesheet" href="../static/test.css">
+  <link rel="stylesheet" href="../static/reset.css">
+  <link href="../static/favicon.png" rel="icon">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  
+  
+ 
+    <title>もしもボックス</title>
 
-{% block title %}
-    test
-{% endblock %}
+</head>
 
-{% block main %}
-    <div class="outer" >
-        <h1>{{ test }}</h1>
-        <br><br><br>
-        {% for name in names%}
-            <h2>{{ name }}</h2>
-        {% endfor %}
-        <br><br><br>
-        <h5>DBの表示確認</h5>
-            <table class="table" cellspacing=500>
-                {% for secret in secrets%}
-                    <tbody>
-                    <tr><td>{{ secret['title'] }}</td></tr>
-                    <tr><td class="table-img">
-                            <img src="{{ secret['image'] }}" alt="">
-                        </td>
-                    </tr>
-                    <tr><td>{{ secret['content'] }}</td></tr>
-                    </tbody>    
-                    {% endfor %}
-            </table>
-    </div>
-{% endblock%}
+
+ <body>
+
+
+<section>
+    <ul class="accordion-area">
+       
+        <li>
+            <section>
+                <h3 class="title">「勉強を教えない予備校」とあるが、何を教えてくれるのか？</h3>
+                <div class="box">
+                  <p>
+                      私たちは、既存の予備校や学習塾を「ファースト」とするならば、セカンドスクールに位置づけられる存在だと理解しております。
+                    これまでのファーストスクールが必ずしも十分には対応できていない領域を埋める存在がハイブリッド予備校イグニスです。
+                    <br>
+                    <br>
+                      一般選抜の個別教科対策や総合型選抜における志望理由書の作成方法といった勉強を<br>「教える」のではなく「共に考える」場所を提供し、
+                    受講生が自らの関心を深めたり、<br>学習計画を策定したりするためのお手伝いをします。
+                    必要となる基本的知識については、入学後から自由に活用していただける教材にて提供いたします。
+                  </p>
+                </div>
+            </section>
+        </li>
+
+        <li>
+            <section class="space">
+                <h3 class="title">実際の入試対策はどこまでしてもらえるのか？</h3>
+                <div class="box">
+                    <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
+                </div>
+            </section>
+
+        </li>
+
+        <li>
+            <section class="space">
+                <h3 class="title">料金について教えてほしい</h3>
+                <div class="box">
+                    <p>
+                      料金体系につきましてはリンク先をご参照ください。<br>
+                      ⇒料金体系はこちら（ファイル作成済み、リンク先として設定）
+                    </p>
+                </div>
+            </section>
+
+        </li>
+
+        <li>
+            <section class="space">
+                <h3 class="title">教材について教えてほしい</h3>
+                <div class="box">
+                    <p>
+                     すべての教材は、PowerPointをベースとしたテキストに解説動画を埋め込んだ形式で作成しております。
+                     大学・学部選びやそれぞれの入試方式の特徴、志望理由書や面接、小論文の本質、学習計画の立て方、世の中に数多くある受験をめぐる「都市伝説」との向き合い方など、
+                     幅広いテーマで教材を用意しております。
+                      <br>
+                      <br>
+                      すべての解説動画を10分程度の長さに設定しております。
+                      通学時間や休憩時間など、スキマ時間を活用して効果的に学んでいただくための配慮です。
+                      教材を活用して自身の関心を深掘りしていただき、個別サポートに臨むことでさらに効果が高まります。
+                    </p>
+                </div>
+            </section>
+
+        </li>
+
+        <li>
+            <section class="space">
+                <h3 class="title">どのような生徒を対象としているのか？</h3>
+                <div class="box">
+                    <p>基本的には、受験に本格的に臨む前の高校1～2年生を対象と考えております。
+                      早期に目的意識を養い大学や学科を選ぶことによって、本格的な入試対策を効果的・効率的に進めることができるからです。
+                      <br>
+                      <br>
+                      もちろん、大学選びや学科選びに迷う3年生も大歓迎です。ただし、選択までの時間は限られていますので、早めにイグニスの扉を開けてください。</p>
+                </div>
+            </section>
+
+        </li>
+
+        <li>
+            <section>
+                <h3 class="title">講師はどんな人がいるのか？</h3>
+                <div class="box">
+                    <p>
+                      イグニスのサポーターには、社会のさまざまな分野で活躍する仕事のプロから現役の大学生に至るまで、幅広い人材が集まっています。
+                      将来像を明確に描くにはプロの力、大学について詳しく知るには大学生の力、テーマに最適な人材を起用することによって受講生に真に役立つサポートを提供いたします。
+                    </p>
+                </div>
+            </section>
+        </li>
+
+        <li>
+            <section>
+            <h3 class="title">教材に対する質問等はどうすればよいのか？</h3>
+                <div class="box">
+                  <p>教材の内容に関する質問につきましては、LINEのチャット機能を活用しております。<br>
+                     回答も原則LINEにて対応させていただきます。<br>
+                     質問の方法についてはこちら（新九郎君にてリンク先の情報を作成願います）
+                     <br>
+                     <br>
+                     なお、入学をご検討中の方におかれましては、お手数ながら「Contact」のページからお問い合わせをお願いします。<br>
+                     お問い合わせについてはこちら（該当ページへのリンク）
+                  </p>
+                </div>
+            </section>
+            </li>
+
+                <li>
+                  <section>
+                      <h3 class="title">入学までの流れについて教えてほしい</h3>
+                      <div class="box">
+                          <p>「入学までの具体的な流れ」のページに飛んでもらう。</p>
+                      </div>
+                  </section>
+              </li>
+
+              <li>
+                <section>
+                    <h3 class="title">「ハイブリッド」とはどのような意味か？</h3>
+                    <div class="box">
+                        <p>教材と個別サポートとの「組合せ」、オンラインと対面との「組合せ」（サポートの実施方法は選択いただくことができます）という
+                          2つの「組合せ」＝ハイブリッドによってイグニスは成り立っています。
+                          <br>
+                          <br>
+                          また、ハイブリッドには「異種交配」との意味もあります。<br>
+                          これまでとは異なる概念＝異種を取り入れることで、変化に強い多様性を尊重できる人材への成長に貢献すること。
+                          そんなイグニスの想いもささやかながら込めております。</p>
+                    </div>
+                </section>
+            </li>
+
+            <li>
+              <section>
+                  <h3 class="title">教材だけを利用することは可能か？</h3>
+                  <div class="box">
+                      <p>
+                        教材だけをご利用いただくことも可能です。
+                        なお、個別サポートの設定に期限はありませんので、追ってお申し込みいただくこともまったく問題ありません。十分にご検討いただければ幸いです。
+                      </p>
+                  </div>
+              </section>
+          </li>
+
+    </ul>
+</section>
+
+
+</body>
+<script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
+
+<script src="../static/js/jquery-2.1.4.min.js"></script>
+<script src="../static/js/script.js"></script>
+</html>
