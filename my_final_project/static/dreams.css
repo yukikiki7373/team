@@ -100,7 +100,7 @@ nav .nav-item {
   background-color: #f8e493;
   border-radius: 20px;
   border: solid 5px #ffffff;
-  width: 55%;
+  width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -119,6 +119,18 @@ nav .nav-item {
   background-color: #c5f4ff;
   border: solid 3px #fa85a0;
   border-radius: 5px;
+}
+
+.hr {
+  border-top: 3px dotted whitesmoke;
+  width: 85%;
+}
+
+.text_of_title {
+  margin: 0.2em;
+  font-size: large;
+  width: 580px;
+  word-wrap: break-word;
 }
 /*--------------------//ひみつ道具投稿--------------------------*/
 
@@ -218,7 +230,7 @@ nav .nav-item {
   transition: all 0.5s ease;
   background-color: #c5f4ff;
   border-radius: 10px;
-  border: solid 5px #ffffff;
+  border: solid 5px #f8c0cd;
 }
 
 /*アイコンの＋と*/
@@ -269,12 +281,12 @@ nav .nav-item {
 
 .accordion-area2 .replay-color {
   margin: 10px 0;
-  background: #ff8080;
+  background: #fff;
   border-radius: 10px;
 }
 
 .accordion-area2 section {
-  border: 1px solid #ff8080;
+  border: 2px dotted #000;
   border-radius: 10px;
 }
 
@@ -331,3 +343,18 @@ nav .nav-item {
 }
 
 /*---------//もしも投稿リプライ全体-----*/
+
+/*-----ひみつ道具投稿---------*/
+
+.title-3 {
+  position: relative;
+  /*マーク位置基準とするためのrelative指定*/
+  cursor: pointer;
+}
+
+/*アコーディオンで現れるエリア*/
+.box-3 {
+  display: none; /*はじめは非表示*/
+}
+
+/*----//ひみつ道具投稿---------*/

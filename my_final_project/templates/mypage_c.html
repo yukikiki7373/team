@@ -49,59 +49,67 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
-      <p>マイ　もしもボックス</p>
-        {% for dream in dreams %}
+      <p>マイ もしも</p>
+        <form name="f" method="post">
+        <table class="table table-striped">
+            <tbody>
+            {% for dream in dreams %}
+                <tr>
+                    <td
+                        id="dream_{{dream.id}}"
+                        dream_id="{{dream.id}}">{{ dream.content }}
+                    </td>
+                    <td class="td_update_txt" id="update_txt_{{dream.id}}">
+                        <input type="text" class="txt_update" name="update_txt" dream_id="{{ dream.id }}" value="{{ dream.content }}">
+                    </td>
+                    <td class="button"><button type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="hidden" name="id" id="id">
+        <input type="hidden" name="content" id="content">
+
+        <script>
+            $(document).ready(function(){
+            $('button[name="btn_update"]').click(function() {
+                var id = $(this).val();
+                if ($('#update_txt_' + id).is(':visible')) {
+                $('#update_txt_' + id).hide();
+                $('#dream_' + id).show();
+                $(this).text('編集');
+                } else {
+                $('#update_txt_' + id).show();
+                $('#dream_' + id).hide();
+                $(this).text('戻す');
+                }
+            });
+            $('input[name="update_txt"]').keydown(function(e) {
+                if (e.keyCode == 13) {
+                var id = $(this).attr("dream_id");
+                $('#id').val(id);
+                var content = $(this).val();
+                $('#content').val(content)
+                $('form[name="f"]').attr('action', '/dream_edit');
+                $('form[name="f"]').submit();
+                }
+            });
+            });
+        </script>
+
+      <p>マイ コメント</p>
+        {% for dreams_for_mycomment in dreams_for_mycomments %}
                     {% for user in users %}
-                        {% if dream['user_id'] == user['id'] %}
+                        {% if dreams_for_mycomment['user_id'] == user['id'] %}
                             <!-- ---------------- もしも投稿の表示部分 ------------------>
                             <div class="form-floating">
-                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
+                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dreams_for_mycomment['content'] }}</textarea>
                             </div>
                             <!-- ---------------- もしも投稿の表示部分 ------------------>
                         {% endif %}
                     {% endfor %}
                     {% for comment in comments %}
-                      {% if dream['id'] == comment['dreams_id'] %}
-                          {% for user in users %}
-                              {% if comment['user_id'] == user['id'] %}
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                                  <div class="form-floating">
-                                      <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
-                                  </div>
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                              {% endif %}
-                          {% endfor %}
-                          {% for reply in replies %}
-                              {% if reply['comments_id'] == comment['id'] %}
-                                  {% for user in users %}
-                                      {% if user['id'] == reply['user_id'] %}
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                          <div class="form-floating">
-                                              <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
-                                          </div>
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                      {% endif %}
-                                  {% endfor %}
-                              {% endif %}
-                          {% endfor %}
-                      {% endif %}
-                    {% endfor %}
-                {% endfor %}
-
-
-    <p>マイ　ベストアンサー</p>
-      {% for best_answer in best_answers %}
-                    {% for user in users %}
-                        {% if best_answer['user_id'] == user['id'] %}
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                            <div class="form-floating">
-                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ best_answer['content'] }}</textarea>
-                            </div>
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                        {% endif %}
-                    {% endfor %}
-                    {% for comment in comments %}
-                      {% if best_answer['id'] == comment['dreams_id'] %}
+                      {% if dreams_for_mycomment['id'] == comment['dreams_id'] %}
                           {% for user in users %}
                               {% if comment['user_id'] == user['id'] %}
                               <!-- ---------------- コメント投稿の表示部分 ------------------>

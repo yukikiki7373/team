@@ -63,7 +63,134 @@
    </div>
       
       <p>マイ　ひみつ道具</p>
+        <form name="f" method="post">
+        <table class="table table-striped">
+            <tbody>
+            {% for secret in secrets %}
+                <tr><th>タイトル</th></tr>
+                <tr>
+                    <td
+                        id="secret_{{secret.id}}"
+                        secret_id="{{secret.id}}">{{ secret.title }}
+                    </td>
+                    <td class="td_update_txt" id="update_txt_{{secret.id}}">
+                        <input type="text" class="txt_update" name="update_txt" secret_id="{{ secret.id }}" value="{{ secret.title }}">
+                    </td>
+                    <td class="button"><button type="button" name="btn_update" value="{{ secret.id }}">編集</button></td>
+                </tr>
 
+                <tr><th>「ひみつ道具」説明</th></tr>
+                <tr>
+                    <td
+                        id="secret_2_{{secret.id}}"
+                        secret_id="{{secret.id}}">{{ secret.content }}
+                    </td>
+                    <td class="td_update_txt" id="update_txt_2_{{secret.id}}">
+                        <input type="text" class="txt_update" name="update_txt_2" secret_id="{{ secret.id }}" value="{{ secret.content }}">
+                    </td>
+                    <td class="button"><button type="button" name="btn_update_2" value="{{ secret.id }}">編集</button></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="hidden" name="id" id="id">
+        <input type="hidden" name="title" id="title">
+        <input type="hidden" name="content" id="content">
+
+        <script>
+            $(document).ready(function(){
+            $('button[name="btn_update"]').click(function() {
+                var id = $(this).val();
+                if ($('#update_txt_' + id).is(':visible')) {
+                $('#update_txt_' + id).hide();
+                $('#secret_' + id).show();
+                $(this).text('編集');
+                } else {
+                $('#update_txt_' + id).show();
+                $('#secret_' + id).hide();
+                $(this).text('戻す');
+                }
+            });
+            $('button[name="btn_update_2"]').click(function() {
+                var id = $(this).val();
+                if ($('#update_txt_2_' + id).is(':visible')) {
+                $('#update_txt_2_' + id).hide();
+                $('#secret_2_' + id).show();
+                $(this).text('編集');
+                } else {
+                $('#update_txt_2_' + id).show();
+                $('#secret_2_' + id).hide();
+                $(this).text('戻す');
+                }
+            });
+            $('input[name="update_txt"]').keydown(function(e) {
+                if (e.keyCode == 13) {
+                var id = $(this).attr("secret_id");
+                $('#id').val(id);
+                var title = $(this).val();
+                $('#title').val(title)
+                $('form[name="f"]').attr('action', '/title_edit');
+                $('form[name="f"]').submit();
+                }
+            });
+            $('input[name="update_txt_2"]').keydown(function(e) {
+                if (e.keyCode == 13) {
+                var id = $(this).attr("secret_id");
+                $('#id').val(id);
+                var content = $(this).val();
+                $('#content').val(content)
+                $('form[name="f"]').attr('action', '/content_edit');
+                $('form[name="f"]').submit();
+                }
+            });
+            });
+        </script>
+
+
+
+      <p>マイ コメント</p>
+      
+            {% for dream in dreams %}
+                    {% for user in users %}
+                        {% if dream['user_id'] == user['id'] %}
+                            <!-- ---------------- もしも投稿の表示部分 ------------------>
+                            <div class="form-floating">
+                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
+                            </div>
+                            <!-- ---------------- もしも投稿の表示部分 ------------------>
+                        {% endif %}
+                    {% endfor %}
+                    {% for comment in comments %}
+                      {% if dream['id'] == comment['dreams_id'] %}
+                          {% for user in users %}
+                              {% if comment['user_id'] == user['id'] %}
+                              <!-- ---------------- コメント投稿の表示部分 ------------------>
+
+                                  <div class="form-floating">
+                                      <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
+                                  </div>
+                                
+                              <!-- ---------------- コメント投稿の表示部分 ------------------>
+                              {% endif %}
+                          {% endfor %}
+                          {% for reply in replies %}
+                              {% if reply['comments_id'] == comment['id'] %}
+                                  {% for user in users %}
+                                      {% if user['id'] == reply['user_id'] %}
+                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
+                                          <div class="form-floating">
+                                              <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
+                                          </div>
+                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
+                                      {% endif %}
+                                  {% endfor %}
+                              {% endif %}
+                          {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+            
 
       <p>マイ　ベストアンサー</p>
       {% for best_answer in best_answers %}
