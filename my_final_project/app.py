@@ -47,39 +47,7 @@ db = SQL("sqlite:///teamSQLite/team.db")
 def top():
     return render_template("top.html")
 
-
-    # -----------------------------もしも一覧表示用コード（構造テスト）-------------------
-    # dreams = db.execute("SELECT * FROM dreams")
-    # users =  db.execute("SELECT username, id FROM users")
-    # comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
-    # replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
-
-
-
-    # return render_template("test_for_mosimo.html", dreams=dreams, comments=comments, replies=replies, users=users)
-
-    # -------------------------------もしも一覧表示用コード（構造テスト）------------------
-
-    #------------------------------jinnaテスト用コード--------------------------------------
-    # test = "jinjaは作動してる!!"
-
-   # names = {'yuki', 'takahashi', 'aaa', 'bbb', 11}
-
-    #db.execute("DELETE FROM users WHERE username LIKE '%i'")
-    #db.execute("INSERT INTO users(username, hash, is_business) values('yuki', 'fwaofhaogoha', True)")
-    #db.execute("INSERT INTO users(username, hash, is_business) values('takahashi', 'fwggoanajfha', False)")
-
-    #users = db.execute("SELECT * FROM users")
-
-    #return render_template("test.html", test=test, names=names, users=users)
-
-    #------------------------------jinnaテスト用コード--------------------------------------
-
-    #------------------------------画像テスト用コード--------------------------------------
-    # test = db.execute("SELECT image FROM secrets")
-    # test = test [0]['image']
-    # return render_template("test1.html", test=test)
-    #------------------------------画像テスト用コード--------------------------------------
+   
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -112,6 +80,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = users[0]["id"]
+        session["is_business"] = users[0]["is_business"]
 
         # Redirect user to home page
         return redirect("/dreams")
@@ -268,31 +237,39 @@ def dreams():
 def search_dreams():  
     """Show the result of quotation of dreams"""
     symbol = request.form.get("symbol")
-    quote = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ?",
+    symbol = '%' + symbol + '%'
+    quotes = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND content LIKE ? ORDER BY created_date DESC",
         False, 
         symbol
-        )
-    solved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?" , False, True)
-    unsolved = db.execute("SELECT * FROM replies WHERE is_deleted = ? AND is_solved = ?", False, False)
+    )
 
-    return render_template("search.html", quote=quote, solved=solved, unsolved=unsolved)
+    users =  db.execute("SELECT username, id FROM users")
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
+
+    return render_template("search_dreams.html", quotes=quotes, users=users, comments=comments, replies=replies)
 
 
 
-@app.route("/quote_secrets", methods=["GET", "POST"])
+@app.route("/search_secrets", methods=["GET", "POST"])
 @login_required
-def quote_secrets():  
+def search_secrets():  
     """Show the result of quotation of secrets"""
     symbol = request.form.get("symbol")
-    quote = db.execute(
+    symbol = '%' + symbol + '%'
+    quotes = db.execute(
         "SELECT * FROM secrets WHERE is_deleted = ? AND content LIKE ? OR title LIKE ?",
         False,
         symbol,
         symbol
     )
 
-    return render_template("quote.html", quote=quote)
+    users =  db.execute("SELECT username, id FROM users")
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
+
+    return render_template("search_dreams.html", quotes=quotes, users=users, comments=comments, replies=replies)
 
 
 @app.route("/secrets", methods=["GET", "POST"])
@@ -336,28 +313,28 @@ def secrets():
 @login_required
 def mypage_c():
     """Show my dreams & comments & replies"""
+    users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
         False,
         session["user_id"],
         session["user_id"],
         session["user_id"]
     )
-    comments = db.execute(
-        "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
+    
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
         False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
         False,
-        session["user_id"],
-        session["user_id"],
+        True,
         session["user_id"]
-    )
-    return render_template("mypage_c.html", dreams=dreams, comments=comments, replies=replies)
+        )
+
+    return render_template("mypage_c.html", users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+
 
 
 @app.route("/dream_edit", methods=["POST"])
@@ -604,7 +581,20 @@ def mypage_b():
     """Show my secrets"""
     secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
-    return render_template("mypage_b.html", secrets=secrets)
+    users =  db.execute("SELECT username, id FROM users")
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        False,
+        False,
+        True,
+        session["user_id"]
+        )
+
+    return render_template("mypage_b.html", secrets=secrets, users=users, comments=comments, replies=replies, best_answers=best_answers) 
+
 
 
 @app.route("/show_my_best_answer") #To show best_answer(only developer who is login)
@@ -646,8 +636,8 @@ def secrets_edit():
 @login_required
 def solved():
     dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", True, False)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ", False)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
     users = db.execute("SELECT * FROM users")
 
     return render_template("search_solved.html", dreams = dreams, comments=comments, replies=replies, users=users)
@@ -657,8 +647,8 @@ def solved():
 @login_required
 def unsolved():
     dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", False, False)
-    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ", False)
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
     users = db.execute("SELECT * FROM users")
 
     return render_template("search_unsolved.html", dreams = dreams, comments=comments, replies=replies, users=users)
