@@ -588,18 +588,34 @@ def dream_delete():
 @login_required
 def secrets_delete():
     """secrets_delete"""
+    user_id = session["user_id"]
+    id = request.form["id"]
 
-    user_id = session["user_id"] # insert user_id 
+    db.execute("UPDATE secrets SET is_deleted = ? WHERE id = ? AND user_id = ?", True, id, user_id) #Change id_deleted == true
 
-    # secrets_content = request.form.get("secrets_content") #Insert content into this variable. Comparison to investigate which secret is about to delete
-    # secrets_id = db.execute("SELECT id FROM dreams WHERE user_id = ? AND content = ?", user_id, secrets_content)
+    """Show my secrets"""
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
-    secrets_id = request.form.get("secrets_id")
+    users =  db.execute("SELECT username, id FROM users")
+    dreams = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
+        session["user_id"],
+        session["user_id"]
+    )
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        False,
+        False,
+        True,
+        session["user_id"]
+        )
 
-    db.execute("UPDATE secrets SET is_deleted = True WHERE id = ? AND user_id = ?", secrets_id, user_id) #Change id_deleted == true
+    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
 
-    return redirect("mypage_b")
 
 @app.route("/mypage_b") #To show secrets(only developer who is login)
 @login_required

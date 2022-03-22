@@ -89,6 +89,7 @@
                         <input type="text" class="txt_update" name="update_txt_2" secret_id="{{ secret.id }}" value="{{ secret.content }}">
                     </td>
                     <td class="button"><button type="button" name="btn_update_2" value="{{ secret.id }}">編集</button></td>
+                    <td class="button"><button type="button" name="btn_delete" value="{{ secret.id }}">ひみつ道具を削除</button></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -142,6 +143,12 @@
                 $('form[name="f"]').attr('action', '/content_edit');
                 $('form[name="f"]').submit();
                 }
+            });
+            $('button[name="btn_delete"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/secrets_delete');
+                $('form[name="f"]').submit();
             });
             });
         </script>
