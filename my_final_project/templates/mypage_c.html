@@ -54,6 +54,7 @@
         <table class="table table-striped">
             <tbody>
             {% for dream in dreams %}
+                <tr><th>マイ もしも</tr></th>
                 <tr>
                     <td
                         id="dream_{{dream.id}}"
@@ -65,6 +66,28 @@
                     <td class="button"><button type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
                     <td class="button"><button type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
                 </tr>
+
+                {% for comment in comments%}
+                    {% if dream['id'] == comment['dreams_id'] %}
+                        {% for user in users %}
+                            {% if comment['user_id'] == user['id'] %}
+                                <tr><th>コメント</tr></th>
+                                <tr>
+                                    <td
+                                        id="comment_{{comment.id}}"
+                                        comment_id="{{comment.id}}">{{user.username}}{{ comment.content }}
+                                    </td>
+                                    {% if comment['is_best'] == false %}
+                                        <td class="button"><button type="button" name="btn_bestanswer" value="{{ comment.id }}">ベストアンサー</button></td>
+                                    {% else %}
+                                        <td class="button"><button type="button" name="btn_cancel_bestanswer" value="{{ comment.id }}">ベストアンサーを取り消す</button></td>
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
             {% endfor %}
             </tbody>
         </table>
@@ -99,6 +122,18 @@
                 var id = $(this).val();
                 $('#id').val(id);
                 $('form[name="f"]').attr('action', '/dream_delete');
+                $('form[name="f"]').submit();
+            });
+            $('button[name="btn_bestanswer"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/best_answer');
+                $('form[name="f"]').submit();
+            });
+            $('button[name="btn_cancel_bestanswer"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/cancel_best_answer');
                 $('form[name="f"]').submit();
             });
             });
