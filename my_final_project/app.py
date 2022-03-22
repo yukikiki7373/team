@@ -315,9 +315,13 @@ def mypage_c():
     """Show my dreams & comments & replies"""
     users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ?",
         False,
-        session["user_id"],
+        session["user_id"]
+    )
+    dreams_for_mycomments = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
         session["user_id"],
         session["user_id"]
     )
@@ -333,7 +337,7 @@ def mypage_c():
         session["user_id"]
         )
 
-    return render_template("mypage_c.html", users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+    return render_template("mypage_c.html", users=users, dreams=dreams, dreams_for_mycomments=dreams_for_mycomments, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 
@@ -342,106 +346,37 @@ def mypage_c():
 def dream_edit():
     """Edit my dream"""
 
-    dream_id = request.form["dream_id"]
+    id = request.form["id"]
     content = request.form["content"]
 
-    db.execute("UPDATE dreams SET content = ? WHERE id = ?", content, dream_id)
+    db.execute("UPDATE dreams SET content = ? WHERE id = ?", content, id)
 
     """Show my dreams & comments & replies"""
+    users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ?",
         False,
-        session["user_id"],
+        session["user_id"]
+    )
+    dreams_for_mycomments = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
         session["user_id"],
         session["user_id"]
     )
-    comments = db.execute(
-        "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
+    
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
         False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
         False,
-        session["user_id"],
-        session["user_id"],
+        True,
         session["user_id"]
-    )
-    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
+        )
 
-
-@app.route("/comment_edit", methods=["POST"])
-@login_required
-def comment_edit():
-    """Edit my comment"""
-
-    comment_id = request.form["comment_id"]
-    content = request.form["content"]
-
-    db.execute("UPDATE comments SET content = ? WHERE id = ?", content, comment_id)
-
-    """Show my dreams & comments & replies"""
-    dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
-        False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    comments = db.execute(
-        "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
-        False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
-
-
-
-
-@app.route("/reply_edit", methods=["POST"])
-@login_required
-def reply_edit():
-    """Edit my reply"""
-
-    reply_id = request.form["reply_id"]
-    content = request.form["content"]
-
-    db.execute("UPDATE replies SET content = ? WHERE id = ?", content, reply_id)
-
-    """Show my dreams & comments & replies"""
-    dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM replies WHERE user_id = ?)",
-        False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    comments = db.execute(
-        "SELECT * FROM comments WHERE is_deleted = ? AND user_id = ? OR dreams_id IN(SELECT id FROM dreams WHERE user_id = ?) OR id IN(SELECT comments_id FROM replies WHERE user_id = ?)", 
-        False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? AND user_id = ? OR comments_id IN(SELECT id FROM comments WHERE user_id = ?) OR comments_id IN(SELECT id FROM comments WHERE dreams_id IN(SELECT id FROM dreams WHERE user_id = ?)", 
-        False,
-        session["user_id"],
-        session["user_id"],
-        session["user_id"]
-    )
-    return render_template("mydreams.html", dreams=dreams, comments=comments, replies=replies)
+    return render_template("mypage_c.html", users=users, dreams=dreams, dreams_for_mycomments=dreams_for_mycomments, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 @app.route("/comment", methods=["POST"])
@@ -582,6 +517,12 @@ def mypage_b():
     secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
     users =  db.execute("SELECT username, id FROM users")
+    dreams = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
+        session["user_id"],
+        session["user_id"]
+    )
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
@@ -593,43 +534,81 @@ def mypage_b():
         session["user_id"]
         )
 
-    return render_template("mypage_b.html", secrets=secrets, users=users, comments=comments, replies=replies, best_answers=best_answers) 
+    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 
-@app.route("/show_my_best_answer") #To show best_answer(only developer who is login)
+
+
+@app.route("/title_edit", methods=["POST"]) #To edit secrets(only developer who is login)
 @login_required
-def show_my_best_answer():
-    user_id = session["user_id"]
+def title_edit():
 
-    user = db.execute("SELECT is_business FROM users WHERE id = ?", user_id)
+    """Edit my title of secrets"""
 
-    """Show best answer"""
-    dreams = db.execute("SELECT * FROM dreams WHERE user_id = ? AND is_deleted = False AND is_best = 1", user_id)
-    comments = db.execute("SELECT * FROM comments WHERE user_id = ? AND is_deleted = False", user_id)
-    replies = db.execute("SELECT * FROM replies WHERE user_id = ? AND is_deleted = False", user_id)
-    if user == False:
-        return render_template("mypage_c.html", dreams=dreams, comments=comments, replies=replies)
-    else:
-        return render_template("mypage_b.html", dreams=dreams, comments=comments, replies=replies)
+    id = request.form["id"]
+    title = request.form["title"]
 
-
-@app.route("/secrets_edit", methods=["POST"]) #To edit secrets(only developer who is login)
-@login_required
-def secrets_edit():
+    db.execute("UPDATE secrets SET title = ? WHERE id = ?", title, id)
 
     user_id = session["user_id"]
-
-    """Edit my secrets"""
-
-    secrets_id = request.form["secrets_id"]
-    secrets_content = request.form["secrets_content"]
-
-    db.execute("UPDATE secrets SET content = ? WHERE id = ?, user_id = ?", secrets_content, secrets_id, user_id)
-
+    """Show my secrets"""
     secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
-    return render_template("mypage_b.html", secrets=secrets)
+    users =  db.execute("SELECT username, id FROM users")
+    dreams = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
+        session["user_id"],
+        session["user_id"]
+    )
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        False,
+        False,
+        True,
+        session["user_id"]
+        )
+
+    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+
+
+@app.route("/content_edit", methods=["POST"]) #To edit secrets(only developer who is login)
+@login_required
+def content_edit():
+    """Edit my content of secrets"""
+
+    id = request.form["id"]
+    content = request.form["content"]
+
+    db.execute("UPDATE secrets SET content = ? WHERE id = ?", content, id)
+
+    user_id = session["user_id"]
+    """Show my secrets"""
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
+
+    users =  db.execute("SELECT username, id FROM users")
+    dreams = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
+        session["user_id"],
+        session["user_id"]
+    )
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        False,
+        False,
+        True,
+        session["user_id"]
+        )
+
+    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 @app.route("/solved", methods=["GET", "POST"]) #this is for timeline of solved dream
