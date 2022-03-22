@@ -3,4 +3,6 @@
 
 -- INSERT INTO comments (user_id, dreams_id, content, is_best, is_deleted) VALUES ("2", "3", "こんなのありますよー", "1", "0")
 
-DELETE FROM comments WHERE id = 7;
+-- DELETE FROM comments WHERE id = 7;
+
+INSERT INTO comments (user_id, dreams_id, content, is_best, is_deleted) VALUES ("2", "10", "こんなのありますよー", "0", "0")
