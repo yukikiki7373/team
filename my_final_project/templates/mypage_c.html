@@ -62,6 +62,7 @@
                         <input type="text" class="txt_update" name="update_txt" dream_id="{{ dream.id }}" value="{{ dream.content }}">
                     </td>
                     <td class="button"><button type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
+                    <td class="button"><button type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -92,6 +93,12 @@
                 $('form[name="f"]').attr('action', '/dream_edit');
                 $('form[name="f"]').submit();
                 }
+            });
+            $('button[name="btn_delete"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/dream_delete');
+                $('form[name="f"]').submit();
             });
             });
         </script>
