@@ -98,7 +98,7 @@ nav .nav-item {
   background-color: #f8e493;
   border-radius: 20px;
   border: solid 5px #ffffff;
-  width: 55%;
+  width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -117,6 +117,18 @@ nav .nav-item {
   background-color: #c5f4ff;
   border: solid 3px #fa85a0;
   border-radius: 5px;
+}
+
+.hr{
+  border-top: 3px dotted whitesmoke;
+  width: 85%; 
+}
+
+.text_of_title{
+  margin: 0.2em;
+  font-size: large;
+  width: 580px;
+  word-wrap: break-word;
 }
 /*--------------------//ひみつ道具投稿--------------------------*/
 
