@@ -88,7 +88,7 @@
             {% if dream['user_id'] == user['id'] %}
                 <!-- ---------------- もしも投稿の表示部分 ------------------>
                 <div class="form-floating">
-                    <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
+                    <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2" style="height: auto;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
                 </div>
                 <!-- ---------------- もしも投稿の表示部分 ------------------>
             {% endif %}
@@ -99,7 +99,7 @@
                             {% if comment['user_id'] == user['id'] %}
                             <!-- ---------------- コメント投稿の表示部分 ------------------>
                                 <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
+                                    <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2"  style="height:auto; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
                                 </div>
                             <!-- ---------------- コメント投稿の表示部分 ------------------>
                             {% endif %}
@@ -110,7 +110,7 @@
                                     {% if user['id'] == reply['user_id'] %}
                                     <!-- ---------------- リプライ投稿の表示部分 ------------------>
                                         <div class="form-floating">
-                                            <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
+                                            <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2" style="height: auto; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
                                         </div>
                                     <!-- ---------------- リプライ投稿の表示部分 ------------------>
                                     {% endif %}
