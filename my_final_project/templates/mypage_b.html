@@ -16,21 +16,32 @@
 
 </head>
  
+<<<<<<< HEAD
  <>
 <nav class="navbar navbar-expand-md navbar-light" style="background-color: #748eff;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
+=======
+ <body>
+  <nav class="navbar navbar-expand-md navbar-light" style="background-color: #748eff;">
+>>>>>>> ed37d22693afd07ce27e08747d0dd294bd65bf3e
             <div class="collapse navbar-collapse" id="navbarNav4">
-               
+                {% if session["is_business"] == false%}
                     <ul class="navbar-nav mr-auto mt-2">
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>
-    
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>    
                         <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
-
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_b"><span class="menu-color">マイページ</span></a></li>
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_c"><span class="menu-color">マイページ</span></a></li>
                     </ul>
+
+                    {% else %}
+                        <ul class="navbar-nav mr-auto mt-2">
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>    
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_b"><span class="menu-color">マイページ</span></a></li>
+                        </ul>
+                {% endif %}
 
                     <ul class="navbar-nav ml-auto mt-2 nav-space-right">
                         <li class="nav-item"><a class="nav-link green" href="/logout"><span class="menu-color">ろぐあうと</span></a></li>
@@ -46,16 +57,65 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
+
+
+
   <div class="sub-menu">
         <ul class="mypage-wrapper">
-          <li class="mypage-item"><a href="#tab1" class="current">ひみつ道具</a></li>
+          <li class="mypage-item"><a href="#tab1" class="current">マイ　ひみつ道具</a></li>
           <li class="mypage-item"><a href="#tab2">マイ　ベストアンサー</a></li>
         </ul>
    </div>
       
+      <p>マイ　ひみつ道具</p>
+
+
+      <p>マイ　ベストアンサー</p>
+      {% for best_answer in best_answers %}
+                    {% for user in users %}
+                        {% if best_answer['user_id'] == user['id'] %}
+                            <!-- ---------------- もしも投稿の表示部分 ------------------>
+                            <div class="form-floating">
+                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ best_answer['content'] }}</textarea>
+                            </div>
+                            <!-- ---------------- もしも投稿の表示部分 ------------------>
+                        {% endif %}
+                    {% endfor %}
+                    {% for comment in comments %}
+                      {% if best_answer['id'] == comment['dreams_id'] %}
+                          {% for user in users %}
+                              {% if comment['user_id'] == user['id'] %}
+                              <!-- ---------------- コメント投稿の表示部分 ------------------>
+                                  <div class="form-floating">
+                                      <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
+                                  </div>
+                              <!-- ---------------- コメント投稿の表示部分 ------------------>
+                              {% endif %}
+                          {% endfor %}
+                          {% for reply in replies %}
+                              {% if reply['comments_id'] == comment['id'] %}
+                                  {% for user in users %}
+                                      {% if user['id'] == reply['user_id'] %}
+                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
+                                          <div class="form-floating">
+                                              <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
+                                          </div>
+                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
+                                      {% endif %}
+                                  {% endfor %}
+                              {% endif %}
+                          {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+
+
+   
    <div class="mypage-width">
         <div id="contents">
           <div id="tab1">
+<<<<<<< HEAD
             <p>ひみつ道具の内容</p>
             <form class="form-secrets-width" name="f" method="post">
               <section class="secrets-color">
@@ -101,15 +161,21 @@
                   <button class="btn btn-light btn-dreams-width" type="submit">もしもを投稿</button>
                </section> 
             </form>
+=======
+            {# <p>マイ　ひみつ道具</p> #}
+            
+>>>>>>> ed37d22693afd07ce27e08747d0dd294bd65bf3e
           </div>
 
-      </div>
+          <div id="tab2">
+            {# <p>マイ　ベストアンサー</p> #}
+    
+          </div>
 
-
-   </div>
+        </div>
+    </div>
   </main>
 
 </body>
 <script src="../static/js/script.js"></script>
 </html>
-

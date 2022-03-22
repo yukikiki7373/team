@@ -40,22 +40,22 @@
 </head>
  
  <body>
-<nav class="navbar navbar-expand-md navbar-light" style="background-color: #748eff;">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
+    <nav class="navbar navbar-expand-md navbar-light" style="background-color: #748eff;">
             <div class="collapse navbar-collapse" id="navbarNav4">
-               
+                {% if session["is_business"] == false%}
                     <ul class="navbar-nav mr-auto mt-2">
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="dreams"><span class="menu-color">もしもボックス</span></a></li>
-    
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="secrets"><span class="menu-color">ひみつ道具</span></a></li>
-
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="search"><span class="menu-color">検索</span></a></li>
-
-                        <li class="nav-item nav-space-left"><a class="nav-link" href="post_register"><span class="menu-color">マイページ</span></a></li>
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>    
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_c"><span class="menu-color">マイページ</span></a></li>
                     </ul>
+
+                    {% else %}
+                        <ul class="navbar-nav mr-auto mt-2">
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>    
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_b"><span class="menu-color">マイページ</span></a></li>
+                        </ul>
+                {% endif %}
 
                     <ul class="navbar-nav ml-auto mt-2 nav-space-right">
                         <li class="nav-item"><a class="nav-link green" href="/logout"><span class="menu-color">ろぐあうと</span></a></li>
@@ -67,9 +67,47 @@
   <main>
         <div class="title-wrapper">
              <img src="../static/img/shine.png" alt="">
-             <h1 class="title-color">"もしも投稿"の検索結果</h1>
+             <h1 class="title-color">検索結果</h1>
              <img src="../static/img/shine.png" alt="">
         </div>
+
+        {% for quote in quotes %}
+            {% for user in users %}
+                {% if quote['user_id'] == user['id'] %}
+                    <!-- ---------------- もしも投稿の表示部分 ------------------>
+                    <div class="form-floating">
+                        <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ quote['content'] }}</textarea>
+                    </div>
+                    <!-- ---------------- もしも投稿の表示部分 ------------------>
+                {% endif %}
+            {% endfor %}
+            {% for comment in comments %}
+                    {% if quote['id'] == comment['dreams_id'] %}
+                        {% for user in users %}
+                            {% if comment['user_id'] == user['id'] %}
+                            <!-- ---------------- コメント投稿の表示部分 ------------------>
+                                <div class="form-floating">
+                                    <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
+                                </div>
+                            <!-- ---------------- コメント投稿の表示部分 ------------------>
+                            {% endif %}
+                        {% endfor %}
+                        {% for reply in replies %}
+                            {% if reply['comments_id'] == comment['id'] %}
+                                {% for user in users %}
+                                    {% if user['id'] == reply['user_id'] %}
+                                    <!-- ---------------- リプライ投稿の表示部分 ------------------>
+                                        <div class="form-floating">
+                                            <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
+                                        </div>
+                                    <!-- ---------------- リプライ投稿の表示部分 ------------------>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+            {% endfor %}
+        {% endfor %}
 
   </main>
 </body>
