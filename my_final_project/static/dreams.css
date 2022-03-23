@@ -55,6 +55,7 @@ nav .nav-item {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  margin-bottom: 10px;
 }
 
 .form-control {

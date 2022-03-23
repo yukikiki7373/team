@@ -4,7 +4,7 @@ main {
   display: block;
 }
 
-.mypage-wrapper .mypage-item {
+.mypage-item {
   font-size: 25px;
   font-weight: bold;
   float: left;
@@ -41,14 +41,19 @@ ul li a.current {
   align-items: center;
 }
 
-
-td.button {width:80px;text-align:right;font-family: "Hannari", serif;}
-.td_update_txt {display:none;}
+td.button {
+  width: 80px;
+  text-align: right;
+  font-family: "Hannari", serif;
+}
+.td_update_txt {
+  display: none;
+}
 .txt_update {
-    width: 98%;
-    height: 34px;
-    font-size: 17px;
-    font-family: "Hannari", serif;
-    padding-left: 8px;
-    border-radius: 5px;
+  width: 98%;
+  height: 34px;
+  font-size: 17px;
+  font-family: "Hannari", serif;
+  padding-left: 8px;
+  border-radius: 5px;
 }

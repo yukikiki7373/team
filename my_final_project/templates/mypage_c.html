@@ -15,6 +15,50 @@
   
     <title>もしもボックス</title>
 
+    <script>
+        $(document).ready(function(){
+        $('button[name="btn_update"]').click(function() {
+            var id = $(this).val();
+            if ($('#update_txt_' + id).is(':visible')) {
+            $('#update_txt_' + id).hide();
+            $('#dream_' + id).show();
+            $(this).text('編集');
+            } else {
+            $('#update_txt_' + id).show();
+            $('#dream_' + id).hide();
+            $(this).text('戻す');
+            }
+        });
+        $('input[name="update_txt"]').keydown(function(e) {
+            if (e.keyCode == 13) {
+            var id = $(this).attr("dream_id");
+            $('#id').val(id);
+            var content = $(this).val();
+            $('#content').val(content)
+            $('form[name="f"]').attr('action', '/dream_edit');
+            $('form[name="f"]').submit();
+            }
+        });
+        $('button[name="btn_delete"]').click(function() {
+            var id = $(this).val();
+            $('#id').val(id);
+            $('form[name="f"]').attr('action', '/dream_delete');
+            $('form[name="f"]').submit();
+        });
+        $('button[name="btn_bestanswer"]').click(function() {
+            var id = $(this).val();
+            $('#id').val(id);
+            $('form[name="f"]').attr('action', '/best_answer');
+            $('form[name="f"]').submit();
+        });
+        $('button[name="btn_cancel_bestanswer"]').click(function() {
+            var id = $(this).val();
+            $('#id').val(id);
+            $('form[name="f"]').attr('action', '/cancel_best_answer');
+            $('form[name="f"]').submit();
+        });
+        });
+    </script>
 </head>
  
  <body>
@@ -49,6 +93,21 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
+
+        <div class="sub-menu">
+            <ul class="mypage-wapper">
+              <li class="mypage-item"><a href="#tab1" class="current">マイ　もしも</a></li>
+              <li class="mypage-item"><a href="#tab2">マイ　コメント</a></li>
+            </ul>
+       </div>
+
+
+
+
+<div class="mypage-width">
+    <div id="contents">
+    <div id="tab1">
+            
       <p>マイ もしも</p>
         <form name="f" method="post">
         <table class="table table-striped">
@@ -91,55 +150,14 @@
             {% endfor %}
             </tbody>
         </table>
+        </form>
         <input type="hidden" name="id" id="id">
         <input type="hidden" name="content" id="content">
+    </div>
+    </div>
 
-        <script>
-            $(document).ready(function(){
-            $('button[name="btn_update"]').click(function() {
-                var id = $(this).val();
-                if ($('#update_txt_' + id).is(':visible')) {
-                $('#update_txt_' + id).hide();
-                $('#dream_' + id).show();
-                $(this).text('編集');
-                } else {
-                $('#update_txt_' + id).show();
-                $('#dream_' + id).hide();
-                $(this).text('戻す');
-                }
-            });
-            $('input[name="update_txt"]').keydown(function(e) {
-                if (e.keyCode == 13) {
-                var id = $(this).attr("dream_id");
-                $('#id').val(id);
-                var content = $(this).val();
-                $('#content').val(content)
-                $('form[name="f"]').attr('action', '/dream_edit');
-                $('form[name="f"]').submit();
-                }
-            });
-            $('button[name="btn_delete"]').click(function() {
-                var id = $(this).val();
-                $('#id').val(id);
-                $('form[name="f"]').attr('action', '/dream_delete');
-                $('form[name="f"]').submit();
-            });
-            $('button[name="btn_bestanswer"]').click(function() {
-                var id = $(this).val();
-                $('#id').val(id);
-                $('form[name="f"]').attr('action', '/best_answer');
-                $('form[name="f"]').submit();
-            });
-            $('button[name="btn_cancel_bestanswer"]').click(function() {
-                var id = $(this).val();
-                $('#id').val(id);
-                $('form[name="f"]').attr('action', '/cancel_best_answer');
-                $('form[name="f"]').submit();
-            });
-            });
-        </script>
-
-      <p>マイ コメント</p>
+      
+    <div id="tab2">
         {% for dreams_for_mycomment in dreams_for_mycomments %}
                     {% for user in users %}
                         {% if dreams_for_mycomment['user_id'] == user['id'] %}
@@ -177,33 +195,8 @@
                       {% endif %}
                     {% endfor %}
                 {% endfor %}
-
-
-
- <div class="sub-menu">
-       <ul class="mypage-wapper">
-         <li class="mypage-item"><a href="#tab1" class="current">マイ　もしもボックス</a></li>
-         <li class="mypage-item"><a href="#tab2">マイ　ベストアンサー</a></li>
-       </ul>
-  </div>
-     
-  <div class="mypage-width">
-       <div id="contents">
-         <div id="tab1">
-           
-         </div>
-
-         <div id="tab2">
-           <p>マイ　ベストアンサーの内容</p>
-           
-         </div>
-
-     </div>
-
-
-  </div>
-
-
+    </div>
+</div>
 
     
   </main>
