@@ -9,61 +9,33 @@
 img {
   display: block;
 }
-.img-position {
-  position: relative;
-  top: 0;
-  left: 0;
-}
+
 img:first-child {
   margin: 0 auto;
   width: 100%;
   height: 100%;
 }
+
 img:nth-child(2) {
   margin: 0 auto;
   width: 100%;
   height: 100%;
 }
+
 img:nth-child(3) {
   margin: 0 auto;
   width: 100%;
   height: 100%;
 }
 
-.top-button {
-  position: absolute;
-  top: 600px;
-  left: 530px;
-}
-
-.btn-primary-top {
-  width: 130px;
-  height: 30px;
-  margin-left: 50px;
-  color: #fff;
-  border: 2px solid #0000cd;
-  border-radius: 0;
-  background: #00bfff;
-  -webkit-box-shadow: 4px 4px 0 #000;
-  box-shadow: 4px 4px 0 #000;
-}
-.btn-primary-top:hover {
-  -webkit-box-shadow: -4px -4px 0 #000;
-  box-shadow: -4px -4px 0 #000;
-}
-
 /*---//topページのCSS----*?
 /*---背景画像の設定------*/
 
 .fv {
-  background-image: url(../static/img/dreams.png);
-  height: 100%;
-  width: 100%;
-  position: absolute;
+  display: block;
+  position: relative;
   top: 0;
   left: 0;
-  background-size: cover;
-  background-position: center;
 }
 
 /*---//背景画像の設定------*/
@@ -71,8 +43,8 @@ img:nth-child(3) {
 /*-----ログインボタンの移動--*/
 .login-button {
   position: absolute;
-  top: 570px;
-  left: 555px;
+  top: 580px;
+  left: 580px;
 }
 /*-----//ログインボタンの移動--*/
 
@@ -80,75 +52,98 @@ img:nth-child(3) {
 .form-control {
   width: 180px;
   height: 30px;
+  background-color: #c7d0d8;
 }
 
 .form-group {
   margin-top: 10px;
 }
 
-.btn-primary {
-  margin-top: 10px;
-  width: 80px;
-  height: 30px;
-  margin-left: 50px;
-  color: #fff;
-  border: 2px solid #0000cd;
-  border-radius: 0;
-  background: #00bfff;
-  -webkit-box-shadow: 4px 4px 0 #000;
-  box-shadow: 4px 4px 0 #000;
+.button-position1 {
+  margin-top: 13px;
+  margin-left: 18px;
+  text-align: center;
+  position: relative;
 }
 
-.btn-primary:hover {
-  -webkit-box-shadow: -4px -4px 0 #000;
-  box-shadow: -4px -4px 0 #000;
-}
-
-/*-----//ログインボタンのサイズと余白設定--*/
-
-/*-----はじめての方のとうろくボタン--------*/
-.btn-primary-first {
+.button-position2 {
   position: absolute;
   top: 655px;
-  right: 50px;
-  width: 120px;
-  height: 30px;
-  color: #fff;
-  border: 2px solid #0000cd;
-  border-radius: 0;
-  background: #00bfff;
-  -webkit-box-shadow: 4px 4px 0 #000;
-  box-shadow: 4px 4px 0 #000;
+  right: 190px;
+  margin-top: 15px;
+  text-align: center;
 }
 
-.btn-primary-first:hover {
-  -webkit-box-shadow: -4px -4px 0 #000;
-  box-shadow: -4px -4px 0 #000;
-}
-/*-----はじめての方のとうろくボタン--------*/
-
-/*-----開発者の方のとうろくボタン--------*/
-.btn-primary-developer {
+.button-position3 {
   position: absolute;
   top: 650px;
   left: 50px;
-  position: absolute;
-  width: 120px;
-  height: 40px;
-  font-size: 10px;
-  color: #fff;
-  border: 2px solid #0000cd;
-  border-radius: 0;
-  background: #00bfff;
-  -webkit-box-shadow: 4px 4px 0 #000;
-  box-shadow: 4px 4px 0 #000;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
 }
 
-.btn-primary-developer:hover {
-  -webkit-box-shadow: -4px -4px 0 #000;
-  box-shadow: -4px -4px 0 #000;
+.button-position4 {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: 13px;
 }
-/*-----//開発者の方のとうろくボタン--------*/
+
+.btn02 {
+  /*ボタンの形状*/
+  display: inline-block;
+  width: auto;
+  max-width: 250px;
+  height: 50px;
+  line-height: 50px;
+  outline: none;
+}
+
+/*ボタン内側の設定*/
+.btn02 span {
+  display: block;
+  position: absolute;
+  width: 150px;
+  height: 40px;
+  border: 2px solid #000;
+  /* 重なりを3Dで表示 */
+  transform-style: preserve-3d;
+  /* アニメーションの設定 数字が少なくなるほど早く回転 */
+  transition: 0.5s;
+}
+
+/*== くるっと回転（奥に） */
+
+/* 回転前 */
+.rotateback span:nth-child(1) {
+  background: #00bfff;
+  color: #fff;
+  border: 2px solid #0000cd;
+  transform: rotateX(0deg); /*はじめは回転なし*/
+  transform-origin: 0 50% -25px; /* 回転する起点 */
+}
+
+/*hoverをした後の形状*/
+.rotateback:hover span:nth-child(1) {
+  transform: rotateX(90deg); /* X軸に90度回転 */
+}
+
+/* 回転後 */
+.rotateback span:nth-child(2) {
+  background: #00bfff;
+  color: #000;
+  border: 2px solid #0000cd;
+  transform: rotateX(-90deg); /*はじめはX軸に-90度回転*/
+  transform-origin: 0 50% -25px; /* 回転する起点 */
+}
+
+/*hoverをした後の形状*/
+.rotateback:hover span:nth-child(2) {
+  transform: rotateX(0deg); /* X軸に0度回転 */
+}
+
+/*-----//ログインボタンのサイズと余白設定--*/
 
 /*---register_bのCSS-------------------*/
 /*---背景画像の設定---------------------*/
@@ -183,12 +178,12 @@ img:nth-child(3) {
 
 .register_button {
   position: absolute;
-  top: 530px;
-  left: 555px;
+  top: 540px;
+  left: 580px;
 }
 
 /*----apologyのCSS---------------------- */
-.apology_div{
+.apology_div {
   width: max-content;
   display: block;
   margin-left: auto;
@@ -196,18 +191,16 @@ img:nth-child(3) {
   margin-top: 35em;
 }
 
-.apology_h1{
+.apology_h1 {
   color: rgb(22, 22, 22);
   font-family: "Gill Sans", sans-serif;
 }
 
-.apology_p{
+.apology_p {
   color: rgb(22, 22, 22);
   text-align: right;
   font-size: xx-large;
   font-family: "Gill Sans", sans-serif;
 }
 
-
 /*----apologyのCSS---------------------- */
-

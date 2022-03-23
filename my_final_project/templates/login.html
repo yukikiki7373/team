@@ -13,8 +13,8 @@
 
 <body>
 <!-----------------------------ログインボタン-------------------------------->
-<div class="reset-position">
-    <div class="fv">       
+<div>
+    <img  class="fv" src="../static/img/dreams.png" alt="" srcset="">      
         <div class="login-button">
             <form action="/login" method="post">
                <div class="form-group">
@@ -23,16 +23,16 @@
                 <div class="form-group">
                     <input class="form-control" name="password" placeholder="ひみつのばんごう" type="password">
                 </div>
-                <a href="dreams"><button class="btn btn-primary" type="submit">ろぐいん</button></a>
+                <a class="btn02 rotateback button-position1" href="/dreams"><span>ろぐいん</span><span>もしもを叶えに行く</span></a>
             </form>
-    </div>
-</div>
+        </div>
+    
 <!------------------------------//ログインボタン-------------------------------->
 
 <!------------------------------登録ボタン-------------------------------------->
             <div>
                 
-                   <a href="register_c"><button class="btn btn-primary-first" type="submit">はじめての方</button></a>
+                   <a class="btn02 rotateback  button-position2" href="/register_c"><span>はじめての方</span><span>登録する</span></a>
                 
             </div>
                 
@@ -41,12 +41,16 @@
 <!-----------------------------開発者登録ボタン----------------------------------->
             <div>
                 
-                  <a href="register_b"><button class="btn btn-primary-developer" type="submit">はじめましての<br>ひみつ道具の開発者の方</button></a>
+                  <a class="btn02 rotateback button-position3" href="/register_b"><span>ひみつ道具開発者の方</span><span>登録する</span></a>
                 
             </div>
- <!----------------------------//開発者登録ボタン---------------------------------->               
-        
     </div>
+    <img  src="../static/img/top2.png" alt="b">
+    <img  src="../static/img/top3.png" alt="c">
+ <!----------------------------//開発者登録ボタン---------------------------------->               
+</div>
+
+
 
 </body>
 </html>
