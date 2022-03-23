@@ -1,9 +1,26 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/reset.css">
+    <link href="../static/favicon.png" rel="icon">
+    <title>Apology</title>
+</head>
+<body>
+    <div class="reset-position">
+        <div class="fv">       
+            <div class="apology_div">
+                <h1 class="apology_h1">エラー：{{ apology }}({{ code }})</h1>
+                <br>
+                <p class="apology_p"><a href="javascript:history.back()">please try again</a></p>
+            </div>
+        </div>
+    </div>
+    <!------------------------------//ログインボタン-------------------------------->    
 
-{% block title %}
-    Apology
-{% endblock %}
+</body>
+</html>
 
-{% block main %}
-    <img alt="{{ top }}" class="border" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.imgur.com/CsCgN7Ll.png" title="{{ top }}">
-{% endblock %}
