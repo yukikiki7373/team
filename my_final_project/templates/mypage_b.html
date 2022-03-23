@@ -159,7 +159,71 @@
     </div>
     </div>
 
-        
+
+
+
+
+
+ <!-------------------サンプル---------------------------------->       
+    <form class="form-secrets-width" name="f" method="post" action="/secrets" enctype="multipart/form-data">
+
+        <div class="secrets-color">
+          <table class="table table-striped">
+            <tbody>
+  
+              <tr class="form-control-secrets">
+                <td>
+                  <input type="textarea" name="title" class="form-control-width" id="title_area"  placeholder="タイトル">
+                </td>
+              </tr>
+              <!----画像読み取って表示-->
+              <tr class="img-border">
+                 <td>
+                  <label>画像：<input type="file" name="image_file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
+                  <div>
+                    <img src="" id="img" />
+                  </div>
+                 </td>
+              </tr>
+  
+              <tr class="form-control-secrets">
+                <td>
+                  <textarea class="form-control-width" name="content" cols="40" rows="8" id="comment_area"  placeholder="「ひみつ道具」説明" ></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+         <!--投稿ボタン-------->
+          <button id="top-dreams" class="btn btn-light btn-secrets-width" type="submit">「ひみつ道具」を投稿</button>
+  
+      </form>
+
+<!-------------------//サンプル---------------------------------->    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -209,6 +273,65 @@
     </div>
 </div>    
 
+
+<!------------------------------------サンプル----------------------------------->
+<section>
+    <ul class="accordion-area">
+       
+        <li>
+            <section>
+            <h3 class="title">もしもこんなサービスがあったらな</h3>
+            <div class="box">
+        <!--------もしも投稿に対してのリプライとそれへのコメント-------->
+              
+              <section class="accordion-area2">     
+                    <li class="replay-color">
+
+                        <section>
+                            <h3 class="title-2">～～なサービスおすすめですよ</h3>
+                            <div class="box-2">
+                                <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
+
+                                <form action="/dreams" method="post">
+
+                                    <div class="form-floating">
+                                    <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
+                            
+                                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+     
+                    </li>
+                    
+                   
+        
+                </section>
+                  
+    
+        <!--------//もしも投稿に対してのリプライとそれへのコメント-------->
+                
+        <!----------もしも投稿に対する返信フォーム----------------------->
+                 <form action="/dreams" method="post">
+
+                    <div class="form-floating">
+                    <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
+            
+                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
+                    </div>
+                </form>
+        <!----------//もしも投稿に対する返信フォーム----------------------->
+            </div>
+            </section>
+        </li>
+
+
+    </ul>
+</section>
+
+
+<!------------------------------------//サンプル---------------------------->
 </main>
 
 </body>

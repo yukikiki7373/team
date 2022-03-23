@@ -360,3 +360,12 @@ nav .nav-item {
 }
 
 /*----//ひみつ道具投稿---------*/
+
+/*-------検索結果から戻る---------*/
+.search_back {
+  text-align: center;
+}
+
+.image-cursor {
+  cursor: pointer;
+}
