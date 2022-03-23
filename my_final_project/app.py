@@ -43,13 +43,13 @@ Session(app)
 db = SQL("sqlite:///teamSQLite/team.db")
 
 
-@app.route("/")
-def top():
-    return render_template("top.html")
+# @app.route("/")
+# def top():
+#     return render_template("top.html")
 
    
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def login():
     """Log user in"""
 

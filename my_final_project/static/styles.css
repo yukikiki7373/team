@@ -60,17 +60,18 @@ img:nth-child(3) {
 }
 
 .button-position1 {
-  margin-top: 13px;
-  margin-left: 18px;
+  margin-left: 13px;
   text-align: center;
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .button-position2 {
   position: absolute;
   top: 655px;
   right: 190px;
-  margin-top: 15px;
+  margin-top: 5px;
   text-align: center;
 }
 
@@ -78,7 +79,7 @@ img:nth-child(3) {
   position: absolute;
   top: 650px;
   left: 50px;
-  margin-top: 15px;
+  margin-top: 5px;
   text-align: center;
   font-size: 14px;
 }
@@ -86,8 +87,11 @@ img:nth-child(3) {
 .button-position4 {
   font-size: 14px;
   text-align: center;
-  margin-top: 10px;
   margin-left: 13px;
+}
+
+.font-position {
+  padding: 10px 0;
 }
 
 .btn02 {
@@ -105,7 +109,7 @@ img:nth-child(3) {
   display: block;
   position: absolute;
   width: 150px;
-  height: 40px;
+  height: auto;
   border: 2px solid #000;
   /* 重なりを3Dで表示 */
   transform-style: preserve-3d;
@@ -178,7 +182,7 @@ img:nth-child(3) {
 
 .register_button {
   position: absolute;
-  top: 540px;
+  top: 560px;
   left: 580px;
 }
 
