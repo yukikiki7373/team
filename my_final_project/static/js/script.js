@@ -58,27 +58,26 @@ $(function () {
   })();
 
 /*---画像を取得してリサイズする--*/
-  const fileup = (e) => {
-const img = document.getElementById('img');
-const reader = new FileReader();
-const imgReader = new Image();
-const imgWidth = 680;
-reader.onloadend = () => {
-  imgReader.onload = () => {
-    const imgType = imgReader.src.substring(5, imgReader.src.indexOf(';'));
-    const imgHeight = imgReader.height * (imgWidth / imgReader.width);
-    const canvas = document.createElement('canvas');
-    canvas.width = imgWidth;
-    canvas.height = imgHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(imgReader,0,0,imgWidth,imgHeight);
-    img.src = canvas.toDataURL(imgType);
+const fileup = (e) => {
+  const img = document.getElementById('img');
+  const reader = new FileReader();
+  const imgReader = new Image();
+  const imgWidth = 680;
+  reader.onloadend = () => {
+    imgReader.onload = () => {
+      const imgType = imgReader.src.substring(5, imgReader.src.indexOf(';'));
+      const imgHeight = imgReader.height * (imgWidth / imgReader.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = imgWidth;
+      canvas.height = imgHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(imgReader,0,0,imgWidth,imgHeight);
+      img.src = canvas.toDataURL(imgType);
+    }
+    imgReader.src = reader.result;
   }
-  imgReader.src = reader.result;
+  reader.readAsDataURL(e.files[0]);
 }
-reader.readAsDataURL(e.files[0]);
-}
-
 
 
 
@@ -145,7 +144,7 @@ $('.title').on('click', function () {//タイトル要素をクリックした�
 
 
 
-//もしも投稿リプライをクリックした時の動作
+//もしも投稿コメントをクリックした時の動作
 $('.title-2').on('click', function () {//タイトル要素をクリックしたら
 	$('.box-2').slideUp(500);//クラス名.boxがついたすべてのアコーディオンを閉じる
 
@@ -162,17 +161,3 @@ $('.title-2').on('click', function () {//タイトル要素をクリックした
 
 
 
-//ひみつ道具投稿ををクリックした時の動作
-$('.title-3').on('click', function () {//タイトル要素をクリックしたら
-	$('.box-3').slideUp(500);//クラス名.boxがついたすべてのアコーディオンを閉じる
-
-	var findElm = $(this).next(".box-3");//タイトル直後のアコーディオンを行うエリアを取得
-
-	if ($(this).hasClass('close')) {//タイトル要素にクラス名closeがあれば
-		$(this).removeClass('close');//クラス名を除去    
-	} else {//それ以外は
-		$('.close').removeClass('close'); //クラス名closeを全て除去した後
-		$(this).addClass('close');//クリックしたタイトルにクラス名closeを付与し
-		$(findElm).slideDown(500);//アコーディオンを開く
-	}
-});
