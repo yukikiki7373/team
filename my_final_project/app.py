@@ -61,11 +61,11 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("ユーザー名を入力してください", 403)
+            return render_template("apology.html", apology = "ユーザー名を入力してください", code = 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("パスワードを入力してください", 403)
+            return render_template("apology.html", apology="パスワードを入力してください", code = 403)
 
         # Query database for username
         users = db.execute(
@@ -76,7 +76,7 @@ def login():
         if len(users) != 1 or not check_password_hash(
             users[0]["hash"], request.form.get("password")
         ):
-            return apology("ユーザー名またはパスワードが間違っています", 403)
+            return render_template("apology.html", apology = "ユーザー名またはパスワードが間違っています", code = 403)
 
         # Remember which user has logged in
         session["user_id"] = users[0]["id"]
@@ -112,22 +112,22 @@ def register_c():
 
         # Ensure the username was submitted
         if not username:
-            return apology("ユーザー名を入力してください", 400)
+            return ("ユーザー名を入力してください", 400)
         # Ensure the username doesn't exists
         elif len(rows) != 0:
-            return apology("このユーザー名は既に登録されています", 400)
+            return render_template("apology.html", apology = "このユーザー名は既に登録されています", code = 400)
 
         # Ensure password was submitted
         elif not password:
-            return apology("パスワードを入力してください", 400)
+            return render_template("apology.html", apology = "パスワードを入力してください", code = 400)
 
         # Ensure confirmation password was submitted
         elif not request.form.get("confirmation"):
-            return apology("パスワード（確認）を入力してください", 400)
+            return render_template("apology.html", apology = "パスワード（確認）を入力してください", code = 400)
 
         # Ensure passwords match
         elif not password == confirmation:
-            return apology("同じパスワードを入力してください", 400)
+            return render_template("apology.html", apology = "同じパスワードを入力してください", code = 400)
 
         else:
             # Generate the hash of the password
@@ -167,22 +167,22 @@ def register_b():
 
         # Ensure the username was submitted
         if not username:
-            return apology("ユーザー名を入力してください", 400)
+            return render_template("apology.html", apology = "ユーザー名を入力してください", code = 400)
         # Ensure the username doesn't exists
         elif len(rows) != 0:
-            return apology("このユーザー名は既に登録されています", 400)
+            return render_template("apology.html", apology = "このユーザー名は既に登録されています", code = 400)
 
         # Ensure password was submitted
         elif not password:
-            return apology("パスワードを入力してください", 400)
+            return render_template("apology.html", apology = "パスワードを入力してください", code = 400)
 
         # Ensure confirmation password was submitted
         elif not request.form.get("confirmation"):
-            return apology("パスワード（確認）を入力してください", 400)
+            return render_template("apology.html", apology = "パスワード（確認）を入力してください", code = 400)
 
         # Ensure passwords match
         elif not password == confirmation:
-            return apology("同じパスワードを入力してください", 400)
+            return render_template("apology.html", apology = "同じパスワードを入力してください", code = 400)
 
         else:
             # Generate the hash of the password
