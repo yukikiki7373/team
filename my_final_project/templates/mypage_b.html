@@ -140,7 +140,7 @@
                             <!-- --------------------- -->
                             
                             <div>
-                                <p id="secret_{{secret.id}}" secret_id="{{secret.id}}">Title:&nbsp;&nbsp;{{ secret.title }}</p>
+                                <p id="secret_{{secret.id}}" secret_id="{{secret.id}}">&nbsp;&nbsp;{{ secret.title }}</p>
                             </div>
                                 <div class="td_update_txt" id="update_txt_{{secret.id}}">
                                     <form action="/title_edit" method="post">
@@ -184,7 +184,7 @@
                         <div>
                             <div class="text_of_title" id="secret_2_{{secret.id}}"
                             secret_id="{{secret.id}}">
-                                <p>Content:&nbsp;&nbsp;{{ secret['content'] }}</p>
+                                <p>&nbsp;&nbsp;{{ secret['content'] }}</p>
                             </div>
                             <!-- --------- -->
                             <div class="td_update_txt" id="update_txt_2_{{secret.id}}">
@@ -222,11 +222,11 @@
 <!-- -------------------------------------------------------------------- -->
   
 
-
-      <p>マイ コメント</p>
+<!-- ----------タブ（マイもしも）------------------------------------------------- -->
+      <p>マイ もしも</p>
 
           <div id="tab2">
-            
+
             <p>マイ　ベストアンサーの内容</p>
             <form action="/post_register" method="post">
          
