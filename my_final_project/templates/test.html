@@ -1,104 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- http://getbootstrap.com/docs/4.5/ -->
- 
-  <link rel="stylesheet" href="../static/test.css">
-  <link rel="stylesheet" href="../static/reset.css">
-  <link href="../static/favicon.png" rel="icon">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  
-  
- 
-    <title>もしもボックス</title>
+{% for dream in dreams %}
+<section>
+{% for user in users %}
+    {% if dream['user_id'] == user['id'] %}
+        <ul class="accordion-area">
+       
+        <li>
+            <section>
+            <h3 class="title">{{ user['username'] }}:{{ dream['content'] }}</h3>
 
-</head>
+    {% endif %}
+{% endfor %}
 
+<div class="box">
+{% for comment in comments %}
+    {% if dream['id'] == comment['dreams_id'] %}
+        {% for user in users %}
+            {% if comment['user_id'] == user['id'] %}
+        <!--------もしも投稿に対してのリプライとそれへのコメント-------->
+              
+                <section class="accordion-area2">     
+                    <li class="replay-color">
 
- <body>
+                    <section>
+                        <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+            {% endif %}
+        {% endfor %}
+        {% for reply in replies %}
+            {% if reply['comments_id'] == comment['id'] %}
+                {% for user in users %}
+                    {% if user['id'] == reply['user_id'] %}
+                        <div class="box-2">
+                            <p>{{ user['username'] }}:{{ reply['content'] }}</p>
+                            
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
 
-    <form class="form-secrets-width" name="f" method="post" action="/secrets" enctype="multipart/form-data">
+                            <form action="/reply" method="post">
+                                <div class="form-floating">
+                                    <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
+                                    <input hidden type="text" name = "comments_id" value = "{{ comment['id'] }}">
+                                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    </li>
+                </section>
+    {% endif %}   
+{% endfor %}       
+    
+        <!--------//もしも投稿に対してのリプライとそれへのコメント-------->
+                
+        <!----------もしも投稿に対する返信フォーム----------------------->
+                 <form action="/comment" method="post">
 
-        <div class="secrets-color">
-          <table class="table table-striped">
-            <tbody>
-  
-              <tr class="form-control-secrets">
-                <td>
-                  <input type="textarea" name="title" class="form-control-width" id="title_area"  placeholder="タイトル">
-                </td>
-              </tr>
-              <!----画像読み取って表示-->
-              <tr class="img-border">
-                 <td>
-                  <label>画像：<input type="file" name="image_file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
-                  <img src="" id="img" />
-                 </td>
-              </tr>
-  
-              <tr class="form-control-secrets">
-                <td>
-                  <textarea class="form-control-width" name="content" cols="40" rows="8" id="comment_area"  placeholder="「ひみつ道具」説明" ></textarea>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-  
-         <!--投稿ボタン-------->
-          <button id="top-dreams" class="btn btn-light btn-secrets-width" type="submit">「ひみつ道具」を投稿</button>
-  
-      </form>
-
-
-
-
-<ul class="accordion-area">
-               
-    <li>
-        <section>
-        <form class="form-secrets-width" name="f" method="post" action="/secrets" enctype="multipart/form-data">
-
-        <div class="secrets-color">
-        <table class="table table-striped">
-            <tbody>
-                <tr class="form-control-secrets">
-                    <td>
-                      <input type="textarea" name="title" class="form-control-width" id="title_area"  placeholder="タイトル">
-                    </td>
-                  </tr>
-
-            
-            <div class="box">
-                  <!----画像読み取って表示-->
-              <tr class="img-border">
-                <td>
-                 <label>画像：<input type="file" name="image_file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
-                 <img src="" id="img" />
-                </td>
-             </tr>
- 
-             <tr class="form-control-secrets">
-               <td>
-                 <textarea class="form-control-width" name="content" cols="40" rows="8" id="comment_area"  placeholder="「ひみつ道具」説明" ></textarea>
-               </td>
-             </tr>
+                    <div class="form-floating">
+                        <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
+                        <input hidden type="text" name = "dreams_id" value = "{{ dream['id'] }}">
+                        <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
+                    </div>
+                </form>
+        <!----------//もしも投稿に対する返信フォーム----------------------->
             </div>
-
-        </tbody>
-    </table>
-  </div>
- </section>
-</li>
-
-
-
-</body>
-<script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
-
-<script src="../static/js/jquery-2.1.4.min.js"></script>
-<script src="../static/js/script.js"></script>
-</html>
+        </section>
+        </li>
+        </ul>
+</section>
+{% endfor %}
