@@ -128,18 +128,17 @@
 
     <!--------------------------//もしも投稿--------------------------------------------->
 
-    {% for dream in dreams %}
-        <section>
-        {% for user in users %}
-            {% if dream['user_id'] == user['id'] %}
-                <ul class="accordion-area">
+{% for dream in dreams %}
+<ul class="accordion-area">
+    {% for user in users %}
+        {% if dream['user_id'] == user['id'] %}
                
-                <li>
-                    <section>
-                    <h3 class="title">{{ user['username'] }}:{{ dream['content'] }}</h3>
+        <li>
+        <section>
+            <h3 class="title">{{ user['username'] }}:{{ dream['content'] }}</h3>
 
-            {% endif %}
-        {% endfor %}
+        {% endif %}
+    {% endfor %}
 
         <div class="box">
         {% for comment in comments %}
@@ -148,36 +147,37 @@
                     {% if comment['user_id'] == user['id'] %}
                 <!--------もしも投稿に対してのリプライとそれへのコメント-------->
                       
-                        <section class="accordion-area2">     
-                            <li class="replay-color">
+                <section class="accordion-area2">     
+                    <li class="replay-color">
 
-                            <section>
-                                <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
-                    {% endif %}
-                {% endfor %}
-                {% for reply in replies %}
-                    {% if reply['comments_id'] == comment['id'] %}
-                        {% for user in users %}
-                            {% if user['id'] == reply['user_id'] %}
-                                <div class="box-2">
-                                    <p>{{ user['username'] }}:{{ reply['content'] }}</p>
+                    <section>
+                        <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+            {% endif %}
+        {% endfor %}
+                   <div class="box-2">
+        {% for reply in replies %}
+            {% if reply['comments_id'] == comment['id'] %}
+                {% for user in users %}
+                {% if user['id'] == reply['user_id'] %}
+                    
+                        <p>{{ user['username'] }}:{{ reply['content'] }}</p>
                                     
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                {% endif %}
                 {% endfor %}
+            {% endif %}
+        {% endfor %}
 
-                                    <form action="/reply" method="post">
-                                        <div class="form-floating">
-                                            <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
-                                            <input hidden type="text" name = "comments_id" value = "{{ comment['id'] }}">
-                                            <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </section>
-                            </li>
-                        </section>
+                        <form action="/reply" method="post">
+                            <div class="form-floating">
+                                <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
+                                <input hidden type="text" name = "comments_id" value = "{{ comment['id'] }}">
+                                <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
+                            </div>
+                        </form>
+                    </div>
+                    </section>
+                    </li>
+                </section>
             {% endif %}   
         {% endfor %}       
             
@@ -196,9 +196,9 @@
                     </div>
                 </section>
                 </li>
-                </ul>
-        </section>
-    {% endfor %}
+</ul>
+
+{% endfor %}
 
 
 
@@ -210,12 +210,12 @@
             <section>
             <h3 class="title">もしもこんなサービスがあったらな</h3>
             <div class="box">
-        <!--------もしも投稿に対してのリプライとそれへのコメント-------->
+        <!--------コメントへのリプ-------->
               
               <section class="accordion-area2">     
                     <li class="replay-color">
 
-                        <section>
+                    <section>
                             <h3 class="title-2">～～なサービスおすすめですよ</h3>
                             <div class="box-2">
                                 <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
@@ -231,41 +231,14 @@
                             </div>
                         </section>
      
-                    </li>
+                   </li>
                     
                    
         
-                </section>
+               </section>
 
-                <section class="accordion-area2">     
-                    <li class="replay-color">
-
-                        <section>
-                            <h3 class="title-2">～～なサービスおすすめですよ</h3>
-                            <div class="box-2">
-                                <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
-
-                                <form action="/dreams" method="post">
-
-                                    <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
-                            
-                                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-     
-                    </li>
-                    
-                   
-        
-                </section>
-                  
-    
-        <!--------//もしも投稿に対してのリプライとそれへのコメント-------->
-                
-        <!----------もしも投稿に対する返信フォーム----------------------->
+<!--------//もしも投稿に対してのリプライとそれへのコメント-------->
+<!----------もしも投稿に対するコメントフォーム----------------------->
                  <form action="/dreams" method="post">
 
                     <div class="form-floating">
@@ -283,7 +256,7 @@
     </ul>
 </section>
 
-  </main>
+</main>
 
 
 
