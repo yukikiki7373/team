@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="../static/reset.css">
   <link href="../static/favicon.png" rel="icon">
   <script src="../static/js/jquery-2.1.4.min.js"></script>
-  <script src="../static/js/script.js"></script>
     <title>もしもボックス</title>
 
 
@@ -71,44 +70,86 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
-        {% for quote in quotes %}
-            {% for user in users %}
-                {% if quote['user_id'] == user['id'] %}
-                    <!-- ---------------- もしも投稿の表示部分 ------------------>
-                    <div class="form-floating">
-                        <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ quote['content'] }}</textarea>
-                    </div>
-                    <!-- ---------------- もしも投稿の表示部分 ------------------>
-                {% endif %}
-            {% endfor %}
-            {% for comment in comments %}
-                    {% if quote['id'] == comment['dreams_id'] %}
-                        {% for user in users %}
-                            {% if comment['user_id'] == user['id'] %}
-                            <!-- ---------------- コメント投稿の表示部分 ------------------>
-                                <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
-                                </div>
-                            <!-- ---------------- コメント投稿の表示部分 ------------------>
-                            {% endif %}
-                        {% endfor %}
-                        {% for reply in replies %}
-                            {% if reply['comments_id'] == comment['id'] %}
-                                {% for user in users %}
-                                    {% if user['id'] == reply['user_id'] %}
-                                    <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                        <div class="form-floating">
-                                            <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
-                                        </div>
-                                    <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-            {% endfor %}
+{% for quote in quotes %}
+<ul class="accordion-area">
+    {% for user in users %}
+        {% if quote['user_id'] == user['id'] %}
+               
+        <li>
+        <section>
+            <h3 class="title">{{ user['username'] }}:{{ quote['content'] }}</h3>
+
+        {% endif %}
+    {% endfor %}
+
+        <div class="box">
+        {% for comment in comments %}
+            {% if quote['id'] == comment['dreams_id'] %}
+                {% for user in users %}
+                    {% if comment['user_id'] == user['id'] %}
+                <!--------もしも投稿に対してのリプライとそれへのコメント-------->
+                      
+                <section class="accordion-area2">     
+                    <li class="replay-color">
+
+                    <section>
+                        <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+            {% endif %}
         {% endfor %}
+                   <div class="box-2">
+        {% for reply in replies %}
+            {% if reply['comments_id'] == comment['id'] %}
+                {% for user in users %}
+                {% if user['id'] == reply['user_id'] %}
+                    
+                        <p>{{ user['username'] }}:{{ reply['content'] }}</p>
+                                    
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
+                        <form action="/reply" method="post">
+                            <div class="form-floating">
+                                <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
+                                <input hidden type="text" name = "comments_id" value = "{{ comment['id'] }}">
+                                <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
+                            </div>
+                        </form>
+                    </div>
+                    </section>
+                    </li>
+                </section>
+            {% endif %}   
+        {% endfor %}       
+            
+                <!--------//もしも投稿に対してのリプライとそれへのコメント-------->
+                        
+                <!----------もしも投稿に対する返信フォーム----------------------->
+                         <form action="/comment" method="post">
+        
+                            <div class="form-floating">
+                                <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
+                                <input hidden type="text" name = "dreams_id" value = "{{ quote['id'] }}">
+                                <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
+                            </div>
+                        </form>
+                <!----------//もしも投稿に対する返信フォーム----------------------->
+                    </div>
+                </section>
+                </li>
+</ul>
+
+{% endfor %}
+
         <div class="search_back"><a href="/dreams"><button id="top-dreams" class="btn btn-light btn-secrets-width" type="submit">もしもボックスに戻る</button></a></div>
   </main>
+  <footer id="footer">
+      <p id="page-top" class="hide-btn">
+          <a href="#">Page Top</a>
+      </p>     
+  </footer>
 </body>
+    <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
+    <script src="../static/js/script.js"></script>
 </html>
