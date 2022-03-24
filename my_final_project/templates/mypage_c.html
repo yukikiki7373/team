@@ -72,8 +72,8 @@
                     <td class="td_update_txt" id="update_txt_{{dream.id}}">
                         <input type="text" class="txt_update" name="update_txt" dream_id="{{ dream.id }}" value="{{ dream.content }}">
                     </td>
-                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
-                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
+                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_update" value="{{ dream.id }}"><img src="../static/img/pen.png" alt="" srcset=""></button></td>
+                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_delete" value="{{ dream.id }}"><img src="../static/img/trash.png" alt="" srcset=""></button></td>
                     {% else %}
                     <td colspan="3" id="dream_{{dream.id}}" dream_id="{{dream.id}}">
                         <div class="mypage_c_for_moshimo">
@@ -176,6 +176,7 @@
                 $('#update_txt_' + id).hide();
                 $('#dream_' + id).show();
                 $(this).text('編集');
+
                 } else {
                 $('#update_txt_' + id).show();
                 $('#dream_' + id).hide();
