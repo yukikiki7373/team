@@ -49,29 +49,34 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
-      <p>マイ もしも</p>
+      <!-- <p>マイ もしも</p> -->
         <form name="f" method="post">
-        <table class="table table-striped">
+    <div style="width: 75%; margin-left: auto; margin-right: auto;">
+        <table class="table" style="border-color: #5271ff;">
             <tbody>
             {% for dream in dreams %}
             {% for user in users %}
             {% if dream['user_id'] == user['id'] %}
-                <tr><th>マイ もしも</tr></th>
+                <tr>
+                    <th colspan="6">マイ もしも</th>
+                </tr>
                 <tr>
                     {% if dream['user_id'] == session['user_id'] %}
-                    <td
-                        id="dream_{{dream.id}}"
-                        dream_id="{{dream.id}}">{{user.username}}:{{ dream.content }}
+                    <td id="dream_{{dream.id}}" dream_id="{{dream.id}}">
+                        <div class="mypage_c_for_moshimo">
+                            {{user.username}}: &emsp;{{ dream.content }}
+                        </div>
                     </td>
                     <td class="td_update_txt" id="update_txt_{{dream.id}}">
                         <input type="text" class="txt_update" name="update_txt" dream_id="{{ dream.id }}" value="{{ dream.content }}">
                     </td>
-                    <td class="button"><button type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
-                    <td class="button"><button type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
+                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
+                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
                     {% else %}
-                    <td
-                        id="dream_{{dream.id}}"
-                        dream_id="{{dream.id}}">{{user.username}}{{ dream.content }}
+                    <td colspan="3" id="dream_{{dream.id}}" dream_id="{{dream.id}}">
+                        <div class="mypage_c_for_moshimo">
+                            {{user.username}}: &emsp;{{ dream.content }}
+                        </div>
                     </td>
                     {%endif%}
                 </tr>
@@ -81,24 +86,33 @@
                     {% if dream['id'] == comment['dreams_id'] %}
                         {% for user in users %}
                             {% if comment['user_id'] == user['id'] %}
-                                <tr><th>コメント</th></tr>
+                                <tr>
+                                    <th colspan="3">コメント</th>
+                                </tr>
                                 <tr>
                                     {% if comment['user_id'] == session['user_id'] %}
                                         <tr>
-                                                <td>{{user.username}}{{ comment.content }}</td>
-                                                <td class="button">
+                                                <td>
+                                                    <div class="mypage_c_for_moshimo">
+                                                        {{user.username}}: &emsp;{{ comment.content }}
+                                                    </div>
+                                                </td>
+                                                <td class="button_mypage_c_td"  colspan="2">
                                                     <form action="/comment_delete" method="post">
-                                                        <button type="submit" name="comment_id" value="{{ comment['id'] }}">削除</button>
+                                                        <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment['id'] }}">削除</button>
                                                     </form>
                                                 </td>
                                         </tr>
                                     {% else %}
-                                        <td>{{user.username}}{{ comment.content }}
+                                        <td>
+                                            <div class="mypage_c_for_moshimo">
+                                                {{user.username}}: &emsp;{{ comment.content }}
+                                            </div>
                                         </td>
                                         {% if comment['is_best'] == false %}
-                                            <td class="button"><button type="button" name="btn_bestanswer" value="{{ comment.id }}">ベストアンサー</button></td>
+                                            <td colspan="2" class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_bestanswer" value="{{ comment.id }}">ベストアンサー</button></td>
                                         {% else %}
-                                            <td class="button"><button type="button" name="btn_cancel_bestanswer" value="{{ comment.id }}">ベストアンサーを取り消す</button></td>
+                                            <td colspan="2" class="button_mypage_c_td"><button class="button_for_mypage" style="height: 60px; margin-top: 10px; margin-bottom: 10px;" type="button" name="btn_cancel_bestanswer" value="{{ comment.id }}">ベストアンサーを取り消す</button></td>
                                         {% endif %}
                                     {% endif %}
                                 </tr>
@@ -109,19 +123,29 @@
                             {% if reply['comments_id'] == comment['id'] %}
                                 {% for user in users %}
                                     {% if user['id'] == reply['user_id'] %}
-                                    <tr><th>リプライ</th></tr>
+                                    <tr>
+                                        <th colspan="3">リプライ</th>
+                                    </tr>
                                     <tr>
                                         {% if reply['user_id'] == session['user_id'] %}
                                         <tr>
-                                                <td>{{user.username}}{{ reply.content }}</td>
-                                                <td class="button">
+                                                <td>
+                                                    <div class="mypage_c_for_moshimo">
+                                                        {{user.username}}: &emsp;{{ reply.content }}
+                                                    </div>
+                                                </td>
+                                                <td colspan="2" class="button_mypage_c_td">
                                                     <form action="/reply_delete" method="post">
-                                                        <button type="submit" name="reply_id" value="{{ reply['id'] }}">削除</button>
+                                                        <button class="button_for_mypage" type="submit" name="reply_id" value="{{ reply['id'] }}">削除</button>
                                                     </form>
                                                 </td>
                                         </tr>
                                         {% else %}
-                                            <td>{{user.username}}{{ reply.content }}</td>
+                                            <td>
+                                                <div class="mypage_c_for_moshimo">
+                                                    {{user.username}}: &emsp;{{ reply.content }}
+                                                </div>
+                                            </td>
                                         {% endif %}
                                     </tr>
                                     {% endif %}
@@ -131,10 +155,14 @@
                         <!--  -->
                     {% endif %}
                 {% endfor %}
-
+                <tr><th colspan="6"></th></tr>
+                <tr><th colspan="6"></th></tr>
+                <tr><th colspan="6"></th></tr>
+                <tr><th colspan="6"></th></tr>
             {% endfor %}
             </tbody>
         </table>
+    </div>
         <input type="hidden" name="id" id="id">
         <input type="hidden" name="content" id="content">
 
@@ -227,7 +255,7 @@
             });
         </script>
 
-      <p>マイ コメント</p>
+      <!-- <p>マイ コメント</p>
         
 
  <div class="sub-menu">
@@ -251,7 +279,7 @@
      </div>
 
 
-  </div>
+  </div> -->
 
 
 

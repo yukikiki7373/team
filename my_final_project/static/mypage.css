@@ -57,3 +57,27 @@ td.button {
   padding-left: 8px;
   border-radius: 5px;
 }
+/* mypage_c */
+.button_for_mypage{
+  border: solid 3px #f87694;
+  background-color: #f8e693;
+  border-radius: 5px;
+  transition: 0.5s;
+  height: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.button_mypage_c_td{
+  width: 80px;
+  text-align: center;
+  font-family: "Hannari", serif;
+}
+.mypage_c_for_moshimo {
+  font-size: large;
+  font-weight: normal;
+  padding: 3% 3% 3% 50px;
+  transition: all 0.5s ease;
+  background-color: #c5f4ff;
+  border-radius: 10px;
+  border: solid 5px #f8c0cd;
+}
