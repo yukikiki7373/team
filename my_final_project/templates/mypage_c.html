@@ -25,6 +25,7 @@
                         <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>    
                         <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
                         <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_c"><span class="menu-color">マイページ</span></a></li>
+                        <li class="nav-item nav-space-left"><a class="nav-link" href="/ranking"><span class="menu-color">ランキング</span></a></li>
                     </ul>
 
                     {% else %}
@@ -32,6 +33,7 @@
                             <li class="nav-item nav-space-left"><a class="nav-link" href="/dreams"><span class="menu-color">もしもボックス</span></a></li>    
                             <li class="nav-item nav-space-left"><a class="nav-link" href="/secrets"><span class="menu-color">ひみつ道具</span></a></li>
                             <li class="nav-item nav-space-left"><a class="nav-link" href="/mypage_b"><span class="menu-color">マイページ</span></a></li>
+                            <li class="nav-item nav-space-left"><a class="nav-link" href="/ranking"><span class="menu-color">ランキング</span></a></li>
                         </ul>
                 {% endif %}
 
@@ -70,8 +72,8 @@
                     <td class="td_update_txt" id="update_txt_{{dream.id}}">
                         <input type="text" class="txt_update" name="update_txt" dream_id="{{ dream.id }}" value="{{ dream.content }}">
                     </td>
-                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
-                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
+                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_update" value="{{ dream.id }}"><img id ="image"src="../static/img/pen.png" alt="" srcset=""></button></td>
+                    <td class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_delete" value="{{ dream.id }}"><img src="../static/img/trash.png" alt="" srcset=""></button></td>
                     {% else %}
                     <td colspan="3" id="dream_{{dream.id}}" dream_id="{{dream.id}}">
                         <div class="mypage_c_for_moshimo">
@@ -87,7 +89,7 @@
                         {% for user in users %}
                             {% if comment['user_id'] == user['id'] %}
                                 <tr>
-                                    <th colspan="3">コメント</th>
+                                    <th colspan="3">マイ コメント</th>
                                 </tr>
                                 <tr>
                                     {% if comment['user_id'] == session['user_id'] %}
@@ -99,7 +101,7 @@
                                                 </td>
                                                 <td class="button_mypage_c_td"  colspan="2">
                                                     <form action="/comment_delete" method="post">
-                                                        <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment['id'] }}">削除</button>
+                                                        <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment['id'] }}"><img src="../static/img/trash.png" alt="" srcset=""></button>
                                                     </form>
                                                 </td>
                                         </tr>
@@ -110,7 +112,7 @@
                                             </div>
                                         </td>
                                         {% if comment['is_best'] == false %}
-                                            <td colspan="2" class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_bestanswer" value="{{ comment.id }}">ベストアンサー</button></td>
+                                            <td colspan="2" class="button_mypage_c_td"><button class="button_for_mypage" type="button" name="btn_bestanswer" value="{{ comment.id }}"><img src="../static/img/flower.png" alt="" srcset=""></button></td>
                                         {% else %}
                                             <td colspan="2" class="button_mypage_c_td"><button class="button_for_mypage" style="height: 60px; margin-top: 10px; margin-bottom: 10px;" type="button" name="btn_cancel_bestanswer" value="{{ comment.id }}">ベストアンサーを取り消す</button></td>
                                         {% endif %}
@@ -167,13 +169,15 @@
         <input type="hidden" name="content" id="content">
 
         <script>
+           
             $(document).ready(function(){
             $('button[name="btn_update"]').click(function() {
                 var id = $(this).val();
                 if ($('#update_txt_' + id).is(':visible')) {
                 $('#update_txt_' + id).hide();
                 $('#dream_' + id).show();
-                $(this).text('編集');
+                $(this).text('修理');
+
                 } else {
                 $('#update_txt_' + id).show();
                 $('#dream_' + id).hide();
