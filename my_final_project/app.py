@@ -619,9 +619,9 @@ def mypage_b():
 @app.route("/image_edit", methods=["POST"]) #To edit image (only developer who is login)
 @login_required
 def image_edit():
-
+    user_id = session["user_id"]
     secrets_id = request.form.get("secret_id")
-    title = request.form.get("title")
+    
     image = request.files['image_file'] 
     # filename = request.form.get("image_file")
     tdatetime = datetime.now()
@@ -633,19 +633,17 @@ def image_edit():
         
     db.execute("UPDATE secrets SET image = ? WHERE id = ?", filename, secrets_id)
 
-    before_filename = db.execute("SELECT image FROM secrets WHERE id = ?", secrets_id)
-    before_filename = 'static/upload_img/' + before_filename
-    os.remove(before_filename)
+    # before_filename = db.execute("SELECT image FROM secrets WHERE id = ?", secrets_id)
+    # before_filename = before_filename[0]['image']
+    # # if os.path.exists('before_filename'):
+    # before_filename = 'static/upload_img/' + before_filename
+    # os.remove(before_filename)
     
     filepath = 'static/upload_img/' + filename
     image.save(filepath)
 
     filenames = db.execute("SELECT image, user_id FROM secrets WHERE is_deleted = False")
 
-    id = request.form.get("title_id")
-    title = request.form.get("title_update_txt")
-
-    db.execute("UPDATE secrets SET title = ? WHERE id = ?", title, id)
 
     user_id = session["user_id"]
     """Show my secrets"""
@@ -766,3 +764,15 @@ def unsolved():
 
     return render_template("search_unsolved.html", dreams = dreams, comments=comments, replies=replies, users=users)
     
+
+@app.route("/ranking", methods=["GET","POST"])  #this is for timeline of unsolved dream
+@login_required
+def ranking():
+    dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", False, False)
+    
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    users = db.execute("SELECT * FROM users")
+
+    comments = db.execute("SELECT user_id FROM comments WHERE is_deleted = ? AND is_best = ? GROUP BY user_id ORDER BY COUNT(user_id) DESC", False, True)
+
+    return render_template("ranking.html", comments=comments, users=users)
