@@ -63,42 +63,8 @@
           <li class="mypage-item"><a href="#tab2">マイ　ベストアンサー</a></li>
         </ul>
    </div>
-      
-      <p>マイ　ひみつ道具</p>
-        <form name="f" method="post">
-        <table class="table table-striped">
-            <tbody>
-            {% for secret in secrets %}
-                <tr><th>タイトル</th></tr>
-                <tr>
-                    <td
-                        id="secret_{{secret.id}}"
-                        secret_id="{{secret.id}}">{{ secret.title }}
-                    </td>
-                    <td class="td_update_txt" id="update_txt_{{secret.id}}">
-                        <input type="text" class="txt_update" name="update_txt" secret_id="{{ secret.id }}" value="{{ secret.title }}">
-                    </td>
-                    <td class="button"><button type="button" name="btn_update" value="{{ secret.id }}">編集</button></td>
-                </tr>
-
-                <tr><th>「ひみつ道具」説明</th></tr>
-                <tr>
-                    <td
-                        id="secret_2_{{secret.id}}"
-                        secret_id="{{secret.id}}">{{ secret.content }}
-                    </td>
-                    <td class="td_update_txt" id="update_txt_2_{{secret.id}}">
-                        <input type="text" class="txt_update" name="update_txt_2" secret_id="{{ secret.id }}" value="{{ secret.content }}">
-                    </td>
-                    <td class="button"><button type="button" name="btn_update_2" value="{{ secret.id }}">編集</button></td>
-                    <td class="button"><button type="button" name="btn_delete" value="{{ secret.id }}">ひみつ道具を削除</button></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <input type="hidden" name="id" id="id">
-        <input type="hidden" name="title" id="title">
-        <input type="hidden" name="content" id="content">
+   <div id="tab2">    
+        <p>マイ　ひみつ道具</p>
 
         <script>
             $(document).ready(function(){
@@ -126,163 +92,141 @@
                 $(this).text('戻す');
                 }
             });
-            $('input[name="update_txt"]').keydown(function(e) {
-                if (e.keyCode == 13) {
-                var id = $(this).attr("secret_id");
-                $('#id').val(id);
-                var title = $(this).val();
-                $('#title').val(title)
-                $('form[name="f"]').attr('action', '/title_edit');
-                $('form[name="f"]').submit();
-                }
+            // $('input[name="update_txt"]').keydown(function(e) {
+            //     if (e.keyCode == 13) {
+            //     var id = $(this).attr("secret_id");
+            //     $('#id').val(id);
+            //     var title = $(this).val();
+            //     $('#title').val(title)
+            //     $('form[name="f"]').attr('action', '/title_edit');
+            //     $('form[name="f"]').submit();
+            //     }
+            // });
+            // $('input[name="update_txt_2"]').keydown(function(e) {
+            //     if (e.keyCode == 13) {
+            //     var id = $(this).attr("secret_id");
+            //     $('#id').val(id);
+            //     var content = $(this).val();
+            //     $('#content').val(content)
+            //     $('form[name="f"]').attr('action', '/content_edit');
+            //     $('form[name="f"]').submit();
+            //     }
+            // });
+            //$('button[name="btn_delete"]').click(function() {
+            //    var id = $(this).val();
+            //    $('#id').val(id);
+            //    $('form[name="f"]').attr('action', '/secrets_delete');
+            //    $('form[name="f"]').submit();
+            //});
             });
-            $('input[name="update_txt_2"]').keydown(function(e) {
-                if (e.keyCode == 13) {
-                var id = $(this).attr("secret_id");
-                $('#id').val(id);
-                var content = $(this).val();
-                $('#content').val(content)
-                $('form[name="f"]').attr('action', '/content_edit');
-                $('form[name="f"]').submit();
-                }
-            });
-            $('button[name="btn_delete"]').click(function() {
-                var id = $(this).val();
-                $('#id').val(id);
-                $('form[name="f"]').attr('action', '/secrets_delete');
-                $('form[name="f"]').submit();
-            });
-            });
+
         </script>
+          <!-- <input type="hidden" name="id" id="id">
+          <input type="hidden" name="title" id="title">
+          <input type="hidden" name="content" id="content"> -->
 
-
-
-      <p>マイ コメント</p>
-      
-            {% for dream in dreams %}
-                    {% for user in users %}
-                        {% if dream['user_id'] == user['id'] %}
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                            <div class="form-floating">
-                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
-                            </div>
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                        {% endif %}
-                    {% endfor %}
-                    {% for comment in comments %}
-                      {% if dream['id'] == comment['dreams_id'] %}
-                          {% for user in users %}
-                              {% if comment['user_id'] == user['id'] %}
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-
-                                  <div class="form-floating">
-                                      <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
-                                  </div>
-                                
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                              {% endif %}
-                          {% endfor %}
-                          {% for reply in replies %}
-                              {% if reply['comments_id'] == comment['id'] %}
-                                  {% for user in users %}
-                                      {% if user['id'] == reply['user_id'] %}
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                          <div class="form-floating">
-                                              <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
-                                          </div>
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                      {% endif %}
-                                  {% endfor %}
-                              {% endif %}
-                          {% endfor %}
-                      {% endif %}
-                    {% endfor %}
-                {% endfor %}
-
+<!-- ------------------------編集してる部分-------------------------------------------- -->
+<div>
+    {% for secret in secrets %}
+        {% for user in users %}
+            {% if secret['user_id'] == user['id'] %}
             
-
-      <p>マイ　ベストアンサー</p>
-      {% for best_answer in best_answers %}
-                    {% for user in users %}
-                        {% if best_answer['user_id'] == user['id'] %}
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                            <div class="form-floating">
-                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ best_answer['content'] }}</textarea>
-                            </div>
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                        {% endif %}
-                    {% endfor %}
-                    {% for comment in comments %}
-                      {% if best_answer['id'] == comment['dreams_id'] %}
-                          {% for user in users %}
-                              {% if comment['user_id'] == user['id'] %}
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                                  <div class="form-floating">
-                                      <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
-                                  </div>
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                              {% endif %}
-                          {% endfor %}
-                          {% for reply in replies %}
-                              {% if reply['comments_id'] == comment['id'] %}
-                                  {% for user in users %}
-                                      {% if user['id'] == reply['user_id'] %}
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                          <div class="form-floating">
-                                              <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
-                                          </div>
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                      {% endif %}
-                                  {% endfor %}
-                              {% endif %}
-                          {% endfor %}
-                      {% endif %}
-                    {% endfor %}
-                {% endfor %}
-
-
-
-   
-   <div class="mypage-width">
-        <div id="contents">
-          <div id="tab1">
-            <p>ひみつ道具の内容</p>
-            <form class="form-secrets-width" name="f" method="post">
-              <section class="secrets-color">
+              <div class="secrets-color">
                 <table class="table table-striped">
                   <tbody>
-        
-                    <tr class="form-control-secrets">
-                      <td>
-                        <input type="textarea" class="form-control-width" id="title_area"  placeholder="タイトル">
+                    <tr class="form-control-secrets title-3">
+                      <td class="td">
+                        <div title-3>
+                            <!-- --------------------- -->
+                            
+                            <div>
+                                <p id="secret_{{secret.id}}" secret_id="{{secret.id}}">Title:&nbsp;&nbsp;{{ secret.title }}</p>
+                            </div>
+                                <div class="td_update_txt" id="update_txt_{{secret.id}}">
+                                    <form action="/title_edit" method="post">
+                                        <input type="text" class="txt_update" name="title_update_txt" placeholder="{{ secret.title }}">
+                                        <input hidden type="text" name = "title_id" value = "{{ secret.id }}">
+                                        <button type="submit">変更</button>
+                                    </form>
+                                </div>
+                            <div class="button">
+                                <button type="button" name="btn_update" value="{{ secret.id }}">編集</button>
+                            </div>
+                            
+                          <!-- --------------------------------- -->
+                        </div>
                       </td>
                     </tr>
-                    <!----画像読み取って表示-->
+                   <div class="box-3">
                     <tr class="img-border">
                        <td>
-                        <label>画像：<input type="file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
-                        <img src="" id="img" />
+                        <label>画像：
+                        {% for filename in filenames %}
+                          {% if filename['image'] == secret['image'] %}
+                            <div>
+                                <img src="../static/upload_img/{{filename['image']}}" alt="「ひみつ道具」image" width="680px" height="auto">
+                            </div>
+                            <form action="/image_edit" method="post" enctype="multipart/form-data">
+                                <label>画像：<input type="file" name="image_file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
+                                <div>
+                                    <img src="" id="img" />
+                                </div>
+                                <input hidden type="text" name = "secret_id" value = "{{ secret.id }}">
+                                <button type="submit">変更</button>
+                            </form>               
+                          {% endif %}
+                        {% endfor %}
                        </td>
                     </tr>
         
                     <tr class="form-control-secrets">
                       <td>
-                        <textarea class="form-control-width" cols="40" rows="8" id="comment_area"  placeholder="「ひみつ道具」説明" ></textarea>
+                        <div>
+                            <div class="text_of_title" id="secret_2_{{secret.id}}"
+                            secret_id="{{secret.id}}">
+                                <p>Content:&nbsp;&nbsp;{{ secret['content'] }}</p>
+                            </div>
+                            <!-- --------- -->
+                            <div class="td_update_txt" id="update_txt_2_{{secret.id}}">
+                                <form action="/content_edit" method="post">
+                                    <input type="text" class="txt_update" name="content_update_txt" secret_id="{{ secret.id }}" value="{{ secret.content }}">
+                                    <input hidden type="text" name = "content_id" value = "{{ secret.id }}">
+                                    <button type="submit">変更</button>
+                                </form>
+                            </div>
+                            <div class="button"><button type="button" name="btn_update_2" value="{{ secret.id }}">編集</button></div>
+                            <form class="form-secrets-width" action="/secrets_delete" method="post">
+                                <div class="button">   
+                                    <button type="submit" name="secret_id" value="{{ secret.id }}">ひみつ道具を削除</button>
+                                </div>
+                            </form>
+                          <!-- ------------- -->
+                        </div>
                       </td>
                     </tr>
+                  </div>
                   </tbody>
                 </table>
-            </section>  
-        
-               <!--投稿ボタン-------->
-                <button class="btn btn-light btn-secrets-width" type="submit">「ひみつ道具」を投稿</button>
-        
+              
+              </div>
             </form>
-        </div>
+          
+  
+            <br>
+            <br>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+<!-- -------------------------------------------------------------------- -->
+  
 
-    </div>
+
+      <p>マイ コメント</p>
 
           <div id="tab2">
+            
             <p>マイ　ベストアンサーの内容</p>
             <form action="/post_register" method="post">
          
