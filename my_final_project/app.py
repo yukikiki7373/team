@@ -214,6 +214,7 @@ def dreams():
             False,
             False
         )
+        flash("投稿が完了しました。")
         return redirect("/dreams")
 
     else:
@@ -247,7 +248,7 @@ def search_secrets():
     symbol = request.form.get("symbol")
     symbol = '%' + symbol + '%'
     quotes = db.execute(
-        "SELECT * FROM secrets WHERE is_deleted = ? AND content LIKE ? OR title LIKE ?",
+        "SELECT * FROM secrets WHERE is_deleted = ? AND content LIKE ? OR title LIKE ? ORDER BY created_date DESC",
         False,
         symbol,
         symbol
@@ -288,6 +289,7 @@ def secrets():
         filepath = 'static/upload_img/' + filename
         image.save(filepath)
 
+        flash("投稿が完了しました。")
         return redirect("/secrets")
 
     else:
@@ -300,7 +302,7 @@ def secrets():
 def mypage_c():
     """Show my dreams & comments & replies"""
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"],
@@ -326,10 +328,11 @@ def dream_edit():
     content = request.form["content"]
 
     db.execute("UPDATE dreams SET content = ? WHERE id = ?", content, id)
+    flash("編集が完了しました。")
 
     """Show my dreams & comments & replies"""
     dreams = db.execute(
-            "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?))",
+            "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
             False,
             session["user_id"],
             session["user_id"],
@@ -360,6 +363,7 @@ def comment():
         False,
         False
     )
+    flash("コメントを投稿しました。")
 
     """Show list of dreams.db"""
     """Show list of dreams.db"""
@@ -386,6 +390,7 @@ def reply():
         content,
         False
     )
+    flash("リプライを投稿しました。")
 
     """Show list of dreams.db"""
     """Show list of dreams.db"""
@@ -405,10 +410,10 @@ def best_answer():
 
     db.execute("UPDATE comments SET is_best = ? WHERE id = ?", True, id)
     db.execute("UPDATE dreams SET is_solved = ? WHERE id IN(SELECT dreams_id FROM comments WHERE id = ?)", True, id)
-
+    flash("ベストアンサーを登録しました。")
     """Show my dreams & comments & replies"""
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"],
@@ -417,6 +422,7 @@ def best_answer():
         session["user_id"],
         False
     )
+    
     users =  db.execute("SELECT username, id FROM users")
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
@@ -432,10 +438,11 @@ def cancel_best_answer():
 
     db.execute("UPDATE comments SET is_best = ? WHERE id = ?", False, id)
     db.execute("UPDATE dreams SET is_solved = ? WHERE id IN(SELECT dreams_id FROM comments WHERE id = ?)", False, id)
+    flash("ベストアンサーを取り消しました。")
 
     """Show my dreams & comments & replies"""
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"],
@@ -461,7 +468,7 @@ def dream_delete():
     id = request.form["id"]
 
     db.execute("UPDATE dreams SET is_deleted = ? WHERE id = ? AND user_id = ?", True, id, user_id) #Change id_deleted == true
-
+    flash("投稿を削除しました。")
     """Show my dreams & comments & replies"""
     users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
@@ -470,7 +477,7 @@ def dream_delete():
         session["user_id"]
     )
     dreams_for_mycomments = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"]
@@ -502,11 +509,12 @@ def dream_delete():
 def comment_delete():
     """dream_delete"""
     comment_id = request.form.get("comment_id")
+    print(comment_id)
     db.execute("UPDATE comments SET is_deleted = ? WHERE id = ? AND user_id = ?", True, comment_id, session["user_id"]) #Change id_deleted == true
-
+    flash("コメントを削除しました。")
     """Show my dreams & comments & replies"""
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"],
@@ -527,10 +535,10 @@ def reply_delete():
     """reply_delete"""
     reply_id = request.form.get("reply_id")
     db.execute("UPDATE replies SET is_deleted = ? WHERE id = ? AND user_id = ?", True, reply_id, session["user_id"]) #Change id_deleted == true
-
+    flash("リプライを削除しました。")
     """Show my dreams & comments & replies"""
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"],
@@ -555,13 +563,13 @@ def secrets_delete():
     id = request.form.get("secret_id")
 
     db.execute("UPDATE secrets SET is_deleted = ? WHERE id = ? AND user_id = ?", True, id, user_id) #Change id_deleted == true
-
+    flash("ひみつ道具投稿を削除しました。")
     """Show my secrets"""
     secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
 
     users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"]
@@ -585,11 +593,10 @@ def secrets_delete():
 def mypage_b():
     user_id = session["user_id"]
     """Show my secrets"""
-    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
-
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = ? ORDER BY created_date DESC", user_id, False)
     users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"]
@@ -598,7 +605,7 @@ def mypage_b():
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
     best_answers = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ? ORDER BY created_date DESC)",
         False,
         False,
         True,
@@ -675,14 +682,15 @@ def title_edit():
     title = request.form.get("title_update_txt")
 
     db.execute("UPDATE secrets SET title = ? WHERE id = ?", title, id)
+    flash("編集が完了しました。")
 
     user_id = session["user_id"]
     """Show my secrets"""
-    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = ? ORDER BY created_date DESC", user_id, False)
 
     users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"]
@@ -710,14 +718,15 @@ def content_edit():
     content = request.form.get("content_update_txt")
 
     db.execute("UPDATE secrets SET content = ? WHERE id = ?", content, id)
+    flash("編集が完了しました。")
 
     user_id = session["user_id"]
     """Show my secrets"""
-    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = ? ORDER BY created_date DESC", user_id, False)
 
     users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
         session["user_id"]
@@ -726,7 +735,7 @@ def content_edit():
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
     best_answers = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?) ORDER BY created_date DESC",
         False,
         False,
         True,
