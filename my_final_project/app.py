@@ -43,11 +43,6 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///teamSQLite/team.db")
 
-
-# @app.route("/")
-# def top():
-#     return render_template("top.html")
-
    
 
 @app.route("/", methods=["GET", "POST"])
@@ -224,9 +219,6 @@ def dreams():
     else:
         return render_template("dreams.html", dreams=dreams, users=users, comments=comments, replies=replies)
 
-    # else:
-    #     return render_template("dreams.html", dreams=dreams, comments=comments, replies=replies)
-
 
 @app.route("/search_dreams", methods=["GET", "POST"])
 @login_required
@@ -264,8 +256,9 @@ def search_secrets():
     users =  db.execute("SELECT username, id FROM users")
     comments = db.execute("SELECT * FROM comments WHERE is_deleted = ? ORDER BY created_date DESC", False)
     replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    filenames = db.execute("SELECT image, user_id FROM secrets WHERE is_deleted = False")
 
-    return render_template("search_dreams.html", quotes=quotes, users=users, comments=comments, replies=replies)
+    return render_template("search_secrets.html", quotes=quotes, users=users, comments=comments, replies=replies, filenames=filenames)
 
 
 @app.route("/secrets", methods=["GET", "POST"])
@@ -300,9 +293,6 @@ def secrets():
     else:
         filenames = db.execute("SELECT image, user_id FROM secrets WHERE is_deleted = False")
         return render_template("secrets.html", secrets=secrets, users=users, filenames = filenames)
-
-    # else:
-    #     return render_template("secrets.html", secrets=secrets)
 
 
 @app.route("/mypage_c")
