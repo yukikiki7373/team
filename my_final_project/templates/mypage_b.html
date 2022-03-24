@@ -13,7 +13,66 @@
   <script src="../static/js/jquery-2.1.4.min.js"></script>
   
     <title>もしもボックス</title>
+  <!--  -->
+  <script>
+    $(document).ready(function(){
+    $('button[name="btn_update"]').click(function() {
+        var id = $(this).val();
+        if ($('#update_txt_' + id).is(':visible')) {
+        $('#update_txt_' + id).hide();
+        $('#secret_' + id).show();
+        $(this).text('編集');
+        } else {
+        $('#update_txt_' + id).show();
+        $('#secret_' + id).hide();
+        $(this).text('戻す');
+        }
+    });
+    $('button[name="btn_update_2"]').click(function() {
+        var id = $(this).val();
+        if ($('#update_txt_2_' + id).is(':visible')) {
+        $('#update_txt_2_' + id).hide();
+        $('#secret_2_' + id).show();
+        $(this).text('編集');
+        } else {
+        $('#update_txt_2_' + id).show();
+        $('#secret_2_' + id).hide();
+        $(this).text('戻す');
+        }
+    });
+    // $('input[name="update_txt"]').keydown(function(e) {
+    //     if (e.keyCode == 13) {
+    //     var id = $(this).attr("secret_id");
+    //     $('#id').val(id);
+    //     var title = $(this).val();
+    //     $('#title').val(title)
+    //     $('form[name="f"]').attr('action', '/title_edit');
+    //     $('form[name="f"]').submit();
+    //     }
+    // });
+    // $('input[name="update_txt_2"]').keydown(function(e) {
+    //     if (e.keyCode == 13) {
+    //     var id = $(this).attr("secret_id");
+    //     $('#id').val(id);
+    //     var content = $(this).val();
+    //     $('#content').val(content)
+    //     $('form[name="f"]').attr('action', '/content_edit');
+    //     $('form[name="f"]').submit();
+    //     }
+    // });
+    //$('button[name="btn_delete"]').click(function() {
+    //    var id = $(this).val();
+    //    $('#id').val(id);
+    //    $('form[name="f"]').attr('action', '/secrets_delete');
+    //    $('form[name="f"]').submit();
+    //});
+    });
 
+</script>
+  <!-- <input type="hidden" name="id" id="id">
+  <input type="hidden" name="title" id="title">
+  <input type="hidden" name="content" id="content"> -->
+  <!--  -->
 </head>
  
  
@@ -63,114 +122,55 @@
           <li class="mypage-item"><a href="#tab2">マイ　ベストアンサー</a></li>
         </ul>
    </div>
-   <div id="tab2">    
+   <div id="contents">
+   <div id="tab1">    
         <p>マイ　ひみつ道具</p>
+<!-- --------------------編集してる部分-------------------------------------------- -->
 
-        <script>
-            $(document).ready(function(){
-            $('button[name="btn_update"]').click(function() {
-                var id = $(this).val();
-                if ($('#update_txt_' + id).is(':visible')) {
-                $('#update_txt_' + id).hide();
-                $('#secret_' + id).show();
-                $(this).text('編集');
-                } else {
-                $('#update_txt_' + id).show();
-                $('#secret_' + id).hide();
-                $(this).text('戻す');
-                }
-            });
-            $('button[name="btn_update_2"]').click(function() {
-                var id = $(this).val();
-                if ($('#update_txt_2_' + id).is(':visible')) {
-                $('#update_txt_2_' + id).hide();
-                $('#secret_2_' + id).show();
-                $(this).text('編集');
-                } else {
-                $('#update_txt_2_' + id).show();
-                $('#secret_2_' + id).hide();
-                $(this).text('戻す');
-                }
-            });
-            // $('input[name="update_txt"]').keydown(function(e) {
-            //     if (e.keyCode == 13) {
-            //     var id = $(this).attr("secret_id");
-            //     $('#id').val(id);
-            //     var title = $(this).val();
-            //     $('#title').val(title)
-            //     $('form[name="f"]').attr('action', '/title_edit');
-            //     $('form[name="f"]').submit();
-            //     }
-            // });
-            // $('input[name="update_txt_2"]').keydown(function(e) {
-            //     if (e.keyCode == 13) {
-            //     var id = $(this).attr("secret_id");
-            //     $('#id').val(id);
-            //     var content = $(this).val();
-            //     $('#content').val(content)
-            //     $('form[name="f"]').attr('action', '/content_edit');
-            //     $('form[name="f"]').submit();
-            //     }
-            // });
-            //$('button[name="btn_delete"]').click(function() {
-            //    var id = $(this).val();
-            //    $('#id').val(id);
-            //    $('form[name="f"]').attr('action', '/secrets_delete');
-            //    $('form[name="f"]').submit();
-            //});
-            });
-
-        </script>
-          <!-- <input type="hidden" name="id" id="id">
-          <input type="hidden" name="title" id="title">
-          <input type="hidden" name="content" id="content"> -->
-
-<!-- ------------------------編集してる部分-------------------------------------------- -->
-<div>
     {% for secret in secrets %}
         {% for user in users %}
             {% if secret['user_id'] == user['id'] %}
             
-              <div class="secrets-color">
+              <section class="secrets-color">
                 <table class="table table-striped">
                   <tbody>
                     <tr class="form-control-secrets title-3">
                       <td class="td">
-                        <div title-3>
+                        <section title-3>
                             <!-- --------------------- -->
                             
-                            <div>
+                            <section>
                                 <p id="secret_{{secret.id}}" secret_id="{{secret.id}}">&nbsp;&nbsp;{{ secret.title }}</p>
-                            </div>
-                                <div class="td_update_txt" id="update_txt_{{secret.id}}">
+                            </section>
+                                <section class="td_update_txt" id="update_txt_{{secret.id}}">
                                     <form action="/title_edit" method="post">
                                         <input type="text" class="txt_update" name="title_update_txt" placeholder="{{ secret.title }}">
                                         <input hidden type="text" name = "title_id" value = "{{ secret.id }}">
                                         <button type="submit">変更</button>
                                     </form>
-                                </div>
-                            <div class="button">
+                                </section>
+                            <section class="button">
                                 <button type="button" name="btn_update" value="{{ secret.id }}">編集</button>
-                            </div>
+                            </section>
                             
                           <!-- --------------------------------- -->
-                        </div>
+                        </section>
                       </td>
                     </tr>
-                   <div class="box-3">
+                   <section class="box-3">
                     <tr class="img-border">
                        <td>
                         <label>画像：
                         {% for filename in filenames %}
                           {% if filename['image'] == secret['image'] %}
-                            <div>
+                            <section>
                                 <img src="../static/upload_img/{{filename['image']}}" alt="「ひみつ道具」image" width="680px" height="auto">
-                            </div>
+                            </section>
                             <form action="/image_edit" method="post" enctype="multipart/form-data">
                                 <label>画像：<input type="file" name="image_file" accept="image/jpeg,image/png,image/gif" onchange="fileup(this)" /></label>
-                                <div>
+                                <section>
                                     <img src="" id="img" />
-                                </div>
+                                </section>
                                 <input hidden type="text" name = "secret_id" value = "{{ secret.id }}">
                                 <button type="submit">変更</button>
                             </form>               
@@ -181,49 +181,46 @@
         
                     <tr class="form-control-secrets">
                       <td>
-                        <div>
-                            <div class="text_of_title" id="secret_2_{{secret.id}}"
+                        <section>
+                            <section class="text_of_title" id="secret_2_{{secret.id}}"
                             secret_id="{{secret.id}}">
                                 <p>&nbsp;&nbsp;{{ secret['content'] }}</p>
-                            </div>
+                            </section>
                             <!-- --------- -->
-                            <div class="td_update_txt" id="update_txt_2_{{secret.id}}">
+                            <section class="td_update_txt" id="update_txt_2_{{secret.id}}">
                                 <form action="/content_edit" method="post">
                                     <input type="text" class="txt_update" name="content_update_txt" secret_id="{{ secret.id }}" value="{{ secret.content }}">
                                     <input hidden type="text" name = "content_id" value = "{{ secret.id }}">
                                     <button type="submit">変更</button>
                                 </form>
-                            </div>
-                            <div class="button"><button type="button" name="btn_update_2" value="{{ secret.id }}">編集</button></div>
+                            </section>
+                            <section class="button"><button type="button" name="btn_update_2" value="{{ secret.id }}">編集</button></section>
                             <form class="form-secrets-width" action="/secrets_delete" method="post">
-                                <div class="button">   
+                                <section class="button">   
                                     <button type="submit" name="secret_id" value="{{ secret.id }}">ひみつ道具を削除</button>
-                                </div>
+                                </section>
                             </form>
                           <!-- ------------- -->
-                        </div>
+                        </section>
                       </td>
                     </tr>
-                  </div>
+                  </section>
                   </tbody>
                 </table>
               
-              </div>
+              </section>
             </form>
-          
-  
             <br>
             <br>
             {% endif %}
         {% endfor %}
     {% endfor %}
-  </div>
 </div>
 <!-- -------------------------------------------------------------------- -->
   
 
 <!-- ----------タブ（マイもしも）------------------------------------------------- -->
-      <p>マイ もしも</p>
+      
 
           <div id="tab2">
 
@@ -238,7 +235,7 @@
           
 
            </div>
-</div>
+      </div>
 </main>
 
 </body>
