@@ -86,50 +86,47 @@
         </div>
     {% endif %}
 
-
-
-
-
 <!--------------------------//もしも投稿--------------------------------------------->
     
-    {# {% for dream in dreams %}
+    <!-- {# {% for dream in dreams %}
         {% for user in users %}
-            {% if dream['user_id'] == user['id'] %}
+            {% if dream['user_id'] == user['id'] %} -->
                 <!-- ---------------- もしも投稿の表示部分 ------------------>
-                <div class="form-floating">
+                <!-- <div class="form-floating">
                     <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2" style="height: auto;width: 70%;">{{ user['username'] }}:{{ dream['content'] }}</textarea>
-                </div>
+                </div> -->
                 <!-- ---------------- もしも投稿の表示部分 ------------------>
-            {% endif %}
+            <!-- {% endif %}
         {% endfor %}
         {% for comment in comments %}
                     {% if dream['id'] == comment['dreams_id'] %}
                         {% for user in users %}
-                            {% if comment['user_id'] == user['id'] %}
+                            {% if comment['user_id'] == user['id'] %} -->
                             <!-- ---------------- コメント投稿の表示部分 ------------------>
-                                <div class="form-floating">
+                                <!-- <div class="form-floating">
                                     <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2"  style="height:auto; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
-                                </div>
+                                </div> -->
                             <!-- ---------------- コメント投稿の表示部分 ------------------>
-                            {% endif %}
+                            <!-- {% endif %}
                         {% endfor %}
                         {% for reply in replies %}
                             {% if reply['comments_id'] == comment['id'] %}
                                 {% for user in users %}
-                                    {% if user['id'] == reply['user_id'] %}
+                                    {% if user['id'] == reply['user_id'] %} -->
                                     <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                        <div class="form-floating">
+                                        <!-- <div class="form-floating">
                                             <textarea class="form-control-dreams" name="content" cols="10" rows="3" id="floatingTextarea2" style="height: auto; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
-                                        </div>
+                                        </div> -->
                                     <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                    {% endif %}
+                                    <!-- {% endif %}
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
                     {% endif %}
         {% endfor %}
-    {% endfor %} #}
+    {% endfor %} #} -->
 
+    <!--------------------------//もしも投稿--------------------------------------------->
 
     {% for dream in dreams %}
         <section>
@@ -173,6 +170,7 @@
                                     <form action="/reply" method="post">
                                         <div class="form-floating">
                                             <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
+                                            <input hidden type="text" name = "comments_id" value = "{{ comment['id'] }}">
                                             <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
                                         </div>
                                     </form>
@@ -190,7 +188,7 @@
         
                             <div class="form-floating">
                                 <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
-                    
+                                <input hidden type="text" name = "dreams_id" value = "{{ dream['id'] }}">
                                 <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
                             </div>
                         </form>
@@ -204,7 +202,7 @@
 
 
 
-
+<!----------//以下施策------------------------------------------>
 <section>
     <ul class="accordion-area">
        

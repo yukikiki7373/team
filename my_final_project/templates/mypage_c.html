@@ -15,50 +15,6 @@
   
     <title>もしもボックス</title>
 
-    <script>
-        $(document).ready(function(){
-        $('button[name="btn_update"]').click(function() {
-            var id = $(this).val();
-            if ($('#update_txt_' + id).is(':visible')) {
-            $('#update_txt_' + id).hide();
-            $('#dream_' + id).show();
-            $(this).text('編集');
-            } else {
-            $('#update_txt_' + id).show();
-            $('#dream_' + id).hide();
-            $(this).text('戻す');
-            }
-        });
-        $('input[name="update_txt"]').keydown(function(e) {
-            if (e.keyCode == 13) {
-            var id = $(this).attr("dream_id");
-            $('#id').val(id);
-            var content = $(this).val();
-            $('#content').val(content)
-            $('form[name="f"]').attr('action', '/dream_edit');
-            $('form[name="f"]').submit();
-            }
-        });
-        $('button[name="btn_delete"]').click(function() {
-            var id = $(this).val();
-            $('#id').val(id);
-            $('form[name="f"]').attr('action', '/dream_delete');
-            $('form[name="f"]').submit();
-        });
-        $('button[name="btn_bestanswer"]').click(function() {
-            var id = $(this).val();
-            $('#id').val(id);
-            $('form[name="f"]').attr('action', '/best_answer');
-            $('form[name="f"]').submit();
-        });
-        $('button[name="btn_cancel_bestanswer"]').click(function() {
-            var id = $(this).val();
-            $('#id').val(id);
-            $('form[name="f"]').attr('action', '/cancel_best_answer');
-            $('form[name="f"]').submit();
-        });
-        });
-    </script>
 </head>
  
  <body>
@@ -93,268 +49,209 @@
              <img src="../static/img/shine.png" alt="">
         </div>
 
-
-        <div class="sub-menu">
-            <ul class="mypage-wapper">
-              <li class="mypage-item"><a href="#tab1" class="current">マイ　もしも</a></li>
-              <li class="mypage-item"><a href="#tab2">マイ　コメント</a></li>
-            </ul>
-       </div>
-
-
-
-
-<div class="mypage-width">
-    <div id="contents">
-    <div id="tab1">
-            
       <p>マイ もしも</p>
         <form name="f" method="post">
         <table class="table table-striped">
             <tbody>
             {% for dream in dreams %}
+            {% for user in users %}
+            {% if dream['user_id'] == user['id'] %}
                 <tr><th>マイ もしも</tr></th>
                 <tr>
+                    {% if dream['user_id'] == session['user_id'] %}
                     <td
                         id="dream_{{dream.id}}"
-                        dream_id="{{dream.id}}">{{ dream.content }}
+                        dream_id="{{dream.id}}">{{user.username}}:{{ dream.content }}
                     </td>
                     <td class="td_update_txt" id="update_txt_{{dream.id}}">
                         <input type="text" class="txt_update" name="update_txt" dream_id="{{ dream.id }}" value="{{ dream.content }}">
                     </td>
                     <td class="button"><button type="button" name="btn_update" value="{{ dream.id }}">編集</button></td>
                     <td class="button"><button type="button" name="btn_delete" value="{{ dream.id }}">削除</button></td>
+                    {% else %}
+                    <td
+                        id="dream_{{dream.id}}"
+                        dream_id="{{dream.id}}">{{user.username}}{{ dream.content }}
+                    </td>
+                    {%endif%}
                 </tr>
-
+            {%endif%}
+            {%endfor%}
                 {% for comment in comments%}
                     {% if dream['id'] == comment['dreams_id'] %}
                         {% for user in users %}
                             {% if comment['user_id'] == user['id'] %}
-                                <tr><th>コメント</tr></th>
+                                <tr><th>コメント</th></tr>
                                 <tr>
-                                    <td
-                                        id="comment_{{comment.id}}"
-                                        comment_id="{{comment.id}}">{{user.username}}{{ comment.content }}
-                                    </td>
-                                    {% if comment['is_best'] == false %}
-                                        <td class="button"><button type="button" name="btn_bestanswer" value="{{ comment.id }}">ベストアンサー</button></td>
+                                    {% if comment['user_id'] == session['user_id'] %}
+                                        <tr>
+                                                <td>{{user.username}}{{ comment.content }}></td>
+                                                <td class="button">
+                                                    <form action="/comment_delete" method="post">
+                                                        <button type="submit" name="comment_id" value="{{ comment['id'] }}">削除</button>
+                                                    </form>
+                                                </td>
+                                        </tr>
                                     {% else %}
-                                        <td class="button"><button type="button" name="btn_cancel_bestanswer" value="{{ comment.id }}">ベストアンサーを取り消す</button></td>
+                                        <td>{{user.username}}{{ comment.content }}
+                                        </td>
+                                        {% if comment['is_best'] == false %}
+                                            <td class="button"><button type="button" name="btn_bestanswer" value="{{ comment.id }}">ベストアンサー</button></td>
+                                        {% else %}
+                                            <td class="button"><button type="button" name="btn_cancel_bestanswer" value="{{ comment.id }}">ベストアンサーを取り消す</button></td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                             {% endif %}
                         {% endfor %}
+                        <!--  -->
+                        {% for reply in replies %}
+                            {% if reply['comments_id'] == comment['id'] %}
+                                {% for user in users %}
+                                    {% if user['id'] == reply['user_id'] %}
+                                    <tr><th>リプライ</th></tr>
+                                    <tr>
+                                        {% if reply['user_id'] == session['user_id'] %}
+                                        <tr>
+                                                <td>{{user.username}}{{ reply.content }}</td>
+                                                <td class="button">
+                                                    <form action="/reply_delete" method="post">
+                                                        <button type="submit" name="reply_id" value="{{ reply['id'] }}">削除</button>
+                                                    </form>
+                                                </td>
+                                        </tr>
+                                        {% else %}
+                                            <td>{{user.username}}{{ reply.content }}></td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        <!--  -->
                     {% endif %}
                 {% endfor %}
 
             {% endfor %}
             </tbody>
         </table>
-        </form>
         <input type="hidden" name="id" id="id">
         <input type="hidden" name="content" id="content">
-    </div>
-    </div>
 
-<!------------------------------------サンプル----------------------------------->
-<section>
-    <ul class="accordion-area">
-       
-        <li>
-            <section>
-            <h3 class="title">もしもこんなサービスがあったらな</h3>
-            <div class="box">
-        <!--------もしも投稿に対してのリプライとそれへのコメント-------->
-              
-              <section class="accordion-area2">     
-                    <li class="replay-color">
+        <script>
+            $(document).ready(function(){
+            $('button[name="btn_update"]').click(function() {
+                var id = $(this).val();
+                if ($('#update_txt_' + id).is(':visible')) {
+                $('#update_txt_' + id).hide();
+                $('#dream_' + id).show();
+                $(this).text('編集');
+                } else {
+                $('#update_txt_' + id).show();
+                $('#dream_' + id).hide();
+                $(this).text('戻す');
+                }
+            });
+            // $('button[name="btn_update_comment"]').click(function() {
+            //     var id = $(this).val();
+            //     if ($('#update_txt_comment' + id).is(':visible')) {
+            //     $('#update_txt_comment' + id).hide();
+            //     $('#comment_' + id).show();
+            //     $(this).text('編集');
+            //     } else {
+            //     $('#update_txt_comment' + id).show();
+            //     $('#comment_' + id).hide();
+            //     $(this).text('戻す');
+            //     }
+            // });
+            // $('button[name="btn_update_reply"]').click(function() {
+            //     var id = $(this).val();
+            //     if ($('#update_txt_reply' + id).is(':visible')) {
+            //     $('#update_txt_reply' + id).hide();
+            //     $('#reply_' + id).show();
+            //     $(this).text('編集');
+            //     } else {
+            //     $('#update_txt_reply' + id).show();
+            //     $('#reply_' + id).hide();
+            //     $(this).text('戻す');
+            //     }
+            // });
+            $('input[name="update_txt"]').keydown(function(e) {
+                if (e.keyCode == 13) {
+                var id = $(this).attr("dream_id");
+                $('#id').val(id);
+                var content = $(this).val();
+                $('#content').val(content)
+                $('form[name="f"]').attr('action', '/dream_edit');
+                $('form[name="f"]').submit();
+                }
+            });
+            // $('input[name="update_txt_comment"]').keydown(function(e) {
+            //     if (e.keyCode == 13) {
+            //     var id = $(this).attr("comment_id");
+            //     $('#id').val(id);
+            //     var content = $(this).val();
+            //     $('#content').val(content)
+            //     $('form[name="f"]').attr('action', '/comment_edit');
+            //     $('form[name="f"]').submit();
+            //     }
+            // });
+            // $('input[name="update_txt_reply"]').keydown(function(e) {
+            //     if (e.keyCode == 13) {
+            //     var id = $(this).attr("reply_id");
+            //     $('#id').val(id);
+            //     var content = $(this).val();
+            //     $('#content').val(content)
+            //     $('form[name="f"]').attr('action', '/reply_edit');
+            //     $('form[name="f"]').submit();
+            //     }
+            // });
+            $('button[name="btn_delete"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/dream_delete');
+                $('form[name="f"]').submit();
+            });
+            $('button[name="btn_bestanswer"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/best_answer');
+                $('form[name="f"]').submit();
+            });
+            $('button[name="btn_cancel_bestanswer"]').click(function() {
+                var id = $(this).val();
+                $('#id').val(id);
+                $('form[name="f"]').attr('action', '/cancel_best_answer');
+                $('form[name="f"]').submit();
+            });
+            });
+        </script>
 
-                        <section>
-                            <h3 class="title-2">～～なサービスおすすめですよ</h3>
-                            <div class="box-2">
-                                <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
-
-                                <form action="/dreams" method="post">
-
-                                    <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
-                            
-                                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-     
-                    </li>
-                    
-                   
+      <p>マイ コメント</p>
         
-                </section>
-                  
-    
-        <!--------//もしも投稿に対してのリプライとそれへのコメント-------->
-                
-        <!----------もしも投稿に対する返信フォーム----------------------->
-                 <form action="/dreams" method="post">
 
-                    <div class="form-floating">
-                    <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
-            
-                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
-                    </div>
-                </form>
-        <!----------//もしも投稿に対する返信フォーム----------------------->
-            </div>
-            </section>
-        </li>
-
-
-    </ul>
-</section>
-
-
-<!------------------------------------//サンプル---------------------------->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    <div id="tab2">
-        {% for dreams_for_mycomment in dreams_for_mycomments %}
-                    {% for user in users %}
-                        {% if dreams_for_mycomment['user_id'] == user['id'] %}
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                            <div class="form-floating">
-                                <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px;width: 70%;">{{ user['username'] }}:{{ dreams_for_mycomment['content'] }}</textarea>
-                            </div>
-                            <!-- ---------------- もしも投稿の表示部分 ------------------>
-                        {% endif %}
-                    {% endfor %}
-                    {% for comment in comments %}
-                      {% if dreams_for_mycomment['id'] == comment['dreams_id'] %}
-                          {% for user in users %}
-                              {% if comment['user_id'] == user['id'] %}
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                                  <div class="form-floating">
-                                      <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; margin-left:130px;">{{ user['username'] }}:{{ comment['content'] }}</textarea>
-                                  </div>
-                              <!-- ---------------- コメント投稿の表示部分 ------------------>
-                              {% endif %}
-                          {% endfor %}
-                          {% for reply in replies %}
-                              {% if reply['comments_id'] == comment['id'] %}
-                                  {% for user in users %}
-                                      {% if user['id'] == reply['user_id'] %}
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                          <div class="form-floating">
-                                              <textarea class="form-control-dreams" name="content" id="floatingTextarea2" style="height: 60px; width: 30%; margin-left:180px;">{{ user['username'] }}:{{ reply['content'] }}</textarea>
-                                          </div>
-                                      <!-- ---------------- リプライ投稿の表示部分 ------------------>
-                                      {% endif %}
-                                  {% endfor %}
-                              {% endif %}
-                          {% endfor %}
-                      {% endif %}
-                    {% endfor %}
-                {% endfor %}
-    </div>
-</div>
-
-
-<!------------------------------------サンプル----------------------------------->
-<section>
-    <ul class="accordion-area">
-       
-        <li>
-            <section>
-            <h3 class="title">もしもこんなサービスがあったらな</h3>
-            <div class="box">
-        <!--------もしも投稿に対してのリプライとそれへのコメント-------->
-              
-              <section class="accordion-area2">     
-                    <li class="replay-color">
-
-                        <section>
-                            <h3 class="title-2">～～なサービスおすすめですよ</h3>
-                            <div class="box-2">
-                                <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
-
-                                <form action="/dreams" method="post">
-
-                                    <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
-                            
-                                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
+ <div class="sub-menu">
+       <ul class="mypage-wapper">
+         <li class="mypage-item"><a href="#tab1" class="current">マイ　もしもボックス</a></li>
+         <li class="mypage-item"><a href="#tab2">マイ　ベストアンサー</a></li>
+       </ul>
+  </div>
      
-                    </li>
-                    
-                   
-        
-                </section>
-                  
-    
-        <!--------//もしも投稿に対してのリプライとそれへのコメント-------->
-                
-        <!----------もしも投稿に対する返信フォーム----------------------->
-                 <form action="/dreams" method="post">
+  <div class="mypage-width">
+       <div id="contents">
+         <div id="tab1">
+           
+         </div>
 
-                    <div class="form-floating">
-                    <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
-            
-                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
-                    </div>
-                </form>
-        <!----------//もしも投稿に対する返信フォーム----------------------->
-            </div>
-            </section>
-        </li>
+         <div id="tab2">
+           <p>マイ　ベストアンサーの内容</p>
+           
+         </div>
+
+     </div>
 
 
-    </ul>
-</section>
-
-
-<!------------------------------------//サンプル---------------------------->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  </div>
 
 
 
@@ -369,4 +266,3 @@
 <script src="../static/js/script.js"></script>
 <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 </html>
-
