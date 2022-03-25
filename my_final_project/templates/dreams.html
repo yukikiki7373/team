@@ -16,7 +16,51 @@
   
  
     <title>もしもボックス</title>
+<script>
+    // スクロールした際の動きを関数でまとめる
+    function setFadeElement(){
+    var windowH = $(window).height();//ウィンドウの高さを取得
+    var scroll = $(window).scrollTop();//スクロール値を取得
 
+    //出現範囲の指定
+    //要素までの高さを四捨五入した値で取得
+    var contentsTop = Math.round($('#top-dreams').offset().top);
+    var contentsH = $('#top-dreams').outerHeight(true);//要素の高さを取得
+
+    //出現範囲内に入ったかどうかをチェック
+    if(scroll+window >= contentsTop && scroll + windowH <= contentsTop+contentsH){
+        $("#page-top").addClass("UpMove");//入っていたらUpMoveクラスを追加
+        $("#page-top").removeClass("DownMove");//DownMoveを削除
+        $(".hide-btn").removeClass("hide-btn");//hide-btnを削除
+    }else{
+        //サイト表示時にDownMoveクラスを一瞬付与させないためのクラス付け
+        //hide-btnがなければ下記の動作を行う
+        if(!$(".hide-btn").length){
+            $("#page-top").addClass("DownMove");
+            $("#page-top").removeClass("UpMove");
+        }
+    }
+}
+
+//画面をスクロールしたら動かしたい場合の記述
+$(window).scroll(function(){
+    setFadeElement();/*スクロールした際の動きの関数を呼ぶ*/
+})
+
+
+//ページが読み込まれたらすぐに動かしたい場合の記述
+$(window).on('load', function(){
+   setFadeElement();
+});
+
+//#page-topをクリックした際の設定
+$('#page-top').click(function(){
+    $('body,html').animate({
+      scrollTop: 0//ページトップまでスクロール
+    },400);//ページスクロールトップまでの速さ。数が大きくなるほど遅くなる
+    return false;//リンク自体の無効化
+});
+</script>
 </head>
 
 
@@ -165,7 +209,7 @@
                         {% if comment['is_best'] == false %}
                             <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
                         {% else %}
-                            <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+                            <h3 class="title-2 moshimo-color2">{{ user['username'] }}:{{ comment['content'] }}</h3>
                         {% endif %}
             {% endif %}
         {% endfor %}
@@ -217,59 +261,6 @@
 
 
 
-<!----------//以下施策------------------------------------------>
-<section>
-    <ul class="accordion-area">
-       
-        <li>
-            <section>
-            <h3 class="title">もしもこんなサービスがあったらな</h3>
-            <div class="box">
-        <!--------コメントへのリプ-------->
-              
-              <section class="accordion-area2">     
-                    <li class="replay-color">
-
-                    <section>
-                            <h3 class="title-2">～～なサービスおすすめですよ</h3>
-                            <div class="box-2">
-                                <p>誠に恐縮ながら、現時点では実際の入試対策のサポートを実施しておりません。</p>
-
-                                <form action="/dreams" method="post">
-
-                                    <div class="form-floating">
-                                    <textarea class="form-control-dreams" name="content" placeholder="コメントにリプライ" id="floatingTextarea2" style="height: 60px"></textarea>
-                            
-                                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">リプライ</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-     
-                   </li>
-                    
-                   
-        
-               </section>
-
-<!--------//もしも投稿に対してのリプライとそれへのコメント-------->
-<!----------もしも投稿に対するコメントフォーム----------------------->
-                 <form action="/dreams" method="post">
-
-                    <div class="form-floating">
-                    <textarea class="form-control-dreams" name="content" placeholder="もしも投稿にコメント" id="floatingTextarea2" style="height: 60px"></textarea>
-            
-                    <button  id="top-dreams" class="btn btn-light btn-dreams-width" type="submit">コメント</button>
-                    </div>
-                </form>
-        <!----------//もしも投稿に対する返信フォーム----------------------->
-            </div>
-            </section>
-        </li>
-
-
-    </ul>
-</section>
 
 </main>
 

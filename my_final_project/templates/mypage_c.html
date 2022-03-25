@@ -10,10 +10,11 @@
   <link rel="stylesheet" href="../static/mypage.css">
   <link rel="stylesheet" href="../static/reset.css">
   <link href="../static/favicon.png" rel="icon">
-  
+  <script src="../static/js/script.js"></script>
   <script src="../static/js/jquery-2.1.4.min.js"></script>
   
     <title>もしもボックス</title>
+
 
 </head>
  
@@ -53,7 +54,7 @@
         </header>
     {% endif %}
 
-  <main>
+  <>
         <div class="title-wrapper">
              <img src="../static/img/shine.png" alt="">
              <h1 class="title-color">マイページ</h1>
@@ -137,7 +138,7 @@
                                     {% else %}
                                         {% if comment['is_best'] == false %}
                                             <td>
-                                                <div class="mypage_c_for_moshimo">
+                                                <div class="mypage_c_for_moshimo moshimo-color">
                                                     {{user.username}}: &emsp;{{ comment.content }}
                                                 </div>
                                             </td>
@@ -150,7 +151,7 @@
                                             {% endif %}
                                         {% else %}
                                             <td>
-                                                <div class="mypage_c_for_moshimo">
+                                                <div class="mypage_c_for_moshimo moshimo-color2">
                                                     {{user.username}}: &emsp;{{ comment.content }}
                                                 </div>
                                             </td>
@@ -292,13 +293,13 @@
                 $('form[name="f' + id + '"]').submit();
             });
         });
+
+
+        
         </script>
 
         
 
-
-
-  </div>
 
 
 
@@ -311,6 +312,5 @@
   </p>     
 </footer>
 </body>
-<script src="../static/js/script.js"></script>
 <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 </html>
