@@ -60,16 +60,35 @@
     </div>
     <!--------------------------//タイトルと画像------------------------------------>
     <div style="width: 60%; margin-left: auto; margin-right: auto;">
-        {% for comment in comments %}
-            {% for user in users %}
-                {% if user.id == comment.user_id %}
-                    <br>
-                    <div class="mypage_c_for_moshimo">
-                        <h3 style="text-align: center;">{{ user.username }}</h3>
-                    </div>
-                    <br>
-                {% endif %}
-            {% endfor%}
+        {% for test in tests %}
+            {% if loop.index == 1 %}
+                <br>
+                <div class="mypage_c_for_moshimo">
+                    <img src="../static/img/gold.png" alt="">
+                    <h3 style="text-align: center;">{{test.username}}</h3>
+                </div>
+                <br>
+            {% elif loop.index == 2 %}
+                <br>
+                <div class="mypage_c_for_moshimo">
+                    <img src="../static/img/silver.png" alt="">
+                    <h3 style="text-align: center;">{{test.username}}</h3>
+                </div>
+                <br>
+            {% elif loop.index == 3 %}
+                <br>
+                <div class="mypage_c_for_moshimo">
+                    <img src="../static/img/bronz.png" alt="">
+                    <h3 style="text-align: center;">{{test.username}}</h3>
+                </div>
+                <br>
+            {% else %}
+                <br>
+                <div class="mypage_c_for_moshimo">
+                    <h3 style="text-align: center;">{{test.username}}</h3>
+                </div>
+                <br>
+            {% endif%}
         {% endfor %}
         
     </div>

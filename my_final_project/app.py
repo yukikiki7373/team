@@ -569,7 +569,8 @@ def secrets_delete():
         session["user_id"]
         )
 
-    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+    return redirect("/mypage_b")
+    # return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 @app.route("/mypage_b") #To show secrets(only developer who is login)
@@ -687,8 +688,8 @@ def title_edit():
         True,
         session["user_id"]
         )
-
-    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+    return redirect("/mypage_b")
+    # return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 @app.route("/content_edit", methods=["POST"]) #To edit secrets(only developer who is login)
@@ -723,8 +724,8 @@ def content_edit():
         True,
         session["user_id"]
         )
-
-    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+    return redirect("/mypage_b")
+    # return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
 
 
 @app.route("/solved", methods=["GET", "POST"]) #this is for timeline of solved dream
@@ -752,11 +753,7 @@ def unsolved():
 @app.route("/ranking", methods=["GET","POST"])  #this is for timeline of unsolved dream
 @login_required
 def ranking():
-    dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", False, False)
-    
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
-    users = db.execute("SELECT * FROM users")
 
-    comments = db.execute("SELECT user_id FROM comments WHERE is_deleted = ? AND is_best = ? GROUP BY user_id ORDER BY COUNT(user_id) DESC", False, True)
+    tests = db.execute("SELECT username, count(is_best) FROM users INNER JOIN comments ON users.id = comments.user_id WHERE comments.is_deleted = ? GROUP BY username ORDER BY COUNT(is_best) DESC", False)
 
-    return render_template("ranking.html", comments=comments, users=users)
+    return render_template("ranking.html", tests=tests)
