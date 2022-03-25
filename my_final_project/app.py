@@ -3,7 +3,7 @@ from traceback import print_tb
 #from crypt import methods
 from turtle import title, width
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, before_render_template, flash, redirect, render_template, request, session
 from flask.helpers import get_flashed_messages
 from flask_session import Session
 from jinja2 import Template
@@ -544,7 +544,7 @@ def reply_delete():
 def secrets_delete():
     """secrets_delete"""
     user_id = session["user_id"]
-    id = request.form["id"]
+    id = request.form.get("secret_id")
 
     db.execute("UPDATE secrets SET is_deleted = ? WHERE id = ? AND user_id = ?", True, id, user_id) #Change id_deleted == true
     flash("ひみつ道具投稿を削除しました。")
@@ -595,8 +595,63 @@ def mypage_b():
         True,
         session["user_id"]
         )
+    
+    filenames = db.execute("SELECT image, user_id FROM secrets WHERE is_deleted = False")
 
-    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers) 
+    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers, filenames=filenames) 
+
+@app.route("/image_edit", methods=["POST"]) #To edit image (only developer who is login)
+@login_required
+def image_edit():
+    user_id = session["user_id"]
+    secrets_id = request.form.get("secret_id")
+    
+    image = request.files['image_file'] 
+    # filename = request.form.get("image_file")
+    tdatetime = datetime.now()
+    tstr = tdatetime.strftime('%Y-%m-%d_%Hh%Mm%Ss')
+    # time = datetime.strptime(tstr, '%Y/%m/%d %H:%M:%S')
+    image.filename = tstr
+    user = db.execute("SELECT id FROM users WHERE id =?", user_id)
+    filename = str(user[0]['id']) + '_' + image.filename
+        
+    db.execute("UPDATE secrets SET image = ? WHERE id = ?", filename, secrets_id)
+
+    # before_filename = db.execute("SELECT image FROM secrets WHERE id = ?", secrets_id)
+    # before_filename = before_filename[0]['image']
+    # # if os.path.exists('before_filename'):
+    # before_filename = 'static/upload_img/' + before_filename
+    # os.remove(before_filename)
+    
+    filepath = 'static/upload_img/' + filename
+    image.save(filepath)
+
+    filenames = db.execute("SELECT image, user_id FROM secrets WHERE is_deleted = False")
+
+
+    user_id = session["user_id"]
+    """Show my secrets"""
+    secrets = db.execute("SELECT * FROM secrets WHERE user_id = ? AND is_deleted = False", user_id)
+
+    users =  db.execute("SELECT username, id FROM users")
+    dreams = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?))",
+        False,
+        session["user_id"],
+        session["user_id"]
+    )
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
+
+    best_answers = db.execute(
+        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
+        False,
+        False,
+        True,
+        session["user_id"]
+        )
+
+    return render_template("mypage_b.html", secrets=secrets, users=users, dreams=dreams, comments=comments, replies=replies, best_answers=best_answers, filenames=filenames) 
 
 
 @app.route("/title_edit", methods=["POST"]) #To edit secrets(only developer who is login)
@@ -605,8 +660,8 @@ def title_edit():
 
     """Edit my title of secrets"""
 
-    id = request.form["id"]
-    title = request.form["title"]
+    id = request.form.get("title_id")
+    title = request.form.get("title_update_txt")
 
     db.execute("UPDATE secrets SET title = ? WHERE id = ?", title, id)
     flash("編集が完了しました。")
@@ -641,8 +696,8 @@ def title_edit():
 def content_edit():
     """Edit my content of secrets"""
 
-    id = request.form["id"]
-    content = request.form["content"]
+    id = request.form.get("content_id")
+    content = request.form.get("content_update_txt")
 
     db.execute("UPDATE secrets SET content = ? WHERE id = ?", content, id)
     flash("編集が完了しました。")
@@ -693,3 +748,15 @@ def unsolved():
 
     return render_template("search_unsolved.html", dreams = dreams, comments=comments, replies=replies, users=users)
     
+
+@app.route("/ranking", methods=["GET","POST"])  #this is for timeline of unsolved dream
+@login_required
+def ranking():
+    dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", False, False)
+    
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
+    users = db.execute("SELECT * FROM users")
+
+    comments = db.execute("SELECT user_id FROM comments WHERE is_deleted = ? AND is_best = ? GROUP BY user_id ORDER BY COUNT(user_id) DESC", False, True)
+
+    return render_template("ranking.html", comments=comments, users=users)
