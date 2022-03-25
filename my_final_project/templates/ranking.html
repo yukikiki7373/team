@@ -65,7 +65,7 @@
                 <br>
                 <div class="mypage_c_for_moshimo">
                     <img src="../static/img/gold.png" alt="">
-                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['count(is_best)']}}<small>回</small></h3>
+                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['SUM(is_best)']}}<small>回</small></h3>
                     
                 </div>
                 <br>
@@ -73,20 +73,20 @@
                 <br>
                 <div class="mypage_c_for_moshimo">
                     <img src="../static/img/silver.png" alt="">
-                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['count(is_best)']}}<small>回</small></h3>
+                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['SUM(is_best)']}}<small>回</small></h3>
                 </div>
                 <br>
             {% elif loop.index == 3 %}
                 <br>
                 <div class="mypage_c_for_moshimo">
                     <img src="../static/img/bronz.png" alt="">
-                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['count(is_best)']}}<small>回</small></h3>
+                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['SUM(is_best)']}}<small>回</small></h3>
                 </div>
                 <br>
             {% else %}
                 <br>
                 <div class="mypage_c_for_moshimo">
-                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['count(is_best)']}}<small>回</small></h3>
+                    <h3 style="text-align: center;">{{test.username}}&emsp;&emsp;{{test['SUM(is_best)']}}<small>回</small></h3>
                 </div>
                 <br>
             {% endif%}

@@ -754,10 +754,8 @@ def unsolved():
 @login_required
 def ranking():
 
-    tests = db.execute("SELECT username, count(is_best) FROM users INNER JOIN comments ON users.id = comments.user_id WHERE comments.is_deleted = ? GROUP BY username ORDER BY COUNT(is_best) DESC", False)
+    tests = db.execute("SELECT user_id, username, SUM(is_best) FROM users INNER JOIN comments ON users.id = comments.user_id WHERE comments.is_deleted = ? GROUP BY username ORDER BY SUM(is_best) DESC", False)
 
     db.execute("UPDATE comments SET is_best = False WHERE is_deleted = True")
-
-    # UPDATE (表名) SET (カラム名1) = (値1), (カラム名2) = (値2) WHERE (条件);
 
     return render_template("ranking.html", tests=tests)
