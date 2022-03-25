@@ -44,7 +44,7 @@ ul li a.current {
 td.button {
   width: 80px;
   text-align: right;
-  font-family: "Hannari", serif;
+  font-family: "Nico Moji";
 }
 .td_update_txt {
   display: none;
@@ -53,7 +53,7 @@ td.button {
   width: 98%;
   height: 34px;
   font-size: 17px;
-  font-family: "Hannari", serif;
+  font-family: "Nico Moji";
   padding-left: 8px;
   border-radius: 5px;
 }

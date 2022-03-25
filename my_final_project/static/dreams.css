@@ -10,7 +10,7 @@ nav {
   left: 0;
 }
 nav .nav-item {
-  font-family: "Hannari", serif;
+  font-family: "Nico Moji";
 }
 
 .nav-space-left {
@@ -78,6 +78,8 @@ nav .nav-item {
   margin: 20px;
 }
 
+
+
 .form-wrapper {
   display: flex;
   justify-content: center;
@@ -104,7 +106,7 @@ nav .nav-item {
 
 .form-control-dreams {
   display: inline-block;
-  font-family: "Hannari", serif;
+  font-family: "Nico Moji";
   width: 50%;
   margin-top: 20px;
   margin-right: 10px;
