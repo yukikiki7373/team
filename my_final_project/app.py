@@ -753,11 +753,7 @@ def unsolved():
 @app.route("/ranking", methods=["GET","POST"])  #this is for timeline of unsolved dream
 @login_required
 def ranking():
-    dreams = db.execute("SELECT * FROM dreams WHERE is_solved = ? AND is_deleted = ? ORDER BY created_date DESC", False, False)
-    
-    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ? ORDER BY created_date DESC", False)
-    users = db.execute("SELECT * FROM users")
 
-    comments = db.execute("SELECT user_id FROM comments WHERE is_deleted = ? AND is_best = ? GROUP BY user_id ORDER BY COUNT(user_id) DESC", False, True)
+    tests = db.execute("SELECT username, count(is_best) FROM users INNER JOIN comments ON users.id = comments.user_id WHERE comments.is_deleted = ? GROUP BY username ORDER BY COUNT(is_best) DESC", False)
 
-    return render_template("ranking.html", comments=comments, users=users)
+    return render_template("ranking.html", tests=tests)
