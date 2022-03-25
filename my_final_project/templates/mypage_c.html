@@ -65,6 +65,7 @@
         <table class="table" style="border-color: #5271ff;">
             <tbody>
             {% for dream in dreams %}
+            <!-- {% set count = 1 %} -->
             {% for user in users %}
             {% if dream['user_id'] == user['id'] %}
                 <tr>
@@ -91,6 +92,7 @@
                             {{user.username}}: &emsp;{{ dream.content }}
                         </div>
                     </td>
+                    <!-- {% set count = 0 %} -->
                     {%endif%}
                 </tr>
             {%endif%}
@@ -103,6 +105,7 @@
                                     <th colspan="3">コメント</th>
                                 </tr>
                                 <tr>
+                                    <!-- ----------------------- -->
                                     {% if comment['user_id'] == session['user_id'] %}
                                         {% if comment['is_best'] == false %}
                                             <tr>
@@ -138,26 +141,29 @@
                                                     {{user.username}}: &emsp;{{ comment.content }}
                                                 </div>
                                             </td>
-                                            <td class="button_mypage_c_td"  colspan="2">
-                                                <form action="/best_answer" method="post">
-                                                    <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/flower.png" alt="" srcset=""></button>
-                                                </form>
-                                            </td>
+                                            {% if dream['user_id'] == session['user_id'] %}
+                                                <td class="button_mypage_c_td"  colspan="2">
+                                                    <form action="/best_answer" method="post">
+                                                        <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/flower.png" alt="" srcset=""></button>
+                                                    </form>
+                                                </td>
+                                            {% endif %}
                                         {% else %}
                                             <td>
                                                 <div class="mypage_c_for_moshimo">
                                                     {{user.username}}: &emsp;{{ comment.content }}
                                                 </div>
                                             </td>
-                                            
+                                            {% if dream['user_id'] == session['user_id'] %}
                                             <td class="button_mypage_c_td"  colspan="2">
                                                 <form action="/cancel_best_answer" method="post">
                                                     <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/black-flower.png" alt="" srcset=""></button>
                                                 </form>
                                             </td>
-                                            
+                                            {% endif %}
                                         {% endif %}
                                     {% endif %}
+                                    <!-- ----------------------- -->
                                 </tr>
                             {% endif %}
                         {% endfor %}
