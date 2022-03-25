@@ -67,7 +67,6 @@
     //    $('form[name="f"]').submit();
     //});
     });
-
 </script>
   <!-- <input type="hidden" name="id" id="id">
   <input type="hidden" name="title" id="title">
@@ -146,7 +145,7 @@
                                     <form action="/title_edit" method="post">
                                         <input type="text" class="txt_update" name="title_update_txt" placeholder="{{ secret.title }}">
                                         <input hidden type="text" name = "title_id" value = "{{ secret.id }}">
-                                        <button type="submit">変更</button>
+                                        <button  type="submit" hidden>変更</button>
                                     </form>
                                 </section>
                             <section class="button">
@@ -298,7 +297,7 @@
                                         {% else %}
                                             {% if comment['is_best'] == false %}
                                                 <td>
-                                                    <div class="mypage_c_for_moshimo">
+                                                    <div class="mypage_c_for_moshimo moshimo-color2">
                                                         {{user.username}}: &emsp;{{ comment.content }}
                                                     </div>
                                                 </td>

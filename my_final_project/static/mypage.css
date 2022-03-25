@@ -81,7 +81,12 @@ td.button {
   font-weight: normal;
   padding: 3% 3% 3% 50px;
   transition: all 0.5s ease;
-  background-color: #c5f4ff;
   border-radius: 10px;
+  background-color: #c5f4ff;
   border: solid 5px #f8c0cd;
+}
+
+.moshimo-color2 {
+  background-color: #f4bc32;
+  border: solid 5px #c5f4ff;
 }
