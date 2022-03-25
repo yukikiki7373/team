@@ -124,7 +124,7 @@
    </div>
    <div id="contents">
    <div id="tab1">    
-        <p>マイ　ひみつ道具</p>
+        
 <!-- --------------------編集してる部分-------------------------------------------- -->
 
     {% for secret in secrets %}
@@ -224,7 +224,7 @@
 
           <div id="tab2">
 
-            <p>マイ　コメント</p>
+            
             <section style="width: 75%; margin-left: auto; margin-right: auto;">
               <table class="table" style="border-color: #5271ff;">
                   <tbody>
@@ -268,40 +268,60 @@
                                       </tr>
                                       <tr>
                                           {% if comment['user_id'] == session['user_id'] %}
-                                              <tr>
-                                                      <td>
-                                                          <section class="mypage_c_for_moshimo">
-                                                              {{user.username}}: &emsp;{{ comment.content }}
-                                                          </section>
-                                                      </td>
-                                                      <td class="button_mypage_c_td"  colspan="2">
-                                                          <form action="/comment_delete" method="post">
-                                                              <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/trash.png" alt="" srcset=""></button>
-                                                          </form>
-                                                      </td>
-                                              </tr>
-                                          {% else %}
-                                              <td>
-                                                  <section class="mypage_c_for_moshimo">
-                                                      {{user.username}}: &emsp;{{ comment.content }}
-                                                  </section>
-                                              </td>
-                                              {% if comment['is_best'] == false %}
-                                                  <td class="button_mypage_c_td"  colspan="2">
-                                                      <form action="/best_answer" method="post">
-                                                          <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/flower.png" alt="" srcset=""></button>
-                                                      </form>
-                                                  </td>
-                                              {% else %}
-                                                  <td class="button_mypage_c_td"  colspan="2">
-                                                      <form action="/cancel_best_answer" method="post">
-                                                          <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}">ベストアンサーを取り消す</button>
-                                                      </form>
-                                                  </td>
-                                              {% endif %}
-                                          {% endif %}
-                                      </tr>
-                                  {% endif %}
+                                            {% if comment['is_best'] == false %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="mypage_c_for_moshimo">
+                                                            {{user.username}}: &emsp;{{ comment.content }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="button_mypage_c_td"  colspan="2">
+                                                        <form action="/comment_delete" method="post">
+                                                            <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/trash.png" alt="" srcset=""></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="mypage_c_for_moshimo">
+                                                            {{user.username}}: &emsp;{{ comment.content }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="button_mypage_c_td"  colspan="2">
+                                                        <form action="/comment_delete" method="post">
+                                                            <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/trash.png" alt="" srcset=""></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if comment['is_best'] == false %}
+                                                <td>
+                                                    <div class="mypage_c_for_moshimo">
+                                                        {{user.username}}: &emsp;{{ comment.content }}
+                                                    </div>
+                                                </td>
+                                                <td class="button_mypage_c_td"  colspan="2">
+                                                    <form action="/best_answer" method="post">
+                                                        <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/flower.png" alt="" srcset=""></button>
+                                                    </form>
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <div class="mypage_c_for_moshimo">
+                                                        {{user.username}}: &emsp;{{ comment.content }}
+                                                    </div>
+                                                </td>
+                                                <td class="button_mypage_c_td"  colspan="2">
+                                                    <form action="/cancel_best_answer" method="post">
+                                                        <button class="button_for_mypage" type="submit" name="comment_id" value="{{ comment.id }}"><img src="../static/img/black-flower.png" alt="" srcset=""></button>
+                                                    </form>
+                                                </td>
+                                            {% endif %}
+                                        {% endif %}
+                                    </tr>
+                                {% endif %}
                               {% endfor %}
                               <!--  -->
                               {% for reply in replies %}
