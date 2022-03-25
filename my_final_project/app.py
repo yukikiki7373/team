@@ -214,7 +214,7 @@ def dreams():
             False,
             False
         )
-        flash("投稿が完了しました。")
+        flash("投稿が完了しました")
         return redirect("/dreams")
 
     else:
@@ -406,10 +406,10 @@ def reply():
 @login_required
 def best_answer():
     """Select a best answer"""
-    id = request.form["id"]
+    comment_id = request.form.get("comment_id")
 
-    db.execute("UPDATE comments SET is_best = ? WHERE id = ?", True, id)
-    db.execute("UPDATE dreams SET is_solved = ? WHERE id IN(SELECT dreams_id FROM comments WHERE id = ?)", True, id)
+    db.execute("UPDATE comments SET is_best = ? WHERE id = ?", True, comment_id)
+    db.execute("UPDATE dreams SET is_solved = ? WHERE id IN(SELECT dreams_id FROM comments WHERE id = ?)", True, comment_id)
     flash("ベストアンサーを登録しました。")
     """Show my dreams & comments & replies"""
     dreams = db.execute(
@@ -434,10 +434,9 @@ def best_answer():
 @login_required
 def cancel_best_answer():
     """Cancel a best answer"""
-    id = request.form["id"]
-
-    db.execute("UPDATE comments SET is_best = ? WHERE id = ?", False, id)
-    db.execute("UPDATE dreams SET is_solved = ? WHERE id IN(SELECT dreams_id FROM comments WHERE id = ?)", False, id)
+    comment_id = request.form.get("comment_id")
+    db.execute("UPDATE comments SET is_best = ? WHERE id = ?", False, comment_id)
+    db.execute("UPDATE dreams SET is_solved = ? WHERE id IN(SELECT dreams_id FROM comments WHERE id = ?)", False, comment_id)
     flash("ベストアンサーを取り消しました。")
 
     """Show my dreams & comments & replies"""
@@ -469,40 +468,25 @@ def dream_delete():
 
     db.execute("UPDATE dreams SET is_deleted = ? WHERE id = ? AND user_id = ?", True, id, user_id) #Change id_deleted == true
     flash("投稿を削除しました。")
+
     """Show my dreams & comments & replies"""
-    users =  db.execute("SELECT username, id FROM users")
     dreams = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ?",
-        False,
-        session["user_id"]
-    )
-    dreams_for_mycomments = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE user_id = ?) OR id IN(SELECT dreams_id FROM comments WHERE id IN(SELECT comments_id FROM replies WHERE user_id = ?)) ORDER BY created_date DESC",
+        "SELECT * FROM dreams WHERE is_deleted = ? AND user_id = ? OR id IN(SELECT dreams_id FROM comments WHERE user_id = ? AND is_deleted = ?) OR id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND id IN(SELECT comments_id FROM replies WHERE user_id = ? AND is_deleted = ?)) ORDER BY created_date DESC",
         False,
         session["user_id"],
-        session["user_id"]
-    )
-    
-    comments = db.execute(
-        "SELECT * FROM comments WHERE is_deleted = ? OR dreams_id IN(SELECT id FROM dreams WHERE is_deleted = ?)",
-        False, 
+        session["user_id"],
+        False,
+        False,
+        session["user_id"],
         False
-        )
-    replies = db.execute(
-        "SELECT * FROM replies WHERE is_deleted = ? OR comments_id IN(SELECT id FROM comments WHERE is_deleted = ? OR dreams_id IN(SELECT id FROM dreams WHERE is_deleted = ?))",
-        False,
-        False,
-        False)
+    )
+    users =  db.execute("SELECT username, id FROM users")
+    comments = db.execute("SELECT * FROM comments WHERE is_deleted = ?", False)
+    replies = db.execute("SELECT * FROM replies WHERE is_deleted = ?", False)
 
-    best_answers = db.execute(
-        "SELECT * FROM dreams WHERE is_deleted = ? AND id IN(SELECT dreams_id FROM comments WHERE is_deleted = ? AND is_best = ? AND user_id = ?)",
-        False,
-        False,
-        True,
-        session["user_id"]
-        )
+    return render_template("mypage_c.html", users=users, dreams=dreams, comments=comments, replies=replies) 
 
-    return render_template("mypage_c.html", users=users, dreams=dreams, dreams_for_mycomments=dreams_for_mycomments, comments=comments, replies=replies, best_answers=best_answers) 
+
 
 @app.route("/comment_delete", methods=['POST']) #To delete posts（this is for normal_user） 
 @login_required
