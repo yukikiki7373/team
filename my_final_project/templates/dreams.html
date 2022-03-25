@@ -191,7 +191,7 @@ $('#page-top').click(function(){
                
         <li>
         <section>
-            <h3 class="title">{{ user['username'] }}:{{ dream['content'] }}</h3>
+            <h3 class="title">{{ user['username'] }}&nbsp;:&emsp;{{ dream['content'] }}</h3>
 
         {% endif %}
     {% endfor %}
@@ -208,9 +208,9 @@ $('#page-top').click(function(){
 
                     <section>
                         {% if comment['is_best'] == false %}
-                            <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+                            <h3 class="title-2">{{ user['username'] }}&nbsp;:&emsp;{{ comment['content'] }}</h3>
                         {% else %}
-                            <h3 class="title-2 moshimo-color2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+                            <h3 class="title-2 moshimo-color2">{{ user['username'] }}&nbsp;:&emsp;{{ comment['content'] }}</h3>
                         {% endif %}
             {% endif %}
         {% endfor %}
@@ -220,7 +220,7 @@ $('#page-top').click(function(){
                 {% for user in users %}
                 {% if user['id'] == reply['user_id'] %}
                     
-                        <p>{{ user['username'] }}:{{ reply['content'] }}</p>
+                        <p>{{ user['username'] }}&nbsp;:&emsp;{{ reply['content'] }}</p>
                                     
                 {% endif %}
                 {% endfor %}
