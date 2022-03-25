@@ -93,7 +93,11 @@
                     <li class="replay-color">
 
                     <section>
-                        <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+                        {% if comment['is_best'] == false %}
+                            <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+                        {% else %}
+                            <h3 class="title-2">{{ user['username'] }}:{{ comment['content'] }}</h3>
+                        {% endif %}
             {% endif %}
         {% endfor %}
                    <div class="box-2">
